@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from ByteBridges import views
+
 urlpatterns = [
-    path("", views.IndexPage, name="IndexPage"),
+    path("/Login", views.IndexPage, name="IndexPage"),
+    path("", views.Login, name="login"),
+    path("/client", views.Clients, name="ClientView")
 ]
