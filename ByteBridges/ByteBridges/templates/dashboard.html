@@ -1,0 +1,27 @@
+{% extends 'base_template.html' %}
+
+{% block title %}Dashboard - Gestor{% endblock %}
+
+{% block header %}Dashboard - Gestor{% endblock %}
+
+
+{% block content %}
+    <h1> Lista de {{ data.title }} registados em sistema</h1>
+    <ul>
+
+        {% for obj in data %}
+            <li class="form-row">
+                <div>
+                    {{ obj.product_name }}
+                    <a href="{% url 'edit_view' item_id=obj.id|stringformat:"s" %}">Editar </a>
+                    <button onclick="delete_alert()" class="btn btn-danger">Apagar Produto</button>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block footer %}
+    <p>Lista de produtos</p>
+{% endblock %}
+

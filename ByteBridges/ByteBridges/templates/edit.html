@@ -1,0 +1,47 @@
+{% extends 'base_template.html' %}
+
+{% block title %}Dashboard - Gestor{% endblock %}
+
+{% block header %}Editar Produto - Gestor{% endblock %}
+
+{% block content %}
+    <h1> Editar Produto</h1>
+
+    <div class="center-form">
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="product_name" class="form-label">Nome do produto</label>
+                <input type="text" class="form-control" name="product_name" id="product_name"
+                       value="{{ obj.product_name }}">
+            </div>
+            {% if obj > 70 %}
+                <p>Congratulations! You passed the exam.</p>
+            {% else %}
+                <p>Sorry, you did not pass the exam.</p>
+            {% endif %}
+            <div class="mb-3">
+                <label for="simple_field" class="form-label">Campo simples</label>
+                <input type="text" class="form-control" id="simple_field" name="simple_field"
+                       value="{{ obj.simple_field }}">
+            </div>
+            <div class=" mb-3 form-check">
+
+                <div class="mt-3 p-5 bg-primary text-white rounded">
+                    <h1>Valores Armazenados</h1>
+                    <p>{{ obj.multi_field }}</p>
+                </div>
+                <label class="form-label" for="multi_field">Campo Multivalor</label>
+                <div>
+                    <textarea name="multi_field" id="multi_field" cols="30" rows="10">{{ obj.multi_field }}</textarea>
+
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary col-md4">Criar
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <p>Lista de produtos</p>
+{% endblock %}
