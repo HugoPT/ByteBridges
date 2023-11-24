@@ -1,0 +1,94 @@
+section.vh-100 {
+  position: relative;
+  background-image: url("https://images.alphacoders.com/105/1056771.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center bottom;
+  color: #fff;
+  overflow: hidden;
+}
+section.vh-100::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(0 0 0 / 28%);
+  backdrop-filter: blur(2.5px);
+}
+.card {
+  border-radius: 1rem;
+}
+
+.card img {
+  border-radius: 1rem 0 0 1rem;
+}
+
+.card-body {
+  color: #000;
+}
+
+.form-outline input.form-control {
+  color: #000;
+}
+
+.form-outline input.form-control::placeholder {
+  color: #6c757d;
+}
+
+.btn-dark {
+  background-color: #000;
+  color: #fff;
+}
+
+.btn-dark:hover {
+  background-color: #333;
+}
+
+a.small.text-muted {
+  color: #6c757d;
+}
+
+a.small.text-muted:hover {
+  color: #495057;
+}
+
+p.mb-5 a {
+  color: #393f81;
+}
+
+p.mb-5 a:hover {
+  color: #292f61;
+}
+.imageLogin {
+  border-radius: 1rem 0 0 1rem;
+  object-fit: cover !important;
+  height: 100% !important;
+}
+.loginButtonDiv {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.goBack {
+  background-color: rgb(255 255 255 / 41%);
+  color: #000;
+  padding: 5px 20px;
+  font-size: 24px;
+}
+.goBack:hover {
+  background-color: rgb(255 255 255 / 61%);
+  color: #000;
+}
+
+.btnLogin {
+  background-color: rgb(0, 163, 0);
+  color: #fff;
+  border: none;
+  padding: 10px 40px;
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
