@@ -1,33 +1,40 @@
+/* Variáveis globais para reutilização de valores em várias partes do código */
 :root {
   --header-height: 3rem;
   --nav-width: 68px;
-  --first-color: #4723d9;
-  --first-color-light: #afa5d9;
+  --first-color: #00273f;
+  --hover-color: #ffffff56;
+  --first-color-light: #ffffff;
   --white-color: #f7f6fb;
   --body-font: "Nunito", sans-serif;
   --normal-font-size: 1rem;
   --z-fixed: 100;
 }
 
+/* Configuração global de caixas para evitar problemas de layout */
 *,
 ::before,
 ::after {
   box-sizing: border-box;
 }
 
+/* Estilo geral do corpo da página */
 body {
   position: relative;
   margin: var(--header-height) 0 0 0;
-  padding: 0 1rem;
   font-family: var(--body-font);
   font-size: var(--normal-font-size);
   transition: 0.5s;
+  min-height: 100vh;
+  margin: 0;
 }
 
+/* Remoção do sublinhado padrão de links */
 a {
   text-decoration: none;
 }
 
+/* Estilo do cabeçalho fixo no topo da página */
 .header {
   width: 100%;
   height: var(--header-height);
@@ -38,17 +45,24 @@ a {
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;
-  background-color: var(--white-color);
+  background-color: var(--first-color);
   z-index: var(--z-fixed);
   transition: 0.5s;
 }
-
+.bx-menu {
+  font-size: 1.5rem;
+  color: #fff;
+  cursor: pointer;
+  margin-left: 15px;
+}
+/* Estilo do ícone de menu do cabeçalho */
 .header_toggle {
   color: var(--first-color);
   font-size: 1.5rem;
   cursor: pointer;
 }
 
+/* Estilo da imagem do cabeçalho */
 .header_img {
   width: 35px;
   height: 35px;
@@ -58,10 +72,12 @@ a {
   overflow: hidden;
 }
 
+/* Estilo da imagem dentro do cabeçalho */
 .header_img img {
   width: 40px;
 }
 
+/* Estilo da barra de navegação lateral */
 .l-navbar {
   position: fixed;
   top: 0;
@@ -74,6 +90,7 @@ a {
   z-index: var(--z-fixed);
 }
 
+/* Estilo do contêiner da barra de navegação */
 .nav {
   height: 100%;
   display: flex;
@@ -82,6 +99,7 @@ a {
   overflow: hidden;
 }
 
+/* Estilo do logotipo e links da barra de navegação */
 .nav_logo,
 .nav_link {
   display: grid;
@@ -91,20 +109,27 @@ a {
   padding: 0.5rem 0 0.5rem 1.5rem;
 }
 
+.nav_link:hover {
+  background-color: var(--hover-color);
+}
+/* Estilo do logotipo da barra de navegação */
 .nav_logo {
   margin-bottom: 2rem;
 }
 
+/* Estilo do ícone do logotipo da barra de navegação */
 .nav_logo-icon {
   font-size: 1.25rem;
   color: var(--white-color);
 }
 
+/* Estilo do nome do logotipo da barra de navegação */
 .nav_logo-name {
   color: var(--white-color);
   font-weight: 700;
 }
 
+/* Estilo dos links da barra de navegação */
 .nav_link {
   position: relative;
   color: var(--first-color-light);
@@ -112,26 +137,32 @@ a {
   transition: 0.3s;
 }
 
+/* Estilo dos links da barra de navegação ao passar o mouse sobre eles */
 .nav_link:hover {
   color: var(--white-color);
 }
 
+/* Estilo dos ícones dos links da barra de navegação */
 .nav_icon {
   font-size: 1.25rem;
 }
 
+/* Exibição da barra de navegação ao ativar a classe "show" */
 .show {
   left: 0;
 }
 
+/* Adiciona espaçamento à esquerda do conteúdo principal para evitar sobreposição com a barra de navegação */
 .body-pd {
   padding-left: calc(var(--nav-width) + 1rem);
 }
 
+/* Estilo do link ativo na barra de navegação */
 .active {
   color: var(--white-color);
 }
 
+/* Adiciona uma linha vertical à esquerda do link ativo na barra de navegação */
 .active::before {
   content: "";
   position: absolute;
@@ -141,19 +172,21 @@ a {
   background-color: var(--white-color);
 }
 
+/* Define a altura de 100% para elementos com a classe "height-100" */
 .height-100 {
   height: 100vh;
 }
 
+/* Estilos específicos para telas maiores que 768px */
 @media screen and (min-width: 768px) {
   body {
     margin: calc(var(--header-height) + 1rem) 0 0 0;
-    padding-left: calc(var(--nav-width) + 2rem);
+    padding-left: calc(var(--nav-width) + 0rem);
   }
 
   .header {
     height: calc(var(--header-height) + 1rem);
-    padding: 0 2rem 0 calc(var(--nav-width) + 2rem);
+    padding: 0 2rem 0 calc(var(--nav-width) + 0rem);
   }
 
   .header_img {
@@ -174,7 +207,35 @@ a {
     width: calc(var(--nav-width) + 156px);
   }
 
+  /* Mover o conteúdo do corpo para o lado quando a barra de navegação estiver ativa */
   .body-pd {
-    padding-left: calc(var(--nav-width) + 188px);
+    padding-left: calc(var(--nav-width) + 9.7rem);
   }
+}
+
+/*Footer */
+
+.myFooter {
+  background-color: #000;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  font-size: 12px;
+  margin-top: 20px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  line-height: 40px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  text-rendering: optimizeLegibility;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
