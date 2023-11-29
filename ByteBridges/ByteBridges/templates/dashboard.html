@@ -1,27 +1,104 @@
-{% extends 'base_template.html' %}
+{% extends 'base_template.html' %} {%block extra_css%} {% load static %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/dashboard.css' %}"
+/>
 
-{% block title %}Dashboard - Gestor{% endblock %}
+{%endblock%} {% block content %}
 
-{% block header %}Dashboard - Gestor{% endblock %}
-
-
-{% block content %}
-    <h1> Lista de {{ data.title }} registados em sistema</h1>
-    <ul>
-
-        {% for obj in data %}
-            <li class="form-row">
-                <div>
-                    {{ obj.product_name }}
-                    <a href="{% url 'edit_view' item_id=obj.id|stringformat:"s" %}">Editar </a>
-                    <button onclick="delete_alert()" class="btn btn-danger">Apagar Produto</button>
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
+<div class="container_dash">
+  <div class="row">
+    <div class="col-xl-6 col-lg-6">
+      <div class="card gradiant1">
+        <div class="card-statistic-3 p-4">
+          <div class="card-icon card-icon-large">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <div class="mb-4">
+            <h5 class="card-title mb-0">Clientes</h5>
+          </div>
+          <div class="row align-items-center mb-2 dashBtns">
+            <!-- Botão 1 -->
+            <button class="btn btnChange">
+              Gerir Facturas <i class="bx bx-right-arrow-alt iconsDash"></i>
+            </button>
+            <!-- Botão 2 -->
+            <button class="btn btnChange">
+              Gerir Guias <i class="bx bx-right-arrow-alt iconsDash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6 col-lg-6">
+      <div class="card l-bg-blue-dark">
+        <div class="card-statistic-3 p-4">
+          <div class="card-icon card-icon-large">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="mb-4">
+            <h5 class="card-title mb-0">Encomendas</h5>
+          </div>
+          <div class="row align-items-center mb-2 dashBtns">
+            <!-- Botão 1 -->
+            <button class="btn btnChange">
+              Gerir Facturas <i class="bx bx-right-arrow-alt iconsDash"></i>
+            </button>
+            <!-- Botão 2 -->
+            <button class="btn btnChange">
+              Gerir Guias <i class="bx bx-right-arrow-alt iconsDash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6 col-lg-6">
+      <div class="card l-bg-green-dark">
+        <div class="card-statistic-3 p-4">
+          <div class="card-icon card-icon-large">
+            <i class="fas fa-ticket-alt"></i>
+          </div>
+          <div class="mb-4">
+            <h5 class="card-title mb-0">Facturas e Guias</h5>
+          </div>
+          <div class="row align-items-center mb-2 dashBtns">
+            <!-- Botão 1 -->
+            <button class="btn btnChange">
+              Gerir Facturas <i class="bx bx-right-arrow-alt iconsDash"></i>
+            </button>
+            <!-- Botão 2 -->
+            <button class="btn btnChange">
+              Gerir Guias <i class="bx bx-right-arrow-alt iconsDash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6 col-lg-6">
+      <div class="card l-bg-orange-dark">
+        <div class="card-statistic-3 p-4">
+          <div class="card-icon card-icon-large">
+            <i class="fas fa-dollar-sign"></i>
+          </div>
+          <div class="mb-4">
+            <h5 class="card-title mb-0">Revenue Today</h5>
+          </div>
+          <div class="row align-items-center mb-2 d-flex">
+            <div class="row align-items-center mb-2 dashBtns">
+              <!-- Botão 1 -->
+              <button class="btn btnChange">
+                Gerir Facturas <i class="bx bx-right-arrow-alt iconsDash"></i>
+              </button>
+              <!-- Botão 2 -->
+              <button class="btn btnChange">
+                Gerir Guias <i class="bx bx-right-arrow-alt iconsDash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
-
-{% block footer %}
-    <p>Lista de produtos</p>
-{% endblock %}
-

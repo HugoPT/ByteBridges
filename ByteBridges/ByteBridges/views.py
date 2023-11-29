@@ -10,9 +10,11 @@ def loginForm(request):
 def IndexPage(request):
     return render(request, template_name='base_template.html') 
 
+def dashboard(request):
+    return render(request, template_name='dashboard.html') 
 
 def Clients(request):
-    return render(request, template_name='dashboard.html')   
+    return render(request, template_name='client.html')   
 
 
 

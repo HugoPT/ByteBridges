@@ -21,8 +21,9 @@ from ByteBridges import views
 
 urlpatterns = [
     path("Login", views.IndexPage, name="IndexPage"),
+    path("dashboard", views.dashboard, name="dashboard"),
     path("loginForm", views.loginForm, name="loginForm"),
     path("", views.Login, name="login"),
-    path("client", views.Clients, name="ClientView")
+    path("clients", views.Clients, name="ClientView")
  
 ]
