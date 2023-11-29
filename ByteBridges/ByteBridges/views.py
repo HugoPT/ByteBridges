@@ -8,13 +8,27 @@ def loginForm(request):
     return render(request, "loginForm.html") 
 
 def IndexPage(request):
-    return render(request, template_name='base_template.html') 
-
-def dashboard(request):
     return render(request, template_name='dashboard.html') 
 
-def Clients(request):
-    return render(request, template_name='client.html')   
+#def dashboard(request):
+#   return render(request, template_name='dashboard.html') 
+
+
+#Clients
+def clientsList(request):
+    return render(request, template_name='clientsList.html')   
+
+def clientsCreate(request):
+    return render(request, template_name='clientsCreate.html')   
+
+#Suppliers
+def suppliersList(request):
+    return render(request, template_name='suppliersList.html')   
+
+def suppliersCreate(request):
+    return render(request, template_name='suppliersCreate.html')   
+
+
 
 
 

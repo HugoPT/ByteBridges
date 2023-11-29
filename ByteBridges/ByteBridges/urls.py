@@ -20,10 +20,17 @@ from ByteBridges import views
 
 
 urlpatterns = [
-    path("Login", views.IndexPage, name="IndexPage"),
-    path("dashboard", views.dashboard, name="dashboard"),
+    path("dashboard", views.IndexPage, name="IndexPage"),
+    #path("dashboard", views.dashboard, name="dashboard"),
     path("loginForm", views.loginForm, name="loginForm"),
     path("", views.Login, name="login"),
-    path("clients", views.Clients, name="ClientView")
- 
+    
+    #Clients
+    path("clientsList", views.clientsList, name="clientsList"),
+    path("clientsCreate", views.clientsCreate, name="clientsCreate"),
+    
+    #suppliers
+    path("suppliersList", views.suppliersList, name="suppliersList"),
+    path("suppliersCreate", views.suppliersCreate, name="suppliersCreate"),
+    
 ]

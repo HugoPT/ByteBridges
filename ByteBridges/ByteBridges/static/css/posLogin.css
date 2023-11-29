@@ -27,6 +27,11 @@ body {
   transition: 0.5s;
   min-height: 100vh;
   margin: 0;
+
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
 }
 
 /* Remoção do sublinhado padrão de links */
@@ -217,13 +222,7 @@ a {
 
 .myFooter {
   background-color: #000;
-  color: #fff;
   padding: 20px;
-  text-align: center;
-  font-size: 12px;
-  margin-top: 20px;
-  position: relative;
-  bottom: 0;
   width: 100%;
   line-height: 40px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -231,11 +230,7 @@ a {
   font-size: 14px;
   letter-spacing: 0.025em;
   text-transform: uppercase;
-  text-rendering: optimizeLegibility;
   box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
   transition: all 0.3s ease;
+  margin-top: auto;
 }

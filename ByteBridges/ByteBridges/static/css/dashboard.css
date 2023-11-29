@@ -2,6 +2,15 @@
   position: relative;
   display: block;
   padding: 30px;
+  margin-top: 25px;
+}
+.dashTitle {
+  font-size: 30px;
+  font-weight: bolder;
+  letter-spacing: 2.5px;
+  margin-bottom: 20px;
+  text-align: center;
+  margin-top: 10px;
 }
 .card {
   background-color: #fff;
@@ -14,63 +23,7 @@
     0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12),
     0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
 }
-.l-bg-cherry {
-  background: linear-gradient(to right, #493240, #f09) !important;
-  color: #fff;
-}
 
-.l-bg-blue-dark {
-  background: linear-gradient(to right, #373b44, #4286f4) !important;
-  color: #fff;
-}
-
-.l-bg-green-dark {
-  background: linear-gradient(to right, #0a504a, #38ef7d) !important;
-  color: #fff;
-}
-
-.l-bg-orange-dark {
-  background: linear-gradient(to right, #a86008, #ffba56) !important;
-  color: #fff;
-}
-
-.card .card-statistic-3 .card-icon-large .fas,
-.card .card-statistic-3 .card-icon-large .far,
-.card .card-statistic-3 .card-icon-large .fab,
-.card .card-statistic-3 .card-icon-large .fal {
-  font-size: 110px;
-}
-
-.card .card-statistic-3 .card-icon {
-  text-align: center;
-  line-height: 50px;
-  margin-left: 15px;
-  color: #000;
-  position: absolute;
-  right: -5px;
-  top: 20px;
-  opacity: 0.1;
-}
-
-.l-bg-cyan {
-  background: linear-gradient(135deg, #289cf5, #84c0ec) !important;
-  color: #fff;
-}
-
-.l-bg-green {
-  background: linear-gradient(135deg, #23bdb8 0%, #43e794 100%) !important;
-  color: #fff;
-}
-
-.l-bg-orange {
-  background: linear-gradient(to right, #f9900e, #ffba56) !important;
-  color: #fff;
-}
-
-.l-bg-cyan {
-  background: linear-gradient(135deg, #289cf5, #84c0ec) !important;
-  color: #fff;
-}
 .gradiant1 {
   background: rgb(1, 79, 134);
   background: linear-gradient(
@@ -80,9 +33,65 @@
     rgba(84, 183, 255, 1) 100%
   );
 }
+.gradiant2 {
+  background: rgb(54, 121, 9);
+  background: linear-gradient(
+    90deg,
+    rgba(54, 121, 9, 1) 0%,
+    rgba(93, 213, 101, 1) 33%,
+    rgba(0, 232, 210, 1) 75%,
+    rgba(0, 185, 146, 1) 99%
+  );
+}
+.gradiant3 {
+  background: rgb(150, 0, 81);
+  background: linear-gradient(
+    90deg,
+    rgba(150, 0, 81, 1) 0%,
+    rgba(97, 94, 0, 1) 100%
+  );
+}
+.gradiant4 {
+  background: rgb(160, 82, 45); /* Sienna */
+  background: linear-gradient(
+    90deg,
+    rgba(160, 82, 45, 1) 0%,
+    rgba(205, 133, 63, 1) 66%,
+    rgba(205, 133, 63, 1) 100%
+  );
+}
+.gradiant5 {
+  background: rgb(65, 105, 225); /* Royal Blue */
+  background: linear-gradient(
+    90deg,
+    rgba(65, 105, 225, 1) 0%,
+    rgba(0, 0, 128, 1) 66%,
+    rgba(0, 0, 205, 1) 100%
+  );
+}
+.gradiant6 {
+  background: rgb(128, 0, 0); /* Dark Red */
+  background: linear-gradient(
+    90deg,
+    rgba(128, 0, 0, 1) 0%,
+    rgba(160, 32, 32, 1) 66%,
+    rgba(192, 64, 64, 1) 100%
+  );
+}
+.gradiant7 {
+  background: rgb(0, 128, 128); /* Teal */
+  background: linear-gradient(
+    90deg,
+    rgba(0, 128, 128, 1) 0%,
+    rgba(30, 144, 255, 1) 66%,
+    rgba(0, 191, 255, 1) 100%
+  );
+}
 .card-title {
   font-size: 20px;
   color: #fff;
+  font-weight: bolder;
+  letter-spacing: 2.5px;
 }
 .dashBtns {
   display: flex;
@@ -92,15 +101,21 @@
 .btnChange {
   color: white;
   width: fit-content;
-  padding: 10px 30px;
-  margin: 5px 5px;
-  background: #4286f4;
+  padding: 0.5em 1em;
+  margin: 1em;
+  background: #97979796;
   display: flex;
   align-items: center;
 }
-
+@media screen and (max-width: 600px) {
+  .btnChange {
+    padding: 0.1em 0.5em;
+    margin: 0.1em;
+  }
+}
 .btnChange:hover {
-  background: #0a504a;
+  background: #353535c5;
+  color: white;
 }
 .iconsDash {
   margin-left: 10px;
