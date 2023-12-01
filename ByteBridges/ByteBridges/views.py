@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Supplier
+from django.db import connection
 
 
 def Login(request):
@@ -32,9 +33,15 @@ def clientsCreate(request):
         city = request.POST.get('city')
         phone = request.POST.get('phone')
         obs = request.POST.get('obs')
-
+        with connection['admin'].cursor() as cursor:
+            # Call the stored procedure using the CALL statement
+            cursor.execute("CALL sp_suppliers_create(%s,%s,%s,%s,%s,%s,%s,%s,)",
+                           [name, nif, address, zipcode, city, phone, obs])
+            # If the stored procedure returns results, you can fetch them
+            result = cursor.fetchall()
+            print(result)
         print(f"Inserted client " + name + nif + address + zipcode + city + phone + obs)
-
+        # return render(request, 'your_template.html', {'result': result})
         return redirect('dashboard')
     # return the form
     return render(request, template_name='clientsCreate.html')

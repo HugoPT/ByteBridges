@@ -83,7 +83,39 @@ DATABASES = {
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
         'PORT': '5455',
-    }
+    },
+    'admin': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ByteBridges',
+        'USER': 'master',
+        'PASSWORD': 'safeP@ss0rd4ever',
+        'HOST': 'apps.i9soft.pt',
+        'PORT': '5455',
+    },
+    'manager': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ByteBridges',
+        'USER': 'master',
+        'PASSWORD': 'safeP@ss0rd4ever',
+        'HOST': 'apps.i9soft.pt',
+        'PORT': '5455',
+    },
+    'reporting': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ByteBridges',
+        'USER': 'master',
+        'PASSWORD': 'safeP@ss0rd4ever',
+        'HOST': 'apps.i9soft.pt',
+        'PORT': '5455',
+    },
+    'tecnician': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ByteBridges',
+        'USER': 'master',
+        'PASSWORD': 'safeP@ss0rd4ever',
+        'HOST': 'apps.i9soft.pt',
+        'PORT': '5455',
+    },
 
 }
 
