@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Supplier
 
+
 def Login(request):
     return render(request, "Login.html")
 
@@ -55,7 +56,7 @@ def suppliersCreate(request):
         phone = request.POST.get('phone')
         obs = request.POST.get('obs')
         s = Supplier(
-            name='Example Value',
+            name=name,
             nif=nif,
             email=email,
             address=address,
@@ -65,8 +66,8 @@ def suppliersCreate(request):
             obs=obs
         )
         s.save()
-        print(f"Inserted Supplier " + name + nif + address + zipcode + city + phone + obs)
-
+        print(
+            f"Inserted Supplier " + name + " " + nif + " " + address + " " + zipcode + " " + city + " " + phone + " " + obs)
         return redirect('dashboard')
     return render(request, template_name='suppliersCreate.html')
 

@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Supplier(models.Model):
+    idsupplier = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     nif = models.TextField()
     email = models.CharField(max_length=100, unique=True)
