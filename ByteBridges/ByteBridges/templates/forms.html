@@ -1,48 +1,13 @@
-{% extends 'base_template.html' %} {%block extra_css%} {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}" />
+{% extends 'base_template.html' %}
+{%block extra_css%} {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}"/>
+{%endblock%}
 
-{%endblock%} {% block content %}
+
+{% block content %}
 <div class="form">
-  <section class="formSection">
-    {% block formTitle %} {% endblock %} {% block formContent %}
-    <form class="contact-form row">
-      <div class="form-field col-lg-6">
-        <input id="name" class="input-text js-input" type="text" required />
-        <label class="label" for="name">NAME</label>
-      </div>
-      <div class="form-field col-lg-6">
-        <input id="name" class="input-text js-input" type="text" required />
-        <label class="label" for="name">NAME</label>
-      </div>
-      <div class="form-field col-lg-6">
-        <input id="name" class="input-text js-input" type="text" required />
-        <label class="label" for="name">NAME</label>
-      </div>
-      <div class="form-field col-lg-6">
-        <input id="name" class="input-text js-input" type="text" required />
-        <label class="label" for="name">NAME</label>
-      </div>
-      <div class="form-field col-lg-6">
-        <input id="email" class="input-text js-input" type="email" required />
-        <label class="label" for="email">E-mail</label>
-      </div>
-      <div class="form-field col-lg-6">
-        <input id="company" class="input-text js-input" type="text" required />
-        <label class="label" for="company">Company Name</label>
-      </div>
-      <div class="form-field col-lg-6">
-        <input id="phone" class="input-text js-input" type="text" required />
-        <label class="label" for="phone">Contact Number</label>
-      </div>
-      <div class="form-field col-lg-12">
-        <input id="message" class="input-text js-input" type="text" required />
-        <label class="label" for="message">Message</label>
-      </div>
-      <div class="form-field col-lg-12 submitBtn">
-        <input class="submit-btn" type="submit" value="Criar" />
-      </div>
-    </form>
-    {% endblock %}
-  </section>
+    <section class="formSection">
+             {% block formContent %} {% endblock %}
+    </section>
 </div>
 {% endblock %}
