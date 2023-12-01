@@ -7,36 +7,37 @@
 {% endblock %}
 
 <form class="contact-form row" action="{% url 'clientsCreate' %}" method="post">
+     {% csrf_token %}
     <div class="form-field col-lg-6">
-        <input id="name" class="input-text js-input" type="text" required/>
+        <input id="name" class="input-text js-input" type="text" />
         <label class="label" for="name">NAME</label>
     </div>
     <div class="form-field col-lg-6">
-        <input id="name" class="input-text js-input" type="text" required/>
+        <input id="name" class="input-text js-input" type="text" />
         <label class="label" for="name">NAME</label>
     </div>
     <div class="form-field col-lg-6">
-        <input id="name" class="input-text js-input" type="text" required/>
+        <input id="name" class="input-text js-input" type="text" />
         <label class="label" for="name">NAME</label>
     </div>
     <div class="form-field col-lg-6">
-        <input id="name" class="input-text js-input" type="text" required/>
+        <input id="name" class="input-text js-input" type="text" />
         <label class="label" for="name">NAME</label>
     </div>
     <div class="form-field col-lg-6">
-        <input id="email" class="input-text js-input" type="email" required/>
+        <input id="email" class="input-text js-input" type="email" />
         <label class="label" for="email">E-mail</label>
     </div>
     <div class="form-field col-lg-6">
-        <input id="company" class="input-text js-input" type="text" required/>
+        <input id="company" class="input-text js-input" type="text" />
         <label class="label" for="company">Company Name</label>
     </div>
     <div class="form-field col-lg-6">
-        <input id="phone" class="input-text js-input" type="text" required/>
+        <input id="phone" class="input-text js-input" type="text" />
         <label class="label" for="phone">Contact Number</label>
     </div>
     <div class="form-field col-lg-12">
-        <input id="message" class="input-text js-input" type="text" required/>
+        <input id="message" class="input-text js-input" type="text" />
         <label class="label" for="message">Message</label>
     </div>
     <div class="form-field col-lg-12 submitBtn">
