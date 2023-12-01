@@ -1,3 +1,46 @@
-{% extends 'forms.html' %} {% block formTitle %}
-<h1 class="title">Criar Cliente</h1>
+{% extends 'forms.html' %}
+
+
+{% block formContent %}
+{% block formTitle %}
+<h1 class="title">Criar novo Cliente</h1>
+{% endblock %}
+
+<form class="contact-form row" action="{% url 'clientsCreate' %}" method="post">
+    <div class="form-field col-lg-6">
+        <input id="name" class="input-text js-input" type="text" required/>
+        <label class="label" for="name">NAME</label>
+    </div>
+    <div class="form-field col-lg-6">
+        <input id="name" class="input-text js-input" type="text" required/>
+        <label class="label" for="name">NAME</label>
+    </div>
+    <div class="form-field col-lg-6">
+        <input id="name" class="input-text js-input" type="text" required/>
+        <label class="label" for="name">NAME</label>
+    </div>
+    <div class="form-field col-lg-6">
+        <input id="name" class="input-text js-input" type="text" required/>
+        <label class="label" for="name">NAME</label>
+    </div>
+    <div class="form-field col-lg-6">
+        <input id="email" class="input-text js-input" type="email" required/>
+        <label class="label" for="email">E-mail</label>
+    </div>
+    <div class="form-field col-lg-6">
+        <input id="company" class="input-text js-input" type="text" required/>
+        <label class="label" for="company">Company Name</label>
+    </div>
+    <div class="form-field col-lg-6">
+        <input id="phone" class="input-text js-input" type="text" required/>
+        <label class="label" for="phone">Contact Number</label>
+    </div>
+    <div class="form-field col-lg-12">
+        <input id="message" class="input-text js-input" type="text" required/>
+        <label class="label" for="message">Message</label>
+    </div>
+    <div class="form-field col-lg-12 submitBtn">
+        <input class="submit-btn" type="submit" value="Criar cliente"/>
+    </div>
+</form>
 {% endblock %}

@@ -19,6 +19,9 @@ def clientsList(request):
     return render(request, template_name='clientsList.html')   
 
 def clientsCreate(request):
+    if request.method == 'POST':
+        print(f"Inserted client ")
+    #return the form
     return render(request, template_name='clientsCreate.html')   
 
 #Suppliers

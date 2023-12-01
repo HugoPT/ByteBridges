@@ -1,3 +1,27 @@
-{% extends 'forms.html' %} {% block formTitle %}
-<h1 class="title">Criar Fornecedor</h1>
+{% extends 'forms.html' %}
+
+
+{% block formContent %}
+{% block formTitle %}
+<h1 class="title">Criar novo Fornecedor</h1>
+{% endblock %}
+
+<form class="contact-form row" action="{% url 'suppliersCreate' %}" method="post">
+    <div class="form-field col-lg-6">
+        <input id="name" class="input-text js-input" type="text" required/>
+        <label class="label" for="name">NAME</label>
+    </div>
+    <div class="form-field col-lg-6">
+        <input id="name" class="input-text js-input" type="text" required/>
+        <label class="label" for="name">NAME</label>
+    </div>
+
+    <div class="form-field col-lg-12">
+        <input id="message" class="input-text js-input" type="text" required/>
+        <label class="label" for="message">Message</label>
+    </div>
+    <div class="form-field col-lg-12 submitBtn">
+        <input class="submit-btn" type="submit" value="Criar cliente"/>
+    </div>
+</form>
 {% endblock %}
