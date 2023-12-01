@@ -29,7 +29,7 @@
     <!-- Include your custom CSS -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/posLogin.css' %}" />
-    
+ 
     {% block extra_css %}{% endblock %}
 
     <title>{% block title %}ByteBridges{% endblock %}</title>
@@ -57,7 +57,6 @@
 
           if (toggle && nav && bodypd && headerpd) {
             toggle.addEventListener("click", () => {
-              console.log("zasw");
               nav.classList.toggle("show");
               toggle.classList.toggle("bx-x");
               bodypd.classList.toggle("body-pd");

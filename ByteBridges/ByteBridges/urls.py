@@ -33,4 +33,8 @@ urlpatterns = [
     path("suppliersList", views.suppliersList, name="suppliersList"),
     path("suppliersCreate", views.suppliersCreate, name="suppliersCreate"),
     
+    #order
+    path("createOrder", views.createOrder, name="createOrder"),
+    path("orderList", views.orderList, name="orderList"),
+    
 ]

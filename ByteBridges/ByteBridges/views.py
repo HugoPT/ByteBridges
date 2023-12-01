@@ -28,6 +28,13 @@ def suppliersList(request):
 def suppliersCreate(request):
     return render(request, template_name='suppliersCreate.html')   
 
+#orders
+def createOrder(request):
+    return render(request, template_name='createOrder.html')   
+
+def orderList(request):
+    return render(request, template_name='orderList.html')   
+
 
 
 
