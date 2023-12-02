@@ -1,51 +1,99 @@
-{% extends 'forms.html' %}
-
-
-{% block formContent %}
-{% block formTitle %}
+{% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
 <h1 class="title">Criar novo Fornecedor</h1>
 {% endblock %}
 
-<form class="contact-form row" action="{% url 'suppliersCreate' %}" method="post">
-         {% csrf_token %}
-    <div class="form-field col-lg-6">
-        <input id="name" name="name" class="input-text js-input" type="text" required/>
-        <label class="label" for="name">Nome</label>
-    </div>
-    <div class="form-field col-lg-6">
-        <input id="nif" name="nif" class="input-text js-input" type="text" required/>
-        <label class="label" for="nif">NIF</label>
-    </div>
+<form
+  class="contact-form row"
+  action="{% url 'suppliersCreate' %}"
+  method="post"
+>
+  {% csrf_token %}
+  <div class="form-field col-lg-6">
+    <input
+      id="name"
+      name="name"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="name">Nome</label>
+  </div>
+  <div class="form-field col-lg-6">
+    <input
+      id="nif"
+      name="nif"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="nif">NIF</label>
+  </div>
 
-    <div class="form-field col-lg-12">
-        <input id="address" name="address" class="input-text js-input" type="text" required/>
-        <label class="label" for="address">Morada</label>
-    </div>
+  <div class="form-field col-lg-12">
+    <input
+      id="address"
+      name="address"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="address">Morada</label>
+  </div>
 
-    <div class="form-field col-lg-6">
-        <input id="zipcode" name="zipcode" class="input-text js-input" type="text" required/>
-        <label class="label" for="zipcode">Cod.Postal</label>
-    </div>
+  <div class="form-field col-lg-6">
+    <input
+      id="zipcode"
+      name="zipcode"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="zipcode">Cod.Postal</label>
+  </div>
 
-    <div class="form-field col-lg-6">
-        <input id="city" name="city" class="input-text js-input" type="text" required/>
-        <label class="label" for="city">Cidade</label>
-    </div>
-    <div class="form-field col-lg-6">
-        <input id="phone" name="phone" class="input-text js-input" type="tel" required/>
-        <label class="label" for="phone">Telefone</label>
-    </div>
-    <div class="form-field col-lg-6">
-        <input id="email" name="email" class="input-text js-input" type="email" required/>
-        <label class="label" for="phone">email</label>
-    </div>
-    <div class="form-field col-lg-6">
-        <input id="obs" name="obs" class="input-text js-input" type="text" required/>
-        <label class="label" for="obs">Observações</label>
-    </div>
+  <div class="form-field col-lg-6">
+    <input
+      id="city"
+      name="city"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="city">Cidade</label>
+  </div>
+  <div class="form-field col-lg-6">
+    <input
+      id="phone"
+      name="phone"
+      class="input-text js-input"
+      type="tel"
+      required
+    />
+    <label class="label" for="phone">Telefone</label>
+  </div>
+  <div class="form-field col-lg-6">
+    <input
+      id="email"
+      name="email"
+      class="input-text js-input"
+      type="email"
+      required
+    />
+    <label class="label" for="phone">email</label>
+  </div>
+  <div class="form-field col-lg-6">
+    <input
+      id="obs"
+      name="obs"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="obs">Observações</label>
+  </div>
 
-    <div class="form-field col-lg-12 submitBtn">
-        <input class="submit-btn" type="submit" value="Criar cliente"/>
-    </div>
+  <div class="form-field col-lg-12 submitBtn">
+    <input class="submit-btn" type="submit" value="Criar Fornecedor" />
+  </div>
 </form>
 {% endblock %}
