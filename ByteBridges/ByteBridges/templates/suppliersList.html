@@ -1,17 +1,19 @@
-{% extends 'forms.html' %}
-{% block content %}
-<h1>Lista de fornecedores </h1>
+{% extends 'base_template.html' %} {%block extra_css%} {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
+{%endblock%}{% block content %}
 
-<!--<ul>-->
-<!--    {% for f in suppliers %}-->
-<!--    <li>{{ f.name }}</li>-->
-<!--    {% endfor %}-->
-<!--</ul>-->
+<div class="listContainer">
+  <h1>Lista de fornecedores</h1>
 
+  <!--<ul>-->
+  <!--    {% for f in suppliers %}-->
+  <!--    <li>{{ f.name }}</li>-->
+  <!--    {% endfor %}-->
+  <!--</ul>-->
 
-<table id="suppliersTable" class="display">
+  <table id="suppliersTable" class="display">
     <thead>
-    <tr>
+      <tr>
         <th>Nome</th>
         <th>Morada</th>
         <th>Cidade</th>
@@ -19,13 +21,11 @@
         <th>Telefone</th>
         <th>Email</th>
         <th>Contribuinte</th>
-    </tr>
+      </tr>
     </thead>
     <tbody>
-
-    {% for f in suppliers %}
-    <tr>
-
+      {% for f in suppliers %}
+      <tr>
         <td>{{ f.name }}</td>
         <td>{{ f.address }}</td>
         <td>{{ f.city }}</td>
@@ -33,28 +33,22 @@
         <td><a href="tel:'{{ f.phone }}'">{{ f.phone }}</a></td>
         <td><a href="mailto:{{ f.email }}">{{ f.email }}</a></td>
         <td>{{ f.nif }}</td>
-    </tr>
-    {% endfor %}
-
-
+      </tr>
+      {% endfor %}
     </tbody>
-</table>
+  </table>
+</div>
 
 <script>
-    $(document).ready(function() {
-        $('#suppliersTable').DataTable( {
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5'
-            ],
-            language: {
-       url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json',
-    },
-        } );
-    } );
+  $(document).ready(function () {
+    $("#suppliersTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+      },
+    });
+  });
 </script>
 
 {% endblock %}
