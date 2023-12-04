@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Supplier, Warehouse, Client,Family, Article
+from .models import Supplier, Warehouse, Client,Family, Article, Component
 
 from django.db import connections
 
@@ -159,9 +159,19 @@ def componentCreate(request):
 
         with connections['admin'].cursor() as cursor:
             # Call the stored procedure using the CALL statement
-            cursor.execute("CALL sp_articles_create(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            cursor.execute("CALL sp_components_create(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
                            [idfamily, idwarehouse, name, description, image, cost,
                             profit_margin, barcode, serial_number, reference])
             return redirect('dashboard')
 
     return render(request, 'componentCreate.html', context=context)
+
+def componentList(request):
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("select  * from view_components_list", [])
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
+        components = [Component(*row) for row in result]
+        context={'components':components}
+        return render(request,'componentList.html',context=context)
