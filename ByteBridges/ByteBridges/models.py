@@ -20,14 +20,15 @@ class Supplier(models.Model):
         
     
 class Client(models.Model):
+    idclient = models.AutoField(primary_key=True) 
     email = models.EmailField(max_length=70, unique=True)
-    zipCode = models.CharField(max_length=8, unique=True)
+    individual = models.BooleanField(default=False)
+    zipCode = models.CharField(max_length=8)
     address = models.CharField(max_length=120)
     nif = models.CharField(max_length=9,unique=True)
     name = models.CharField(max_length=80)
     description = models.CharField(max_length=500)
     city = models.CharField(max_length=80)
-
     def __str__(self):
         return self.name
     class Meta:

@@ -19,12 +19,13 @@ def IndexPage(request):
 def clientsList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
-        cursor.execute("select  * from view_clients_list", [])
+        cursor.execute("SELECT * FROM view_clients_list", [])
         # If the stored procedure returns results, you can fetch them
         result = cursor.fetchall()
         print(result)
         clients = [Client(*row) for row in result]
-        return render(request,'clientsList.html',{'clients':clients})
+        return render(request, 'clientsList.html', {'clients': clients})
+
 
 def clientsCreate(request):
     if request.method == 'POST':
