@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Supplier, Warehouse, Client,Family, Article, Component
+from .models import Supplier, Warehouse, Client,Family, Article, Component, Equipment
 
 from django.db import connections
 
@@ -130,6 +130,17 @@ def createEquipment(request):
 
 
     return render(request,'createEquipment.html',context=context)
+
+
+def equipmentList(request):
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("select  * from view_equipments_list", [])
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
+        equipments = [Equipment(*row) for row in result]
+        context={'equipments':equipments}
+        return render(request,'equipmentList.html',context=context)
 
 
 def componentCreate(request):
