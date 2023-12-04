@@ -1,0 +1,52 @@
+{% extends 'base_template.html' %} {%block extra_css%} {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
+{%endblock%}{% block content %}
+
+<div class="listContainer">
+  <h1>Lista de Componentes</h1>
+
+  <table id="componentsTable" class="display">
+    <thead>
+      <tr>
+          <th>Nome</th>
+          <th>Familia</th>
+          <th>Armazém</th>
+          <th>Descrição</th>
+          <th>Custo</th>
+          <th>Margem de Lucro</th>
+          <th>Código de Barras</th>
+          <th>Número de Série</th>
+          <th>Referência</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in components %}
+      <tr>
+          <td>{{ c.name }}</td>
+        <td>{{ c.family }}</td>
+        <td>{{ c.warehouse }}</td>
+        <td>{{ c.description }}</td>
+        <td>{{ c.cost }}</td>
+        <td>{{ c.profitmargin }}</td>
+        <td>{{ c.barcode }}</td>
+        <td>{{ c.serialnumber }}</td>
+        <td>{{ c.reference }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $("#componentsTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+      },
+    });
+  });
+</script>
+
+{% endblock %}

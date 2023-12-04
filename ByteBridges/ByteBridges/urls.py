@@ -46,7 +46,6 @@ urlpatterns = [
     #Component
 
     path("componentCreate", views.componentCreate, name="componentCreate"),
+    path("componentList", views.componentList, name="componentList"),
 
-    
-    
 ]

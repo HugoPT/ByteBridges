@@ -76,3 +76,25 @@ class Article(models.Model):
     class Meta:
         # Specify the table name
         db_table = 'articles'
+
+from django.db import models
+
+class Component(models.Model):
+    idComponent = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=80)
+    family = models.CharField(max_length=255)  # Assuming the data type for the family field
+    warehouse = models.CharField(max_length=255)  # Assuming the data type for the warehouse field
+    description = models.CharField(max_length=500)
+    image = models.CharField(max_length=1024)
+    cost = models.IntegerField()
+    profitmargin = models.FloatField()
+    barcode = models.CharField(max_length=13)
+    serialnumber = models.CharField(max_length=100)
+    reference = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        # Specify the table name
+        db_table = 'view_components_list'
