@@ -108,7 +108,7 @@ DATABASES = {
         'HOST': 'apps.i9soft.pt',
         'PORT': '5455',
     },
-    'tecnician': {
+    'technician': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ByteBridges',
         'USER': 'master',

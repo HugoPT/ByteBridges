@@ -43,9 +43,9 @@ urlpatterns = [
     #Equipment
     path("createEquipment", views.createEquipment, name="createEquipment"),
     
-    #blaººº
+    #Component
 
-    
+    path("componentCreate", views.componentCreate, name="componentCreate"),
 
     
     

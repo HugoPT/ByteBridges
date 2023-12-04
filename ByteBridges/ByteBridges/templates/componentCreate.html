@@ -1,0 +1,112 @@
+{% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
+<h1 class="title">Criar novo Componente</h1>
+{% endblock %}
+
+<form class="allforms row" action="{% url 'componentCreate' %}" method="post">
+  {% csrf_token %}
+  <div class="form-field col-lg-6">
+      <input
+        id="name"
+        name="name"
+        class="input-text js-input"
+        type="text"
+        required
+      />
+      <label class="label" for="name">Nome</label>
+    </div>
+
+    <div class="form-field col-lg-6">
+      <select id="family" name="idfamily">
+        {% for f in families %}
+          <option value="{{ f.idfamily }}">{{ f.namefamily }}</option>
+        {% endfor %}
+      </select>
+      <select id="warehouse" name="idwarehouse">
+        {% for w in warehouse %}
+          <option value="{{ w.idwarehouse }}">{{ w.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-field col-lg-6">
+      <input
+        id="cost"
+        name="cost"
+        class="input-text js-input"
+        type="text"
+        required
+      />
+      <label class="label" for="cost">Custo de Produção</label>
+    </div>
+
+    <div class="form-field col-lg-6">
+      <input
+        id="description"
+        name="description"
+        class="input-text js-input"
+        type="text"
+        required
+      />
+      <label class="label" for="description">Descrição</label>
+    </div>
+
+    <div class="form-field col-lg-6">
+      <input
+        id="image"
+        name="image"
+        class="input-text js-input"
+        type="text"
+        required
+      />
+      <label class="label" for="image">Imagem</label>
+    </div>
+
+    <div class="form-field col-lg-6">
+      <input
+        id="profitmargin"
+        name="profitmargin"
+        class="input-text js-input"
+        type="text"
+        required
+      />
+      <label class="label" for="profitmargin">Margem de Lucro</label>
+    </div>
+
+    <div class="form-field col-lg-6">
+      <input
+        id="barcode"
+        name="barcode"
+        class="input-text js-input"
+        type="text"
+        required
+      />
+      <label class="label" for="barcode">Código de Barras</label>
+    </div>
+
+    <div class="form-field col-lg-6">
+      <input
+        id="serialnumber"
+        name="serialnumber"
+        class="input-text js-input"
+        type="text"
+        required
+      />
+      <label class="label" for="serialnumber">Número de Série</label>
+    </div>
+
+    <div class="form-field col-lg-6">
+      <input
+        id="reference"
+        name="reference"
+        class="input-text js-input"
+        type="text"
+        required
+      />
+      <label class="label" for="reference">Referência</label>
+    </div>
+
+    <div class="form-field col-lg-12 submitBtn">
+      <input class="submit-btn" type="submit" value="Criar Componente" />
+    </div>
+  </form>
+{% endblock %}

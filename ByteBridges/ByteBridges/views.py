@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Supplier, Warehouse, Client,Family
-
+from .models import Supplier, Warehouse, Client,Family, Article
 
 from django.db import connections
 
@@ -126,10 +125,42 @@ def createEquipment(request):
        
         families = [Family(*row) for row in result]
         context={'warehouse':warehouse,'families':families}
+
+
+
     return render(request,'createEquipment.html',context=context)
 
 
+def componentCreate(request):
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("select * from view_warehouses_list")
+        result = cursor.fetchall()
 
+        warehouse = [Warehouse(*row) for row in result]
 
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
 
-    
+        families = [Family(*row) for row in result]
+        context = {'warehouse': warehouse, 'families': families}
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        idfamily = request.POST.get('idfamily')
+        idwarehouse = request.POST.get('idwarehouse')
+        cost = request.POST.get('cost')
+        description = request.POST.get('description')
+        image = request.POST.get('image')
+        profit_margin = request.POST.get('profitmargin')
+        barcode = request.POST.get('barcode')
+        serial_number = request.POST.get('serialnumber')
+        reference = request.POST.get('reference')
+
+        with connections['admin'].cursor() as cursor:
+            # Call the stored procedure using the CALL statement
+            cursor.execute("CALL sp_articles_create(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                           [idfamily, idwarehouse, name, description, image, cost,
+                            profit_margin, barcode, serial_number, reference])
+            return redirect('dashboard')
+
+    return render(request, 'componentCreate.html', context=context)
