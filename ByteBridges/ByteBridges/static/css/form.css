@@ -41,11 +41,7 @@
 .allforms .input-text:focus {
   outline: none;
 }
-.allforms .input-text:focus + .label,
-.allforms .input-text.not-empty + .label {
-  -webkit-transform: translateY(-24px);
-  transform: translateY(-24px);
-}
+
 .allforms .label {
   position: absolute;
   left: 20px;
@@ -55,10 +51,9 @@
   font-weight: 400;
   color: #000000;
   cursor: text;
-  transition: -webkit-transform 0.2s ease-in-out;
   transition: transform 0.2s ease-in-out;
-  transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
 }
+
 .allforms .submit-btn {
   display: inline-block;
   background-color: rgb(0, 160, 16);

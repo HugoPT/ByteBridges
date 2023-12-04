@@ -2,8 +2,43 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}" />
-{%endblock%} {% block content %}
+{%endblock%}{% block content %}
 <div class="form">
   <section class="formSection">{% block formContent %} {% endblock %}</section>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var inputFields = document.querySelectorAll(".input-text");
+
+    inputFields.forEach(function (input) {
+      input.addEventListener("input", function () {
+        toggleLabelPosition(input);
+      });
+
+      input.addEventListener("focus", function () {
+        toggleLabelPosition(input);
+      });
+
+      input.addEventListener("blur", function () {
+        toggleLabelPosition(input);
+      });
+
+      toggleLabelPosition(input); // Initialize label position
+    });
+
+    function toggleLabelPosition(input) {
+      var label = input.nextElementSibling;
+      var trimmedValue = input.value.trim();
+
+      console.log("Input ID:", input.id);
+      console.log("Input Value:", trimmedValue);
+
+      if (trimmedValue !== "" || input === document.activeElement) {
+        label.style.transform = "translateY(-24px)";
+      } else {
+        label.style.transform = "translateY(0)";
+      }
+    }
+  });
+</script>
 {% endblock %}
