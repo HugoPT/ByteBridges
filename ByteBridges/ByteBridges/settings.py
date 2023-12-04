@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-vx5+5h2#e+iwnqfm%9wkc=lu_um+17)7h7)dlkbyw^g^ybifu=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -73,7 +73,7 @@ WSGI_APPLICATION = 'ByteBridges.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-'''
+
 DATABASES = {
 
     'default': {
@@ -83,10 +83,42 @@ DATABASES = {
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
         'PORT': '5455',
-    }
+    },
+    'admin': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ByteBridges',
+        'USER': 'master',
+        'PASSWORD': 'safeP@ss0rd4ever',
+        'HOST': 'apps.i9soft.pt',
+        'PORT': '5455',
+    },
+    'manager': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ByteBridges',
+        'USER': 'master',
+        'PASSWORD': 'safeP@ss0rd4ever',
+        'HOST': 'apps.i9soft.pt',
+        'PORT': '5455',
+    },
+    'reporting': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ByteBridges',
+        'USER': 'master',
+        'PASSWORD': 'safeP@ss0rd4ever',
+        'HOST': 'apps.i9soft.pt',
+        'PORT': '5455',
+    },
+    'tecnician': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ByteBridges',
+        'USER': 'master',
+        'PASSWORD': 'safeP@ss0rd4ever',
+        'HOST': 'apps.i9soft.pt',
+        'PORT': '5455',
+    },
 
 }
-'''
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -112,7 +144,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Lisbon'
 
 USE_I18N = True
 

@@ -1,0 +1,9 @@
+{% extends 'base_template.html' %} {%block extra_css%} {% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}" />
+{%endblock%} {% block content %}
+<div class="form">
+  <section class="formSection">{% block formContent %} {% endblock %}</section>
+</div>
+{% endblock %}

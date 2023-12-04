@@ -1,0 +1,89 @@
+.formSection {
+  max-width: 800px;
+  margin: 50px auto;
+  position: relative;
+}
+.formSection .title {
+  text-align: center;
+  letter-spacing: 3px;
+  font-size: 3.2em;
+  line-height: 48px;
+  padding-bottom: 48px;
+  color: #000;
+  background: #fff;
+}
+
+.allforms .form-field {
+  position: relative;
+  margin: 32px 0;
+}
+.areaLabel {
+  position: relative;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 400;
+  color: #000000;
+  cursor: text;
+  transition: -webkit-transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
+}
+.allforms .input-text {
+  display: block;
+  width: 100%;
+  height: 36px;
+  border-width: 0 0 2px 0;
+  border-color: #000000;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 400;
+}
+.allforms .input-text:focus {
+  outline: none;
+}
+.allforms .input-text:focus + .label,
+.allforms .input-text.not-empty + .label {
+  -webkit-transform: translateY(-24px);
+  transform: translateY(-24px);
+}
+.allforms .label {
+  position: absolute;
+  left: 20px;
+  bottom: 11px;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 400;
+  color: #000000;
+  cursor: text;
+  transition: -webkit-transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, -webkit-transform 0.2s ease-in-out;
+}
+.allforms .submit-btn {
+  display: inline-block;
+  background-color: rgb(0, 160, 16);
+  color: #fff;
+  letter-spacing: 3px;
+  font-size: 16px;
+  padding: 8px 16px;
+  border: none;
+  width: 150px;
+  cursor: pointer;
+}
+.submitBtn {
+  text-align: center;
+}
+.submit-btn {
+  margin: 0 auto;
+  display: block;
+  width: fit-content !important;
+}
+.areatext {
+  width: 100%;
+  height: 200px;
+  border-width: 0 0 2px 0;
+  border-color: #000000;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 400;
+}

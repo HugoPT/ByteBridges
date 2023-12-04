@@ -1,1 +1,54 @@
-{% extends 'base_template.html' %}
+{% extends 'base_template.html' %} {%block extra_css%} {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
+{%endblock%}{% block content %}
+
+<div class="listContainer">
+  <h1>Lista de fornecedores</h1>
+
+  <!--<ul>-->
+  <!--    {% for f in suppliers %}-->
+  <!--    <li>{{ f.name }}</li>-->
+  <!--    {% endfor %}-->
+  <!--</ul>-->
+
+  <table id="suppliersTable" class="display">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Morada</th>
+        <th>Cidade</th>
+        <th>Cod.Postal</th>
+        <th>Telefone</th>
+        <th>Email</th>
+        <th>Contribuinte</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for f in suppliers %}
+      <tr>
+        <td>{{ f.name }}</td>
+        <td>{{ f.address }}</td>
+        <td>{{ f.city }}</td>
+        <td>{{ f.zipcode }}</td>
+        <td><a href="tel:'{{ f.phone }}'">{{ f.phone }}</a></td>
+        <td><a href="mailto:{{ f.email }}">{{ f.email }}</a></td>
+        <td>{{ f.nif }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $("#suppliersTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+      },
+    });
+  });
+</script>
+
+{% endblock %}
