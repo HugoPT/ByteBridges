@@ -26,22 +26,22 @@ urlpatterns = [
     path("", views.Login, name="login"),
     
     #Clients
-    path("clientsList", views.clientsList, name="clientsList"),
-    path("clientsCreate", views.clientsCreate, name="clientsCreate"),
+    path("clientCreate", views.clientCreate, name="clientCreate"),
+    path("clientList", views.clientList, name="clientList"),
     
     #suppliers
-    path("suppliersList", views.suppliersList, name="suppliersList"),
-    path("suppliersCreate", views.suppliersCreate, name="suppliersCreate"),
+    path("supplierCreate", views.supplierCreate, name="supplierCreate"),
+    path("supplierList", views.supplierList, name="supplierList"),
     
     #order
-    path("createOrder", views.createOrder, name="createOrder"),
+    path("orderCreate", views.orderCreate, name="orderCreate"),
     path("orderList", views.orderList, name="orderList"),
     
     #Family
     path("familyCreate", views.familyCreate, name="familyCreate"),
     
     #Equipment
-    path("createEquipment", views.createEquipment, name="createEquipment"),
+    path("equipmentCreate", views.equipmentCreate, name="equipmentCreate"),
     path("equipmentList", views.equipmentList, name="equipmentList"),
     
     #Component

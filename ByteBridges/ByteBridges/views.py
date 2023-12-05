@@ -16,7 +16,7 @@ def IndexPage(request):
     return render(request, template_name='dashboard.html')
 
 # Clients
-def clientsList(request):
+def clientList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
         cursor.execute("SELECT * FROM view_clients_list", [])
@@ -24,10 +24,10 @@ def clientsList(request):
         result = cursor.fetchall()
         print(result)
         clients = [Client(*row) for row in result]
-        return render(request, 'clientsList.html', {'clients': clients})
+        return render(request, 'clientList.html', {'clients': clients})
 
 
-def clientsCreate(request):
+def clientCreate(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         individual = True
@@ -49,12 +49,12 @@ def clientsCreate(request):
         return redirect('dashboard')
 
     # return the form
-    return render(request, template_name='clientsCreate.html')
+    return render(request, template_name='clientCreate.html')
 
 
 
 # Suppliers
-def suppliersList(request):
+def supplierList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
         cursor.execute("select  * from view_suppliers_list", [])
@@ -62,10 +62,10 @@ def suppliersList(request):
         result = cursor.fetchall()
         print(result)
         suppliers = [Supplier(*row) for row in result]
-        return render(request,'suppliersList.html',{'suppliers': suppliers})
+        return render(request,'supplierList.html',{'suppliers': suppliers})
 
 
-def suppliersCreate(request):
+def supplierCreate(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         nif = request.POST.get('nif')
@@ -85,12 +85,12 @@ def suppliersCreate(request):
         print(f"Inserted supplier " + name + " " + nif + " " + address + " " + zipcode + " " + city + " " + phone + " " + email+ " " + obs)
         # return render(request, 'your_template.html', {'result': result})
         return redirect('dashboard')
-    return render(request, template_name='suppliersCreate.html')
+    return render(request, template_name='supplierCreate.html')
 
 
 # orders
-def createOrder(request):
-    return render(request, template_name='createOrder.html')
+def orderCreate(request):
+    return render(request, template_name='orderCreate.html')
 
 
 def orderList(request):
@@ -112,7 +112,7 @@ def familyCreate(request):
     return render(request, template_name='familyCreate.html')
 
 #Equipment
-def createEquipment(request):
+def equipmentCreate(request):
     
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_warehouses_list")
@@ -129,7 +129,7 @@ def createEquipment(request):
 
 
 
-    return render(request,'createEquipment.html',context=context)
+    return render(request,'equipmentCreate.html',context=context)
 
 
 def equipmentList(request):
