@@ -78,7 +78,7 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ByteBridges',
+        'NAME': 'ByteBridgesFinal',
         'USER': 'master',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
@@ -86,7 +86,7 @@ DATABASES = {
     },
     'admin': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ByteBridges',
+        'NAME': 'ByteBridgesFinal',
         'USER': 'master',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
@@ -94,7 +94,7 @@ DATABASES = {
     },
     'manager': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ByteBridges',
+        'NAME': 'ByteBridgesFinal',
         'USER': 'master',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
@@ -102,7 +102,7 @@ DATABASES = {
     },
     'reporting': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ByteBridges',
+        'NAME': 'ByteBridgesFinal',
         'USER': 'master',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
@@ -110,7 +110,7 @@ DATABASES = {
     },
     'technician': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ByteBridges',
+        'NAME': 'ByteBridgesFinal',
         'USER': 'master',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
