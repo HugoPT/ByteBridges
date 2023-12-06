@@ -52,9 +52,9 @@ def clientCreate(request):
             return redirect('dashboard')
 
     nif_api_client = NIFApiClient()
-    company_instance = nif_api_client.fetch_company_data(509442013)
+    company_instance = nif_api_client.fetch_company_data("506707857")
 
-    print(company_instance.records_seo_url)
+    print(company_instance.records_place_address)
 
     # return the form
     return render(request, template_name='clientCreate.html')

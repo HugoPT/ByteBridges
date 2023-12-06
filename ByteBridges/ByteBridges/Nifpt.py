@@ -19,6 +19,7 @@ class NIFApiClient:
 
         if response.status_code == 200:
             data = response.json()
+            print(data)
             records_data = data.get('records', {}).get(str(nif), {})
 
             # Creating a Company object with the extracted data
