@@ -82,3 +82,24 @@
   line-height: 26px;
   font-weight: 400;
 }
+.mainbox {
+  display: flex;
+  position: relative;
+}
+.formDrop {
+  position: relative;
+  padding: 10px;
+  width: 100%;
+  font-size: 14px;
+}
+.dropstyle {
+  width: 100%;
+  height: 40px;
+  border-width: 0 0 2px 0;
+  border-color: #000000;
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  background: #d6d6d654;
+  padding: 0px;
+}
