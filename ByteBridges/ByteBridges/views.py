@@ -62,7 +62,7 @@ def clientCreate(request):
 
 def get_nif_data(request, nif):
     try:
-        external_api_url = f"https://www.nif.pt/?json=1&q="+nif+"&key=9753df22de14c1e7e397c5d27b3ec9a4"
+        external_api_url = f"https://www.nif.pt/?json=1&q=508886970&key=9753df22de14c1e7e397c5d27b3ec9a4"
         
         response = requests.get(external_api_url)
         

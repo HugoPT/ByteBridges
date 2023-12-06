@@ -20,18 +20,35 @@
 
 <script>
   document.getElementById("getNIF").addEventListener("click", function (event) {
-    // Prevent the default button click behavior
     event.preventDefault();
 
     let nif = document.getElementById("nif_pt").value;
 
     let apiUrl = `http://127.0.0.1:8000/get-nif/${nif}/`;
-
+    function decodeHtml(html) {
+      return decodeURIComponent(escape(html));
+    }
     fetch(apiUrl)
       .then((response) => {
-        console.log("1");
         console.log(response);
         return response.json();
+      })
+      .then((result) => {
+        console.log(result.records[nif]);
+        var x = result.records[nif];
+        document.getElementById("name").value = x.title;
+        document.getElementById("nif").value = x.nif;
+        document.getElementById("address").value = x.address;
+        document.getElementById("zipcode").value = x.pc4 + "-" + x.pc3;
+        document.getElementById("city").value = x.geo.region;
+        document.getElementById("email").value = x.contacts.email;
+
+        var obsText = x.activity;
+        obsText = decodeHtml(obsText);
+        obsText = obsText.replace(/<\/?p>/g, "");
+        obsText = obsText.replace(/[^\w\s]/gi, "");
+        obsText = obsText.trim();
+        document.getElementById("obs").value = obsText;
       })
       .catch((error) => console.error("Error:", error));
   });
