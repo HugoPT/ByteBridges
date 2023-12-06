@@ -40,6 +40,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/posLogin.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/form.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/dropdown.css' %}" />
     {% block extra_css %}{% endblock %}
 
     <title>{% block title %}ByteBridges{% endblock %}</title>
@@ -109,6 +110,7 @@
         <img src="https://i.imgur.com/hczKIze.jpg" alt=""/>
     </div>
 </header>
+
 <div class="l-navbar" id="nav-bar">
     <nav class="nav">
         <div>
@@ -116,23 +118,78 @@
                 <i class="bx bx-layer nav_logo-icon"></i>
                 <span class="nav_logo-name">ByteBridges</span>
             </a>
-            <div class="nav_list">
-                <a href="#" class="nav_link active">
-                    <i class="bx bx-grid-alt nav_icon"></i>
-                    <span class="nav_name">Produtos</span>
-                </a>
-                <a href="#" class="nav_link">
-                    <i class="bx bx-user nav_icon"></i>
-                    <span class="nav_name">Clientes</span>
-                </a>
-                <a href="#" class="nav_link">
-                    <i class="bx bx-message-square-detail nav_icon"></i>
-                    <span class="nav_name">Documentos</span>
-                </a>
-                <a href="#" class="nav_link">
-                    <i class="bx bxs-component nav_icon"></i>
-                    <span class="nav_name">Stocks</span>
-                </a>
+            <div>
+                <div class="nav_link_dropdown">
+                    <div>
+                        <a href="#" class="nav_link">
+                            <i class="bx bx-grid-alt nav_icon"></i>
+                            <span class="nav_name">Produtos <i class='bx bx-chevron-right arrow'></i></span>
+                        </a>
+                    </div>
+                    <div class="dropdown_content nav_link">
+                        <a href="componentCreate.html" class="dropHover">
+                            Adicionar Componente <i class='bx bx-chevron-right arrow'></i>
+                        </a>
+                        <a href="equipmentCreate.html" class="dropHover">
+                            Adicionar Equipamento <i class='bx bx-chevron-right arrow'></i>
+                        </a>
+                        <a href="componentList.html" class="dropHover">
+                            Gerir Componente <i class='bx bx-chevron-right arrow'></i>
+                        </a>
+                        <a href="equipmentList.html" class="dropHover">
+                            Gerir Equipamento <i class='bx bx-chevron-right arrow'></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="nav_link_dropdown">
+                    <div>
+                    <a href="#" class="nav_link">
+                        <i class="bx bx-user nav_icon"></i>
+                        <span class="nav_name">Clientes <i class='bx bx-chevron-right arrow'></i></span>
+                    </a>
+                    </div>
+                    <div class="dropdown_content nav_link">
+                        <a href="clientList.html" class="dropHover">
+                            Gerir Cliente <i class='bx bx-chevron-right arrow'></i>
+                        </a>
+                        <a href="clientCreate.html" class="dropHover">
+                            Adicionar Cliente <i class='bx bx-chevron-right arrow'></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="nav_link_dropdown">
+                    <div>
+                        <a href="#" class="nav_link">
+                            <i class="bx bx-message-square-detail nav_icon"></i>
+                            <span class="nav_name">Documentos <i class='bx bx-chevron-right arrow'></i></span>
+                        </a>
+                    </div>
+                    <div class="dropdown_content nav_link">
+                        <a href="#" class="dropHover">
+                            Adicionar Factura <i class='bx bx-chevron-right arrow'></i>
+                        </a>
+                        <a href="#" class="dropHover">
+                            Gerir Factura <i class='bx bx-chevron-right arrow'></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="nav_link_dropdown">
+                    <div>
+                        <a href="#" class="nav_link">
+                            <i class="bx bxs-component nav_icon"></i>
+                            <span class="nav_name">Stocks <i class='bx bx-chevron-right arrow'></i></span>
+                        </a>
+                    </div>
+                    <div class="dropdown_content nav_link">
+                        <a href="adicionar-stock.html" class="dropHover">
+                            Ver Stock <i class='bx bx-chevron-right arrow'></i>
+                        </a>
+                        <a href="gerir-stock.html" class="dropHover">
+                            Movimentos de Stock <i class='bx bx-chevron-right arrow'></i>
+                        </a>
+                    </div>
+                </div>
                 <a href="#" class="nav_link">
                     <i class="bx bx-chart nav_icon"></i>
                     <span class="nav_name">Reporting</span>
@@ -150,6 +207,38 @@
     </nav>
 </div>
 <!--Fim Menu-->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var dropdowns = document.querySelectorAll('.nav_link_dropdown');
+    
+        dropdowns.forEach(function(dropdown) {
+            var content = dropdown.querySelector('.dropdown_content');
+            var arrowIcon = dropdown.querySelector('.arrow');
+    
+            dropdown.addEventListener('click', function(event) {
+                event.preventDefault();
+                content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+    
+                // Toggle the class to change the arrow icon
+                arrowIcon.classList.toggle('rotate');
+            });
+    
+            // Stop the click event propagation when clicking inside the dropdown content
+            content.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
+    
+            // Close the dropdown when clicking outside its scope
+            document.addEventListener('click', function(event) {
+                if (!dropdown.contains(event.target)) {
+                    content.style.display = 'none';
+                    arrowIcon.classList.remove('rotate');
+                }
+            });
+        });
+    });
+    
+</script>
 
 <div class="container">{% block content %}{% endblock %}</div>
 

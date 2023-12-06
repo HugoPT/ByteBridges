@@ -114,14 +114,13 @@ a {
   padding: 0.5rem 0 0.5rem 1.5rem;
 }
 
-.nav_link:hover {
+.nav_link span:hover {
   background-color: var(--hover-color);
 }
 /* Estilo do logotipo da barra de navegação */
 .nav_logo {
   margin-bottom: 2rem;
 }
-
 /* Estilo do ícone do logotipo da barra de navegação */
 .nav_logo-icon {
   font-size: 1.25rem;
