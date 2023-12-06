@@ -51,7 +51,7 @@ class Warehouse(models.Model):
               
 class Family(models.Model):
     idfamily = models.AutoField(primary_key=True, unique=True)
-    namefamily = models.CharField(max_length=70)
+    name = models.CharField(max_length=70)
     description = models.CharField(max_length=500)
 
     def __str__(self):

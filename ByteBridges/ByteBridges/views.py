@@ -147,7 +147,13 @@ def orderSupplierCreate(request):
         result = cursor.fetchall()
 
         warehouses = [Warehouse(*row) for row in result]
-        context = {'suppliers': suppliers, 'warehouses': warehouses}
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+
+        families = [Family(*row) for row in result]
+
+        context = {'suppliers': suppliers, 'warehouses': warehouses, 'families': families}
 
 
     if request.method == 'POST':

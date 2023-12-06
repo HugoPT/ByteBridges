@@ -42,6 +42,45 @@
   </div>
 
 
+<div class="form-field col-lg-4">
+    <div class="mainbox">
+      <div class="formDrop">
+        <select id="family" name="idfamily" class="dropstyle">
+          {% for f in families %}
+          <option class="dropOptions" value="{{ f.idfamily}}">
+            {{ f.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+
+<div class="form-field col-lg-4">
+    <div class="mainbox">
+      <div class="formDrop">
+        <select id="warehouse" name="idwarehouse" class="dropstyle">
+          {% for w in warehouses %}
+          <option class="dropOptions" value="{{ w.idwarehouse}}">
+            {{ w.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+
+<div class="form-field col-lg-4">
+    <input
+      id="name"
+      name="name"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="name">Nome</label>
+  </div>
+
   <div class="form-field col-lg-12 submitBtn">
     <input class="submit-btn" type="submit" value="Criar Encomenda" />
   </div>
