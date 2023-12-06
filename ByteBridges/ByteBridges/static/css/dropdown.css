@@ -17,7 +17,6 @@
 }
 
 .nav_link_dropdown:hover .dropdown_content {
-  display: block;
   background: #ffffff1f;
 }
 .dropHover {
