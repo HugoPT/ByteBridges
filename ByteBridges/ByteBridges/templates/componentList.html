@@ -10,27 +10,21 @@
       <tr>
           <th>Nome</th>
           <th>Familia</th>
-          <th>Armazém</th>
           <th>Descrição</th>
-          <th>Custo</th>
           <th>Margem de Lucro</th>
           <th>Código de Barras</th>
-          <th>Número de Série</th>
           <th>Referência</th>
       </tr>
     </thead>
     <tbody>
-      {% for c in components %}
+      {% for c in result %}
       <tr>
-          <td>{{ c.name }}</td>
-        <td>{{ c.family }}</td>
-        <td>{{ c.warehouse }}</td>
-        <td>{{ c.description }}</td>
-        <td>{{ c.cost }}</td>
-        <td>{{ c.profitmargin }}</td>
-        <td>{{ c.barcode }}</td>
-        <td>{{ c.serialnumber }}</td>
-        <td>{{ c.reference }}</td>
+          <td>{{ c.0 }}</td>
+        <td>{{ c.1 }}</td>
+        <td>{{ c.3 }}</td>
+        <td>{{ c.4 }}</td>
+        <td>{{ c.5 }}</td>
+        <td>{{ c.6 }}</td>
       </tr>
       {% endfor %}
     </tbody>

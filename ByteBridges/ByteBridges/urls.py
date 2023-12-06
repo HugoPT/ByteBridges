@@ -32,10 +32,12 @@ urlpatterns = [
     #suppliers
     path("supplierCreate", views.supplierCreate, name="supplierCreate"),
     path("supplierList", views.supplierList, name="supplierList"),
-    
+
     #order
-    path("orderCreate", views.orderCreate, name="orderCreate"),
-    path("orderList", views.orderList, name="orderList"),
+    path("orderSupplierCreate", views.orderSupplierCreate, name="orderSupplierCreate"),
+    path("orderSupplierList", views.orderSupplierList, name="orderSupplierList"),
+    path("orderClientCreate", views.orderClientCreate, name="orderClientCreate"),
+    path("orderClientList", views.orderClientList, name="orderClientList"),
     
     #Family
     path("familyCreate", views.familyCreate, name="familyCreate"),

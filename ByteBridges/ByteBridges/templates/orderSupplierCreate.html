@@ -2,7 +2,7 @@
 <h1 class="title">Criar novo Fornecedor</h1>
 {% endblock %}
 
-<form class="allforms row" action="{% url 'supplierCreate' %}" method="post">
+<form class="allforms row" action="{% url 'orderSupplierCreate' %}" method="post">
   {% csrf_token %}
   <div class="form-field col-lg-6">
     <input
