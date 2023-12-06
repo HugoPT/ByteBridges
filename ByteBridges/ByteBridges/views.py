@@ -53,28 +53,30 @@ def clientCreate(request):
                            [email, individual, zipcode, address, nif, name, obs, city, eletronicinvoice])
             return redirect('dashboard')
 
-    #nif_api_client = NIFApiClient()
-    #company_instance = nif_api_client.fetch_company_data("506707857")
-    #print(company_instance.records_place_address)
+    # nif_api_client = NIFApiClient()
+    # company_instance = nif_api_client.fetch_company_data("506707857")
+    # print(company_instance.records_place_address)
 
     # return the form
     return render(request, template_name='clientCreate.html')
 
+
 def get_nif_data(request, nif):
     try:
-        external_api_url = f"https://www.nif.pt/?json=1&q="+nif+"&key=7419b7b89077c127844f934fe1563676"
-        
+        external_api_url = f"https://www.nif.pt/?json=1&q=" + nif + "&key=7419b7b89077c127844f934fe1563676"
+
         response = requests.get(external_api_url)
-        
+
         if response.status_code == 200:
             data = response.json()
             print(data)
             return JsonResponse(data)
         else:
             return JsonResponse({'error': 'Failed to fetch data from the external API'}, status=500)
-    
+
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
 
 # Suppliers
 def supplierList(request):

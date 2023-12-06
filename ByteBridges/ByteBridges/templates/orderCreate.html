@@ -1,5 +1,189 @@
 {% extends 'forms.html' %}
 {% block formTitle %}
-<h1 class="title">Criar Encomenda</h1>
+    <h1 class="title">Criar Encomenda</h1>
 {% endblock %}
+
+{% block formContent %}
+    <form id="dataForm">
+        <div class="form-group">
+            <label for="name">Componente:</label>
+            <input class="form-control" type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="reference">Referência:</label>
+            <input class="form-control" type="text" id="reference" name="position" required>
+        </div>
+
+        <div class="form-group">
+            <label for="qtd">Quantidade:</label>
+            <input class="form-control" type="text" id="qtd" name="office" required>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md12">
+                <button class="bnt btn-success form-control" type="button" onclick="addDataRow()">Adicionar Produto</button>
+            </div>
+        </div>
+
+    </form>
+
+    <!-- DataTables Table -->
+    <table id="dataTable" class="display">
+        <thead>
+        <tr>
+            <th>Componente</th>
+            <th>Referência</th>
+            <th>Qtd</th>
+            <th>Opções</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Existing data rows will go here -->
+        </tbody>
+    </table>
+
+
+
+    <script>
+        var table;
+
+        // Initialize DataTables
+        $(document).ready(function () {
+            table = $('#dataTable').DataTable({
+                dom: "Bfrtip",
+                buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+                },
+            });
+
+            // Add event listener for edit and delete buttons
+            $('#dataTable tbody').on('click', 'button.edit', function () {
+                var data = table.row($(this).parents('tr')).data();
+                editDataRow(data);
+            });
+
+            $('#dataTable tbody').on('click', 'button.delete', function () {
+                table.row($(this).parents('tr')).remove().draw();
+            });
+        });
+
+        // Function to add a new row to the DataTable
+        function addDataRow() {
+            let name = $('#name').val();
+            let reference = $('#reference').val();
+            let qtd = $('#qtd').val();
+
+            // Add a new row to the DataTable
+
+            var rowNode = table.row.add([name, reference, qtd, '<button class="edit btn btn-warning">Editar</button> <button class="btn btn-danger delete">Remover</button>']).draw().node();
+
+            $(rowNode).data('originalData', {name: name, reference: reference, qtd: qtd});
+
+            // Clear the form fields
+            $('#name').val('');
+            $('#reference').val('');
+            $('#qtd').val('');
+
+
+        }
+
+        // Function to edit a row in the DataTable
+        function editDataRow(data) {
+            $('#name').val(data.name);
+            $('#reference').val(data.reference);
+            $('#qtd').val(data.qtd);
+        }
+    </script>
+{% endblock %}
+{#{% block formContent %}#}
+{#     <div class="container pt-4">#}
+{##}
+{#    <div class="table-responsive">#}
+{#      <table class="table table-bordered">#}
+{#        <thead>#}
+{#          <tr>#}
+{#            <th class="text-center">Componente</th>#}
+{#            <th class="text-center">Referência</th>#}
+{#            <th class="text-center">Qtd</th>#}
+{#            <th class="text-center">Opções</th>#}
+{#          </tr>#}
+{#        </thead>#}
+{#        <tbody id="tbody">#}
+{##}
+{#        </tbody>#}
+{#      </table>#}
+{#    </div>#}
+{#    <button class="btn btn-md btn-primary"#}
+{#      id="addBtn" type="button">#}
+{#        Adcionar Produto#}
+{#    </button>#}
+{#  </div>#}
+{#    <script>#}
+{#    $(document).ready(function () {#}
+{##}
+{#      // Denotes total number of rows#}
+{#      var rowIdx = 0;#}
+{##}
+{#      // jQuery button click event to add a row#}
+{#      $('#addBtn').on('click', function () {#}
+{##}
+{#        // Adding a row inside the tbody.#}
+{#        $('#tbody').append(`<tr id="R${++rowIdx}">#}
+{#             <td class="row-index text-center">#}
+{#                <p>Motherboard Asus</p>#}
+{#             </td>#}
+{#               <td class="row-index text-center">#}
+{#                <p>MB45-PRO</p>#}
+{#             </td>#}
+{#             <td class="row-index text-center">#}
+{#                <p>4</p>#}
+{#             </td>#}
+{#              <td class="text-center">#}
+{#                <button class="btn btn-danger remove"#}
+{#                  type="button">Remover</button>#}
+{#                <button class="btn btn-warning remove"#}
+{#                  type="button">Alterar</button>#}
+{#                </td>#}
+{#              </tr>`);#}
+{#      });#}
+{##}
+{#      // jQuery button click event to remove a row.#}
+{#      $('#tbody').on('click', '.remove', function () {#}
+{##}
+{#        // Getting all the rows next to the row#}
+{#        // containing the clicked button#}
+{#        var child = $(this).closest('tr').nextAll();#}
+{##}
+{#        // Iterating across all the rows#}
+{#        // obtained to change the index#}
+{#        child.each(function () {#}
+{##}
+{#          // Getting <tr> id.#}
+{#          var id = $(this).attr('id');#}
+{##}
+{#          // Getting the <p> inside the .row-index class.#}
+{#          var idx = $(this).children('.row-index').children('p');#}
+{##}
+{#          // Gets the row number from <tr> id.#}
+{#          var dig = parseInt(id.substring(1));#}
+{##}
+{#          // Modifying row index.#}
+{#          idx.html(`Row ${dig - 1}`);#}
+{##}
+{#          // Modifying row id.#}
+{#          $(this).attr('id', `R${dig - 1}`);#}
+{#        });#}
+{##}
+{#        // Removing the current row.#}
+{#        $(this).closest('tr').remove();#}
+{##}
+{#        // Decreasing total number of rows by 1.#}
+{#        rowIdx--;#}
+{#      });#}
+{#    });#}
+{#  </script>#}
+{#{% endblock %}#}
+
+
 
