@@ -3,17 +3,16 @@
 {%endblock%}{% block content %}
 
 <div class="listContainer">
-  <h1>Lista de Componentes</h1>
+  <h1>Lista de Equipamentos</h1>
 
   <table id="componentsTable" class="display">
     <thead>
       <tr>
           <th>Nome</th>
-          <th>Familia</th>
+          <th>Categoria</th>
           <th>Armazém</th>
           <th>Descrição</th>
           <th>Custo</th>
-          <th>Margem de Lucro</th>
           <th>Código de Barras</th>
           <th>Número de Série</th>
           <th>Referência</th>
@@ -24,10 +23,9 @@
       <tr>
           <td>{{ c.name }}</td>
         <td>{{ c.family }}</td>
-        <td>{{ c.warehouse }}</td>
         <td>{{ c.description }}</td>
+        <td>{{ c.warehouse }}</td>
         <td>{{ c.cost }}</td>
-        <td>{{ c.profitmargin }}</td>
         <td>{{ c.barcode }}</td>
         <td>{{ c.serialnumber }}</td>
         <td>{{ c.reference }}</td>

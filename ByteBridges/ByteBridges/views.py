@@ -37,14 +37,15 @@ def clientCreate(request):
         city = request.POST.get('city')
         email = request.POST.get('email')
         obs = request.POST.get('obs')
+        eletronicinvoice = True
 
         print(
             f"Inserted client {name} {nif} {address} {zipcode} {email} {city} {obs}")
 
         with connections['admin'].cursor() as cursor:
             # Call the stored procedure using the CALL statement
-            cursor.execute("CALL sp_clients_create(%s,%s,%s,%s,%s,%s,%s,%s)",
-                           [email,individual,zipcode,address,nif,name,obs,city])
+            cursor.execute("CALL sp_clients_create(%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                           [email,individual,zipcode,address,nif,name,obs,city,eletronicinvoice])
             
         return redirect('dashboard')
 
