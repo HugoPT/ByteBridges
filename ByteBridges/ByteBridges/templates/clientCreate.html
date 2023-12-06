@@ -1,166 +1,117 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
-    <h1 class="title">Criar novo Cliente</h1>
+<h1 class="title">Criar novo Cliente</h1>
 {% endblock %}
 
-    <form id="getData">
-        <div>
-            <img src="https://www.nssoftware.pt/wp-content/uploads/nif.pt_.jpg" width="120" height="80">
-        </div>
-        <label for="nif_pt">
-            Buscar dados de empresa
-        </label>
-        <input
-                id="nif_pt"
-                name="nif_pt"
-                class="form-row colSM"
-                type="text"
-        />
-        <button id="getNIF" class="btn btn-success" type="button">Solicitar dados</button>
-        <div>
+<form id="getData">
+  <div>
+    <img
+      src="https://www.nssoftware.pt/wp-content/uploads/nif.pt_.jpg"
+      width="120"
+      height="80"
+    />
+  </div>
+  <label for="nif_pt"> Buscar dados de empresa </label>
+  <input id="nif_pt" name="nif_pt" class="form-row colSM" type="text" />
+  <button id="getNIF" class="btn btn-success" type="submit">
+    Solicitar dados
+  </button>
+  <div></div>
+</form>
 
-        </div>
-    </form>
+<script>
+  document.getElementById("getNIF").addEventListener("click", function (event) {
+    // Prevent the default button click behavior
+    event.preventDefault();
 
+    let nif = document.getElementById("nif_pt").value;
 
-    <script>
+    let apiUrl = `http://127.0.0.1:8000/get-nif/${nif}/`;
 
+    fetch(apiUrl)
+      .then((response) => {
+        console.log("1");
+        console.log(response);
+        return response.json();
+      })
+      .catch((error) => console.error("Error:", error));
+  });
+</script>
 
-        document.getElementById('getNIF').addEventListener('click', function (event) {
-            // Prevent the default button click behavior
-            event.preventDefault();
+<form class="allforms row" action="{% url 'clientCreate' %}" method="post">
+  {% csrf_token %}
 
-            var myHeaders = new Headers();
+  <div class="form-field col-lg-6">
+    <input
+      id="name"
+      name="name"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="name">Nome</label>
+  </div>
+  <div class="form-field col-lg-6">
+    <input
+      id="nif"
+      name="nif"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="nif">Contribuinte</label>
+  </div>
 
+  <div class="form-field col-lg-12">
+    <input
+      id="address"
+      name="address"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="address">Morada</label>
+  </div>
 
-            var requestOptions = {
-                method: 'GET',
-                headers: myHeaders,
-                redirect: 'follow'
-            };
+  <div class="form-field col-lg-6">
+    <input
+      id="zipcode"
+      name="zipcode"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="zipcode">Cod.Postal</label>
+  </div>
 
-            fetch("https://www.nif.pt/?json=1&q=509442013&key=9753df22de14c1e7e397c5d27b3ec9a4", requestOptions)
-                .then(response => response.text())
-                .then(result => console.log(result))
-                .catch(error => console.log('error', error));
-            {##}
-            {#// Your custom logic here#}
-            {##}
-            {#let nif = document.getElementById("nif_pt").value#}
-            {#console.log(nif)#}
-            {#var settings = {#}
-            {#    "url": "https://www.nif.pt/?json=1&q=" + nif + "&key=9753df22de14c1e7e397c5d27b3ec9a4",#}
-            {#    "method": "GET",#}
-            {#    "headers": {#}
-            {#        "Content-Type": "application/json",  // Set the content type if you're sending JSON data#}
-            {#        "Access-Control-Allow-Origin": "http://localhost:8000",  // Replace with your frontend's origin#}
-            {#        // Add other headers as needed#}
-            {#    },#}
-            {#    "timeout": 0,#}
-            {
-                #};
-                #}
-                {#$.ajax(settings).done(function (response) {#}
-                {#    console.log(response);#}
-                {#    console.log('Button clicked, but default behavior prevented.');#}
-                {#})
-                    ;
-                    #}
-                }
-            )
-                ;
+  <div class="form-field col-lg-6">
+    <input
+      id="city"
+      name="city"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="city">Cidade</label>
+  </div>
+  <br />
+  <div class="form-field col-lg-6">
+    <input
+      id="email"
+      name="email"
+      class="input-text js-input"
+      type="email"
+      required
+    />
+    <label class="label" for="phone">Email</label>
+  </div>
+  <div class="form-field col-lg-12">
+    <label class="areaLabel" for="obs">Observações:</label>
+    <textarea id="obs" name="obs" rows="4" cols="100"></textarea><br />
+  </div>
 
-                function getNifAPI(e) {
-                    event.preventDefault()
-                    let nif = document.getElementById("nif_pt").value
-                    console.log(nif)
-                    var settings = {
-                        "url": "https://www.nif.pt/?json=1&q=" + nif + "&key=9753df22de14c1e7e397c5d27b3ec9a4",
-                        "method": "GET",
-                        "timeout": 0,
-                    };
-
-                    $.ajax(settings).done(function (response) {
-                        console.log(response);
-                    });
-                }
-
-
-    </script>
-    <form class="allforms row" action="{% url 'clientCreate' %}" method="post">
-        {% csrf_token %}
-
-        <div class="form-field col-lg-6">
-            <input
-                    id="name"
-                    name="name"
-                    class="input-text js-input"
-                    type="text"
-                    required
-            />
-            <label class="label" for="name">Nome</label>
-        </div>
-        <div class="form-field col-lg-6">
-            <input
-                    id="nif"
-                    name="nif"
-                    class="input-text js-input"
-                    type="text"
-                    required
-            />
-            <label class="label" for="nif">Contribuinte</label>
-        </div>
-
-        <div class="form-field col-lg-12">
-            <input
-                    id="address"
-                    name="address"
-                    class="input-text js-input"
-                    type="text"
-                    required
-            />
-            <label class="label" for="address">Morada</label>
-        </div>
-
-        <div class="form-field col-lg-6">
-            <input
-                    id="zipcode"
-                    name="zipcode"
-                    class="input-text js-input"
-                    type="text"
-                    required
-            />
-            <label class="label" for="zipcode">Cod.Postal</label>
-        </div>
-
-        <div class="form-field col-lg-6">
-            <input
-                    id="city"
-                    name="city"
-                    class="input-text js-input"
-                    type="text"
-                    required
-            />
-            <label class="label" for="city">Cidade</label>
-        </div>
-        <br/>
-        <div class="form-field col-lg-6">
-            <input
-                    id="email"
-                    name="email"
-                    class="input-text js-input"
-                    type="email"
-                    required
-            />
-            <label class="label" for="phone">Email</label>
-        </div>
-        <div class="form-field col-lg-12">
-            <label class="areaLabel" for="obs">Observações:</label>
-            <textarea id="obs" name="obs" rows="4" cols="100"></textarea><br/>
-        </div>
-
-        <div class="form-field col-lg-12 submitBtn">
-            <input class="submit-btn" type="submit" value="Criar Cliente"/>
-        </div>
-    </form>
+  <div class="form-field col-lg-12 submitBtn">
+    <input class="submit-btn" type="submit" value="Criar Cliente" />
+  </div>
+</form>
 
 {% endblock %}

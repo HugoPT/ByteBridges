@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 
 from .Nifpt import NIFApiClient
 from .models import Supplier, Warehouse, Client, Family, Article, Component, Equipment
+from django.http import JsonResponse
+import requests
 
 from django.db import connections
 
@@ -51,14 +53,28 @@ def clientCreate(request):
                            [email, individual, zipcode, address, nif, name, obs, city, eletronicinvoice])
             return redirect('dashboard')
 
-    nif_api_client = NIFApiClient()
-    company_instance = nif_api_client.fetch_company_data("506707857")
-
-    print(company_instance.records_place_address)
+    #nif_api_client = NIFApiClient()
+    #company_instance = nif_api_client.fetch_company_data("506707857")
+    #print(company_instance.records_place_address)
 
     # return the form
     return render(request, template_name='clientCreate.html')
 
+def get_nif_data(request, nif):
+    try:
+        external_api_url = f"https://www.nif.pt/?json=1&q="+nif+"&key=9753df22de14c1e7e397c5d27b3ec9a4"
+        
+        response = requests.get(external_api_url)
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(data)
+            return JsonResponse(data)
+        else:
+            return JsonResponse({'error': 'Failed to fetch data from the external API'}, status=500)
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
 
 # Suppliers
 def supplierList(request):

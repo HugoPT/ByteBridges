@@ -28,7 +28,8 @@ urlpatterns = [
     #Clients
     path("clientCreate", views.clientCreate, name="clientCreate"),
     path("clientList", views.clientList, name="clientList"),
-    
+    path('get-nif/<str:nif>/', views.get_nif_data, name='get_nif_data'),
+
     #suppliers
     path("supplierCreate", views.supplierCreate, name="supplierCreate"),
     path("supplierList", views.supplierList, name="supplierList"),

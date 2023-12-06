@@ -39,8 +39,7 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",  # Replace with your frontend's URL
-    # Add other allowed origins as needed
+    "http://127.0.0.1:8000",
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
