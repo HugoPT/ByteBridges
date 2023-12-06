@@ -118,3 +118,5 @@ class Equipment(models.Model):
     class Meta:
         # Specify the table name
         db_table = 'view_equipments_list'
+
+

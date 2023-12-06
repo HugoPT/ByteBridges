@@ -1,95 +1,49 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
-<h1 class="title">Criar novo Fornecedor</h1>
+<h1 class="title">Criar nova Encomenda</h1>
 {% endblock %}
 
 <form class="allforms row" action="{% url 'orderSupplierCreate' %}" method="post">
   {% csrf_token %}
-  <div class="form-field col-lg-6">
-    <input
-      id="name"
-      name="name"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="name">Nome</label>
-  </div>
-  <div class="form-field col-lg-6">
-    <input
-      id="nif"
-      name="nif"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="nif">NIF</label>
-  </div>
-
-  <div class="form-field col-lg-12">
-    <input
-      id="address"
-      name="address"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="address">Morada</label>
-  </div>
 
   <div class="form-field col-lg-6">
-    <input
-      id="zipcode"
-      name="zipcode"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="zipcode">Cod.Postal</label>
+    <div class="mainbox">
+      <div class="formDrop">
+        <select id="supplier" name="idsupplier" class="dropstyle">
+          {% for s in suppliers %}
+          <option class="dropOptions" value="{{ s.idsupplier}}">
+            {{ s.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
   </div>
 
-  <div class="form-field col-lg-6">
-    <input
-      id="city"
-      name="city"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="city">Cidade</label>
-  </div>
-  <div class="form-field col-lg-6">
-    <input
-      id="phone"
-      name="phone"
-      class="input-text js-input"
-      type="tel"
-      required
-    />
-    <label class="label" for="phone">Telefone</label>
-  </div>
-  <div class="form-field col-lg-6">
-    <input
-      id="email"
-      name="email"
-      class="input-text js-input"
-      type="email"
-      required
-    />
-    <label class="label" for="phone">Email</label>
+<div class="form-field col-lg-6">
+    <div class="mainbox">
+      <div class="formDrop">
+        <select id="warehouse" name="idwarehouse" class="dropstyle">
+          {% for w in warehouses %}
+          <option class="dropOptions" value="{{ w.idwarehouse}}">
+            {{ w.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
   </div>
 
-    <div class="form-field col-lg-12">
+<div class="form-field col-lg-12">
     <label class="areaLabel" for="obs">Observações:</label>
     <textarea id="obs"
               class="input-text js-input"
               name="obs"
-              rows="4"
-              cols="100"
               ></textarea><br />
   </div>
 
+
   <div class="form-field col-lg-12 submitBtn">
-    <input class="submit-btn" type="submit" value="Criar Fornecedor" />
+    <input class="submit-btn" type="submit" value="Criar Encomenda" />
   </div>
 </form>
 {% endblock %}
