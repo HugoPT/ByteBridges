@@ -208,19 +208,6 @@
           "</select></div></div></div>"
       );
 
-      // Populate options dynamically based on warehouses data
-      for (var j = 0; j < warehouses.length; j++) {
-        newDropdown
-          .find("select")
-          .append(
-            '<option class="dropOptions" value="' +
-              warehouses[j].id +
-              '">' +
-              warehouses[j].name +
-              "</option>"
-          );
-      }
-
       newColumn.append(newDropdown);
       newRow.append(newColumn);
     }
