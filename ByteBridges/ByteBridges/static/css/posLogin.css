@@ -152,7 +152,7 @@ a {
 }
 
 /* Exibição da barra de navegação ao ativar a classe "show" */
-.show {
+.showbar {
   left: 0;
 }
 
@@ -207,7 +207,7 @@ a {
     padding: 1rem 1rem 0 0;
   }
 
-  .show {
+  .showbar {
     width: calc(var(--nav-width) + 156px);
   }
 

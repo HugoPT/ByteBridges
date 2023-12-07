@@ -2,16 +2,23 @@
 <h1 class="title">Criar nova Encomenda</h1>
 {% endblock %}
 
-<form class="allforms row" action="{% url 'orderSupplierCreate' %}" method="post">
+<form
+  class="allforms row"
+  action="{% url 'orderSupplierCreate' %}"
+  method="post"
+>
   {% csrf_token %}
 
   <div class="form-field col-lg-6">
     <div class="mainbox">
       <div class="formDrop">
         <select id="supplier" name="idsupplier" class="dropstyle">
+          <option class="dropOptions" value="" disabled selected>
+            Escolha um Fornecedor
+          </option>
           {% for s in suppliers %}
-          <option class="dropOptions" value="{{ s.idsupplier}}">
-            {{ s.name}}
+          <option class="dropOptions" value="{{ s.idsupplier }}">
+            {{ s.name }}
           </option>
           {% endfor %}
         </select>
@@ -19,10 +26,13 @@
     </div>
   </div>
 
-<div class="form-field col-lg-6">
+  <div class="form-field col-lg-6">
     <div class="mainbox">
       <div class="formDrop">
         <select id="warehouse" name="idwarehouse" class="dropstyle">
+          <option class="dropOptions" value="" disabled selected>
+            Escolha um Armazém
+          </option>
           {% for w in warehouses %}
           <option class="dropOptions" value="{{ w.idwarehouse}}">
             {{ w.name}}
@@ -33,56 +43,127 @@
     </div>
   </div>
 
-<div class="form-field col-lg-12">
-    <label class="areaLabel" for="obs">Observações:</label>
-    <textarea id="obs"
-              class="input-text js-input"
-              name="obs"
-              ></textarea><br />
-  </div>
-
-
-<div class="form-field col-lg-4">
-    <div class="mainbox">
-      <div class="formDrop">
-        <select id="family" name="idfamily" class="dropstyle">
-          {% for f in families %}
-          <option class="dropOptions" value="{{ f.idfamily}}">
-            {{ f.name}}
-          </option>
-          {% endfor %}
-        </select>
-      </div>
-    </div>
-  </div>
-
-<div class="form-field col-lg-4">
-    <div class="mainbox">
-      <div class="formDrop">
-        <select id="warehouse" name="idwarehouse" class="dropstyle">
-          {% for w in warehouses %}
-          <option class="dropOptions" value="{{ w.idwarehouse}}">
-            {{ w.name}}
-          </option>
-          {% endfor %}
-        </select>
-      </div>
-    </div>
-  </div>
-
-<div class="form-field col-lg-4">
-    <input
-      id="name"
-      name="name"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="name">Nome</label>
+  <div class="form-field col-lg-12">
+    <label class="areaLabel" for="obs">Observações adicionais:</label>
+    <textarea id="obs" class="input-text js-input" name="obs"></textarea><br />
   </div>
 
   <div class="form-field col-lg-12 submitBtn">
-    <input class="submit-btn" type="submit" value="Criar Encomenda" />
+    <button
+      type="button"
+      class="submit-btn"
+      data-bs-toggle="modal"
+      data-bs-target="#exampleModalCenter"
+    >
+      Escolher Produtos
+    </button>
   </div>
 </form>
+<div
+  class="modal fade"
+  id="exampleModalCenter"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Criar Encomenda</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row modalContent" id="dropdown-container">
+          <!-- Initial Dropdowns -->
+          {% for i in "123" %}
+          <div class="col-md-4">
+            <div class="form-field">
+              <div class="mainbox">
+                <div class="formDrop">
+                  <select
+                    id="warehouse{{ i }}"
+                    name="idwarehouse{{ i }}"
+                    class="dropstyle"
+                  >
+                    <option class="dropOptions" value="" disabled selected>
+                      Escolha um Armazém
+                    </option>
+                    {% for w in warehouses %}
+                    <option class="dropOptions" value="{{ w.id }}">
+                      {{ w.name }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <button
+          type="button"
+          class="btn addMoreBtn"
+          onclick="addMoreDropdowns()"
+        >
+          <i class="bx bx-plus-circle plusicon"></i> Adicionar mais
+        </button>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="closeModal()"
+          data-dismiss="modal"
+        >
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function addMoreDropdowns() {
+    // Increment the counter for creating unique IDs
+    var counter = $(".form-field").length / 3 + 1;
+
+    // Create a new row
+    var newRow = $('<div class="row modalContent"></div>');
+
+    for (var i = 0; i < 3; i++) {
+      var newColumn = $('<div class="col-md-4"></div>');
+      var newDropdown = $(
+        '<div class="form-field"><div class="mainbox"><div class="formDrop">' +
+          '<select id="warehouse' +
+          counter +
+          "-" +
+          (i + 1) +
+          '" name="idwarehouse' +
+          counter +
+          "-" +
+          (i + 1) +
+          '" class="dropstyle">' +
+          '<option class="dropOptions" value="" disabled selected>Escolha um Armazém</option>' +
+          '{% for w in warehouses %}<option class="dropOptions" value="{{ w.id }}">{{ w.name }}</option>{% endfor %}' +
+          "</select></div></div></div>"
+      );
+
+      newColumn.append(newDropdown);
+      newRow.append(newColumn);
+    }
+
+    // Append the new row to the existing dropdown container
+    $("#dropdown-container").append(newRow);
+  }
+</script>
 {% endblock %}

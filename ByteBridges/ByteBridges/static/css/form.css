@@ -103,3 +103,22 @@
   background: #d6d6d654;
   padding: 0px;
 }
+.modal-dialog {
+  max-width: 1000px !important;
+}
+.addMoreBtn {
+  display: flex;
+  align-items: center;
+  background: rgb(1, 168, 1);
+  color: #fff;
+  margin-left: 5px;
+  margin-top: 15px;
+}
+.plusicon {
+  font-size: 20px;
+  margin-right: 10px;
+}
+.modalContent {
+  padding: 0 !important;
+  margin: 0 !important;
+}
