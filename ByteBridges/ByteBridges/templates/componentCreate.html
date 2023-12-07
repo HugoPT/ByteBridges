@@ -14,18 +14,19 @@
     />
     <label class="label" for="name">Nome</label>
   </div>
+
   <div class="form-field col-lg-6">
     <input
-      id="serialnumber"
-      name="serialnumber"
+      id="profitmargin"
+      name="profitmargin"
       class="input-text js-input"
       type="text"
       required
     />
-    <label class="label" for="serialnumber">Número de Série</label>
+    <label class="label" for="profitmargin">Margem de Lucro</label>
   </div>
 
-  <div class="form-field col-lg-12">
+  <div class="form-field col-lg-6">
     <div class="mainbox">
       <div class="formDrop">
         <select id="family" name="idfamily" class="dropstyle">
@@ -36,27 +37,7 @@
           {% endfor %}
         </select>
       </div>
-      <div class="formDrop">
-        <select id="warehouse" name="idwarehouse" class="dropstyle">
-          {% for w in warehouse %}
-          <option class="dropOptions" value="{{ w.idwarehouse }}">
-            {{ w.name }}
-          </option>
-          {% endfor %}
-        </select>
-      </div>
     </div>
-  </div>
-
-  <div class="form-field col-lg-6">
-    <input
-      id="cost"
-      name="cost"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="cost">Custo de Produção</label>
   </div>
 
   <div class="form-field col-lg-6">
@@ -70,27 +51,6 @@
     <label class="label" for="description">Descrição</label>
   </div>
 
-  <div class="form-field col-lg-6">
-    <input
-      id="image"
-      name="image"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="image">Imagem</label>
-  </div>
-
-  <div class="form-field col-lg-6">
-    <input
-      id="profitmargin"
-      name="profitmargin"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="profitmargin">Margem de Lucro</label>
-  </div>
 
   <div class="form-field col-lg-6">
     <input

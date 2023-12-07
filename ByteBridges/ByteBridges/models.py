@@ -51,7 +51,7 @@ class Warehouse(models.Model):
               
 class Family(models.Model):
     idfamily = models.AutoField(primary_key=True, unique=True)
-    namefamily = models.CharField(max_length=70)
+    name = models.CharField(max_length=70)
     description = models.CharField(max_length=500)
 
     def __str__(self):
@@ -80,17 +80,15 @@ class Article(models.Model):
         db_table = 'articles'
 
 
-class Component(models.Model):
-    idComponent = models.IntegerField(primary_key=True)
+class ArticleType(models.Model):
+    idarticletype = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=80)
-    family = models.CharField(max_length=255)  # Assuming the data type for the family field
-    warehouse = models.CharField(max_length=255)  # Assuming the data type for the warehouse field
+    idfamily = models.IntegerField()  # Assuming the data type for the family field
+    idcategory = models.IntegerField()  # Assuming the data type for the family field
     description = models.CharField(max_length=500)
     image = models.CharField(max_length=1024)
-    cost = models.IntegerField()
     profitmargin = models.FloatField()
     barcode = models.CharField(max_length=13)
-    serialnumber = models.CharField(max_length=100)
     reference = models.CharField(max_length=30)
 
     def __str__(self):
@@ -98,7 +96,7 @@ class Component(models.Model):
 
     class Meta:
         # Specify the table name
-        db_table = 'view_components_list'
+        db_table = 'articletypes'
 
 
 class Equipment(models.Model):
@@ -120,3 +118,5 @@ class Equipment(models.Model):
     class Meta:
         # Specify the table name
         db_table = 'view_equipments_list'
+
+

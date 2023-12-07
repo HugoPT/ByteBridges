@@ -1,0 +1,88 @@
+{% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
+<h1 class="title">Criar nova Encomenda</h1>
+{% endblock %}
+
+<form class="allforms row" action="{% url 'orderSupplierCreate' %}" method="post">
+  {% csrf_token %}
+
+  <div class="form-field col-lg-6">
+    <div class="mainbox">
+      <div class="formDrop">
+        <select id="supplier" name="idsupplier" class="dropstyle">
+          {% for s in suppliers %}
+          <option class="dropOptions" value="{{ s.idsupplier}}">
+            {{ s.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+
+<div class="form-field col-lg-6">
+    <div class="mainbox">
+      <div class="formDrop">
+        <select id="warehouse" name="idwarehouse" class="dropstyle">
+          {% for w in warehouses %}
+          <option class="dropOptions" value="{{ w.idwarehouse}}">
+            {{ w.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+
+<div class="form-field col-lg-12">
+    <label class="areaLabel" for="obs">Observações:</label>
+    <textarea id="obs"
+              class="input-text js-input"
+              name="obs"
+              ></textarea><br />
+  </div>
+
+
+<div class="form-field col-lg-4">
+    <div class="mainbox">
+      <div class="formDrop">
+        <select id="family" name="idfamily" class="dropstyle">
+          {% for f in families %}
+          <option class="dropOptions" value="{{ f.idfamily}}">
+            {{ f.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+
+<div class="form-field col-lg-4">
+    <div class="mainbox">
+      <div class="formDrop">
+        <select id="warehouse" name="idwarehouse" class="dropstyle">
+          {% for w in warehouses %}
+          <option class="dropOptions" value="{{ w.idwarehouse}}">
+            {{ w.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+
+<div class="form-field col-lg-4">
+    <input
+      id="name"
+      name="name"
+      class="input-text js-input"
+      type="text"
+      required
+    />
+    <label class="label" for="name">Nome</label>
+  </div>
+
+  <div class="form-field col-lg-12 submitBtn">
+    <input class="submit-btn" type="submit" value="Criar Encomenda" />
+  </div>
+</form>
+{% endblock %}
