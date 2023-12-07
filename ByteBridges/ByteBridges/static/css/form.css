@@ -1,3 +1,6 @@
+:root {
+  --bs-table-bg: #000;
+}
 .formSection {
   max-width: 800px;
   margin: 50px auto;
@@ -121,4 +124,9 @@
 .modalContent {
   padding: 0 !important;
   margin: 0 !important;
+}
+.ordertable {
+  width: 100%;
+  border-collapse: collapse;
+  background: #000;
 }
