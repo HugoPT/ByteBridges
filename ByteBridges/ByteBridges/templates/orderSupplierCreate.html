@@ -5,23 +5,72 @@
 
 {% block formContent %}
     <form id="dataForm">
-        <div class="form-group">
-            <label for="name">Componente:</label>
-            <input class="form-control" type="text" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-            <label for="reference">Referência:</label>
-            <input class="form-control" type="text" id="reference" name="position" required>
-        </div>
+      <div class="form-field col-lg-6">
+    <div class="mainbox">
+      <div class="formDrop">
+        <select id="supplier" name="idsupplier" class="dropstyle">
+          {% for s in suppliers %}
+          <option class="dropOptions" value="{{ s.idsupplier}}">
+            {{ s.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
 
-        <div class="form-group">
-            <label for="qtd">Quantidade:</label>
-            <input class="form-control" type="text" id="qtd" name="office" required>
-        </div>
+<div class="form-field col-lg-6">
+    <div class="mainbox">
+      <div class="formDrop">
+        <select id="warehouse" name="idwarehouse" class="dropstyle">
+          {% for w in warehouses %}
+          <option class="dropOptions" value="{{ w.idwarehouse}}">
+            {{ w.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+<div class="form-field col-lg-6">
+    <div class="mainbox">
+      <div class="formDrop">
+        <select id="component" name="component" class="dropstyle">
+          {% for c in component %}
+          <option class="dropOptions" value="{{ c.component}}">
+            {{ c.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+<div class="form-field col-lg-12">
+    <label class="areaLabel" for="obs">Observações:</label>
+    <textarea id="obs"
+              class="input-text js-input"
+              name="obs"
+              ></textarea><br />
+  </div>
 
+
+<div class="form-field col-lg-4">
+    <div class="mainbox">
+      <div class="formDrop">
+        <select id="family" name="idfamily" class="dropstyle">
+          {% for f in families %}
+          <option class="dropOptions" value="{{ f.idfamily}}">
+            {{ f.name}}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
         <div class="form-group">
             <div class="col-md12">
-                <button class="bnt btn-success form-control" type="button" onclick="addDataRow()">Adicionar Produto</button>
+                <button class="bnt btn-success form-control" type="button" onclick="addDataRow()">Adicionar Produto
+                </button>
             </div>
         </div>
 
@@ -41,6 +90,7 @@
         <!-- Existing data rows will go here -->
         </tbody>
     </table>
+    <button class="bnt btn-primary form-control" id="creatDoc" type="button" >Criar encomenda </button>
 
 
 
@@ -61,38 +111,55 @@
             $('#dataTable tbody').on('click', 'button.edit', function () {
                 var data = table.row($(this).parents('tr')).data();
                 editDataRow(data);
+                toggleButtonClass()
             });
 
             $('#dataTable tbody').on('click', 'button.delete', function () {
                 table.row($(this).parents('tr')).remove().draw();
+                toggleButtonClass()
             });
         });
 
+        function toggleButtonClass() {
+            var button = document.getElementById('creatDoc');
+            if (table.rows().count() > 0) {
+                // At least one row exists, add the class
+                button.classList.add('active');
+            } else {
+                // No rows, remove the class
+                button.classList.remove('active');
+            }
+        }
+
         // Function to add a new row to the DataTable
         function addDataRow() {
-            let name = $('#name').val();
-            let reference = $('#reference').val();
-            let qtd = $('#qtd').val();
-
+            let warehouse = $('#warehouse').val();
+            let family = $('#family').val();
+            let obs = $('#obs').val();
+            let suplier = $('#suplier').val();
+            let component = $('#component').val();
             // Add a new row to the DataTable
+            toggleButtonClass()
 
             var rowNode = table.row.add([name, reference, qtd, '<button class="edit btn btn-warning">Editar</button> <button class="btn btn-danger delete">Remover</button>']).draw().node();
 
-            $(rowNode).data('originalData', {name: name, reference: reference, qtd: qtd});
+            $(rowNode).data('originalData', {warehouse: warehouse, family: family, obs: obs,suplier:suplier,component:component});
 
             // Clear the form fields
-            $('#name').val('');
-            $('#reference').val('');
-            $('#qtd').val('');
-
-
+            $('#warehouse').val('');
+            $('#component').val('');
+            $('#family').val('');
+            $('#obs').val('');
+            $('#suplier').val('');
         }
-
         // Function to edit a row in the DataTable
         function editDataRow(data) {
-            $('#name').val(data.name);
-            $('#reference').val(data.reference);
-            $('#qtd').val(data.qtd);
+            $('#warehouse').val(data.warehouse);
+            $('#family').val(data.family);
+            $('#obs').val(data.obs);
+            $('#suplier').val(data.suplier);
+            $('#component').val(data.component);
+
         }
     </script>
 {% endblock %}

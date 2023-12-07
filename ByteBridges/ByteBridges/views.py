@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 
 from .Nifpt import NIFApiClient
-from .models import Supplier, Warehouse, Client, Family, Article, Component, Equipment
+
+from .models import Supplier, Warehouse, Client, Family, Article, Equipment
 from django.http import JsonResponse
 import requests
 
@@ -115,8 +116,40 @@ def supplierCreate(request):
 
 
 # orders
-def orderCreate(request):
-    return render(request, template_name='orderCreate.html')
+def orderSupplierCreate(request):
+    with connections['admin'].cursor() as cursor:
+
+        cursor.execute("select * from view_suppliers_list")
+        result = cursor.fetchall()
+
+        suppliers = [Supplier(*row) for row in result]
+
+        cursor.execute("select * from view_warehouses_list")
+        result = cursor.fetchall()
+
+        warehouses = [Warehouse(*row) for row in result]
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+
+        families = [Family(*row) for row in result]
+
+        context = {'suppliers': suppliers, 'warehouses': warehouses, 'families': families}
+
+
+    if request.method == 'POST':
+        obs = request.POST.get('obs')
+        id_supplier = request.POST.get('id_supplier')
+        id_warehouse = request.POST.get('id_warehouse')
+
+        with connections['admin'].cursor() as cursor:
+            # Call the stored procedure using the CALL statement
+            cursor.execute("CALL fn_orderssupplier_create(%s,%s,%s)",
+                           [obs, id_supplier, id_warehouse])
+
+        return redirect('dashboard')
+    return render(request, template_name='orderSupplierCreate.html', context=context)
+
 
 
 def orderList(request):
