@@ -128,7 +128,7 @@
             <div class="form-field">
               <div class="mainbox">
                 <div class="formDrop">
-                  <div id="componentContainer"></div>
+                  <div id="componentContainer1"></div>
                 </div>
               </div>
             </div>
@@ -172,6 +172,7 @@
 </div>
 
 <script>
+  var counter;
     function updateArticlesAndComponents(selectedValue) {
       // Your logic for updating articles and components goes here
       console.log("Selected value:", selectedValue);
@@ -180,6 +181,7 @@
 
     function handleSelectChange(selectElement) {
       var selectedValue = selectElement.value;
+      console.log("Selected value:", selectElement);
       callComponents(selectedValue);
     }
 
@@ -187,6 +189,7 @@
 
     function callComponents(familyId) {
         console.log(familyId);
+        counter = $(".row.modalContent").length;
         $.ajax({
             url: "get_articles/",
             type: "GET",
@@ -194,17 +197,15 @@
             success: function (data) {
                 console.log("JSON Response:", data);
 
-                // Increment the dropdown count
-                dropdownCount++;
-
                 // Update the content in the component container
-                var componentContainer = $("#componentContainer");
+                var componentContainer = $("#componentContainer"+ counter);
+                console.log("aki"+componentContainer);
                 componentContainer.empty(); // Clear previous content
 
                 // Create a new select element with a unique identifier
                 var newSelect = $("<select>", {
-                    id: "compo" + dropdownCount,
-                    name: "idcompo" + dropdownCount,
+                    id: "compo" + counter,
+                    name: "idcompo" + counter,
                     class: "dropstyle",
                     onchange: function () {
                         updateArticlesAndComponents(this.value);
@@ -225,8 +226,8 @@
                 // Create a new input element
                 var newInput = $("<input>", {
                     type: "text",
-                    id: "quantityInput" + dropdownCount,
-                    name: "quantityInput" + dropdownCount,
+                    id: "quantityInput" + counter,
+                    name: "quantityInput" + counter,
                     class: "modalInput",
                     placeholder: "Enter quantity",
                 });
@@ -243,7 +244,7 @@
 
     function addMoreDropdowns() {
       // Increment the counter for creating unique IDs
-      var counter = $(".row.modalContent").length + 1;
+      counter = $(".row.modalContent").length + 1;
 
       // Create a new row
       var newRow = $('<div class="row newrow modalContent"></div>');
@@ -271,10 +272,10 @@
 
       // Create a column for the component dropdown
       var componentColumn = $('<div class="col-md-4"></div>');
-      var uniqueIdentifier = dropdownCount;
+      var uniqueIdentifier = counter;
       var componentDropdown = $("<div class='form-field'><div class='mainbox'><div class='formDrop'>" +
-          "<select id='compo" + uniqueIdentifier + "' name='idcompo" + uniqueIdentifier + "' class='dropstyle' onchange='updateArticlesAndComponents(this.value)'>" +
-          "<option class='dropOptions' value='' disabled selected>Escolha um Componente</option></select></div></div></div>");
+        "<div id='componentContainer" + counter + "'><select id='compo" + counter + "' name='idcompo" + counter + "' class='dropstyle' onchange='updateArticlesAndComponents(this.value)'>" +
+        "<option class='dropOptions' value='' disabled selected>Escolha um Componente</option></select></div></div></div></div>");
 
       // Append the new dropdown to the current column
       componentColumn.append(componentDropdown);
