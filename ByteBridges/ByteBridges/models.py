@@ -78,8 +78,18 @@ class Article(models.Model):
     class Meta:
         # Specify the table name
         db_table = 'articles'
+        
+class ComponentListFamily(models.Model):
+    at_id = models.IntegerField(primary_key=True)  
+    at_name = models.CharField(max_length=80)
 
+    def __str__(self):
+        return self.at_name
 
+    class Meta:
+        # Specify the table name
+        db_table = 'fn_components_list_family'  
+        
 class ArticleType(models.Model):
     idarticletype = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=80)

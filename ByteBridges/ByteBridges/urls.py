@@ -24,7 +24,8 @@ urlpatterns = [
     #path("dashboard", views.dashboard, name="dashboard"),
     path("loginForm", views.loginForm, name="loginForm"),
     path("", views.Login, name="login"),
-    
+    path('get_articles/', views.get_articles, name='get_articles'),
+
     #Clients
     path("clientCreate", views.clientCreate, name="clientCreate"),
     path("clientList", views.clientList, name="clientList"),

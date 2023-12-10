@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from .models import Supplier, Warehouse, Client,Family, Article, ArticleType, Equipment
+from .models import Supplier, Warehouse, Client,Family, Article, ArticleType, Equipment,ComponentListFamily
 
 from django.db import connections
-
+from django.http import JsonResponse
 
 def Login(request):
     return render(request, "Login.html")
@@ -152,10 +152,9 @@ def orderSupplierCreate(request):
         result = cursor.fetchall()
 
         families = [Family(*row) for row in result]
-
+        
         context = {'suppliers': suppliers, 'warehouses': warehouses, 'families': families}
-
-
+            
     if request.method == 'POST':
         obs = request.POST.get('obs')
         id_supplier = request.POST.get('id_supplier')
@@ -169,6 +168,25 @@ def orderSupplierCreate(request):
         return redirect('dashboard')
     return render(request, template_name='orderSupplierCreate.html', context=context)
 
+
+def get_articles(request):
+    print(request)
+    if request.method == 'GET':
+        family_id = request.GET.get('family_id')
+
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("SELECT * FROM fn_components_list_family(CAST(%s AS INTEGER))", [family_id])
+            result = cursor.fetchall()
+            print(result)
+            articles = [ComponentListFamily(*row) for row in result]
+
+        # Convert ComponentListFamily objects to dictionaries
+        articles_data = [{'idarticle': article.at_id, 'name': article.at_name} for article in articles]
+        print(articles_data)
+
+        data = {'articles': articles_data}
+        print(data)
+        return JsonResponse(data)
 
 #Family  sp_families_create
 def familyCreate(request):

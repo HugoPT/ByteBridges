@@ -130,3 +130,19 @@
   border-collapse: collapse;
   background: #000;
 }
+.modalInput {
+  width: 100%;
+  height: 40px;
+  border-width: 0 0 2px 0;
+  border-color: #000000;
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  background: #d6d6d654;
+  padding: 0px;
+}
+
+.newrow {
+  display: flex;
+  align-items: center;
+}
