@@ -354,7 +354,9 @@
 
       // Clear the values in the modal row
       modalRow.find('select').val('').change(); // Clear dropdown values
+      modalRow.find('select').hide();
       modalRow.find('input').val(''); // Clear input values
+      modalRow.find('input').hide();
 
       // Remove the row from the table
       row.remove();
