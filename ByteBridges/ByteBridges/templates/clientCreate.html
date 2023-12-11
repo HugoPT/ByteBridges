@@ -2,8 +2,61 @@
 <h1 class="title">Criar novo Cliente</h1>
 {% endblock %}
 
+<form id="getData">
+  <div>
+    <img
+      src="https://www.nssoftware.pt/wp-content/uploads/nif.pt_.jpg"
+      width="120"
+      height="80"
+    />
+  </div>
+  <label for="nif_pt"> Buscar dados de empresa </label>
+  <input id="nif_pt" name="nif_pt" class="form-row colSM" type="text" />
+  <button id="getNIF" class="btn btn-success" type="submit">
+    Solicitar dados
+  </button>
+  <div></div>
+</form>
+
+<script>
+  document.getElementById("getNIF").addEventListener("click", function (event) {
+    event.preventDefault();
+
+    let nif = document.getElementById("nif_pt").value;
+
+    let apiUrl = `http://127.0.0.1:8000/get-nif/${nif}/`;
+    function decodeHtml(html) {
+      return decodeURIComponent(escape(html));
+    }
+    fetch(apiUrl)
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .then((result) => {
+        console.log(result.records[nif]);
+        var x = result.records[nif];
+        document.getElementById("name").value = x.title;
+        document.getElementById("nif").value = x.nif;
+        document.getElementById("address").value = x.address;
+        document.getElementById("zipcode").value = x.pc4 + "-" + x.pc3;
+        document.getElementById("city").value = x.geo.region;
+        document.getElementById("email").value = x.contacts.email;
+
+        var obsText = x.activity;
+        obsText = decodeHtml(obsText);
+        obsText = obsText.replace(/<\/?p>/g, "");
+        obsText = obsText.replace(/[^\w\s]/gi, "");
+        obsText = obsText.trim();
+        document.getElementById("obs").value = obsText;
+      })
+      .catch((error) => console.error("Error:", error));
+  });
+</script>
+
 <form class="allforms row" action="{% url 'clientCreate' %}" method="post">
   {% csrf_token %}
+
   <div class="form-field col-lg-6">
     <input
       id="name"
@@ -70,10 +123,7 @@
   </div>
   <div class="form-field col-lg-12">
     <label class="areaLabel" for="obs">Observações:</label>
-    <textarea id="obs"
-              class="input-text js-input"
-              name="obs"
-              ></textarea><br />
+    <textarea id="obs" name="obs" rows="4" cols="100"></textarea><br />
   </div>
 
   <div class="form-field col-lg-12 submitBtn">
