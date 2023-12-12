@@ -120,10 +120,14 @@ section {
   text-align: center;
   height: 30rem;
 }
-
-footer {
-  background-color: #000;
+.thirdImage {
+  background-image: url("https://channellife.co.nz/uploads/story/2019/09/09/GettyImages-514564575.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   color: #fff;
-  padding: 2rem 0;
   text-align: center;
+  height: 30rem;
 }
+
+/*cards*/

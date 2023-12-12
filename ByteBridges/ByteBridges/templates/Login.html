@@ -102,9 +102,81 @@
       <div class="container my-5">
         <div class="row justify-content-center">
           <div class="col-lg-6">
-            <h2>Grupo - NS</h2>
+            <h2>Objetivos:</h2>
+            <p class="lead">
+              Este trabalho foi realizado no âmbito da unidade curricular de
+              Bases de Dados II, do 3º ano do curso de Engenharia Informática da
+              Universidade de Viseu.
+            </p>
 
-            <p class="mb-0">CARDS</p>
+            <p class="mb-0">
+              O principal objetivo deste trabalho é o desenvolvimento de uma
+              plataforma de suporte aos processos anteriormente mencionados. A
+              plataforma em causa deverá basear a sua interface para o
+              utilizador através de tecnologias web. Os dados e as operações
+              sobre estes deverão ser suportados por Sistemas de Gestão de Bases
+              de Dados (SGBD). Têm de ser utilizados os SGBD PostgreSQL e
+              MongoDB.
+            </p>
+            <h2>Requisitos Funcionais:</h2>
+            <ol>
+              <li>
+                Registo de dados sobre aquisição e armazenamento de componentes.
+              </li>
+              <li>Consultas diversas de dados relativos às componentes.</li>
+              <li>Gestão de stock de componentes.</li>
+              <li>Gestão de fornecedores.</li>
+              <li>
+                Listagens de diversa natureza, como componentes em stocks.
+              </li>
+              <li>Exportação de encomendas a fornecedores (JSON ou XML).</li>
+              <li>Importação de componentes (JSON ou XML).</li>
+              <li>Cada equipamento tem um tipo.</li>
+              <li>Criação de equipamentos.</li>
+              <li>
+                Gestão da produção de equipamentos: componentes e mão de obra
+                utilizada.
+              </li>
+              <li>
+                A mão de obra pode ser de vários tipos, e o tipo tem um custo
+                associado.
+              </li>
+              <li>Gestão do valor de custo de equipamentos.</li>
+              <li>Listagens de diversa natureza, como produção, stock, etc.</li>
+              <li>Venda de equipamentos.</li>
+              <li>Gestão de clientes.</li>
+              <li>
+                Listagens de diversa natureza, como clientes e vendas de
+                equipamentos.
+              </li>
+            </ol>
+            <h2>Requisitos Não Funcionais:</h2>
+            <ol>
+              <li>Todos os dados relativos a operações transacionais deverão ser armazenados no SGBD PostgreSQL.</li>
+              <li>Um determinado dado só pode ser armazenado em um dos dois SGBD.</li>
+              <li>Os dados apresentados ao cliente sobre produtos são armazenados no SGBD MongoDB.</li>
+              <li>Caso sejam atributos da tabela de equipamentos existente no PostgreSQL, no atributo deve ser colocada a `_pgsidcampo` (sendo idcampo o nome do campo da tabela de equipamentos existente no SGBD PostgreSQL).</li>
+              <li>A lista de atributos dos equipamentos com a informação a apresentar ao cliente deve ser dinâmica.</li>
+              <li>A lista de atributos para cada equipamento é criada quando se coloca o produto em comercialização.</li>
+              <li>Nesta lista podem-se colocar atributos da Base de Dados do PostgreSQL ou novos atributos.</li>
+              <li>Ao definir novos atributos, faz a sua especificação através do par “Atributo / Valor de atributo”.</li>
+              <li>Todas as interfaces gráficas devem ser desenvolvidas com recurso à framework Django.</li>
+              <li>A plataforma tem de ter vários perfis de utilizador.</li>
+              <li>Todos os objetos da base de dados devem ser cobertos por testes.</li>
+              <li>As interfaces gráficas desenvolvidas para a plataforma web devem ser funcionais e apelativas.</li>
+              <li>Para o controlo de versões do projeto deve ser usado o git.</li>
+            </ol>
+          </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="thirdImage"></div>
+    <section class="py-5">
+      <div class="container my-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-6">
+            <h2>Grupo Nºxx:</h2>
           </div>
         </div>
       </div>

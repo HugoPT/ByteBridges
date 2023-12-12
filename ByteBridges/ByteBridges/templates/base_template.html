@@ -20,7 +20,7 @@
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css"
     />
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Include Datatables CSS from CDN -->
     <link
             rel="stylesheet"
@@ -113,7 +113,7 @@
             <div>
                 <div class="nav_link_dropdown">
                     <div>
-                        <a href="#" class="nav_link">
+                        <a href="#" class="nav_link nav_hover">
                             <i class="bx bx-grid-alt nav_icon"></i>
                             <span class="nav_name">Produtos <i class='bx bx-chevron-right arrow'></i></span>
                         </a>
@@ -135,7 +135,7 @@
                 </div>
                 <div class="nav_link_dropdown">
                     <div>
-                    <a href="#" class="nav_link">
+                    <a href="#" class="nav_link nav_hover">
                         <i class="bx bx-user nav_icon"></i>
                         <span class="nav_name">Clientes <i class='bx bx-chevron-right arrow'></i></span>
                     </a>
@@ -151,7 +151,7 @@
                 </div>
                 <div class="nav_link_dropdown">
                     <div>
-                        <a href="#" class="nav_link">
+                        <a href="#" class="nav_link nav_hover">
                             <i class="bx bx-message-square-detail nav_icon"></i>
                             <span class="nav_name">Documentos <i class='bx bx-chevron-right arrow'></i></span>
                         </a>
@@ -168,7 +168,7 @@
                 
                 <div class="nav_link_dropdown">
                     <div>
-                        <a href="#" class="nav_link">
+                        <a href="#" class="nav_link nav_hover">
                             <i class="bx bxs-component nav_icon"></i>
                             <span class="nav_name">Stocks <i class='bx bx-chevron-right arrow'></i></span>
                         </a>
@@ -182,17 +182,17 @@
                         </a>
                     </div>
                 </div>
-                <a href="#" class="nav_link">
+                <a href="#" class="nav_link nav_hover" >
                     <i class="bx bx-chart nav_icon"></i>
                     <span class="nav_name">Reporting</span>
                 </a>
-                <a href="#" class="nav_link">
+                <a href="#" class="nav_link nav_hover">
                     <i class="bx bx-cog nav_icon"></i>
                     <span class="nav_name">Configurações</span>
                 </a>
             </div>
         </div>
-        <a href="/" class="nav_link">
+        <a class="nav_link nav_hover" onclick="logoutRequest()">
             <i class="bx bx-log-out nav_icon"></i>
             <span class="nav_name">Logout</span>
         </a>
@@ -229,7 +229,21 @@
             });
         });
     });
-    
+    function logoutRequest(){
+        Swal.fire({
+            title: 'Tem a certeza que pretende sair?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: `Sim`,
+            denyButtonText: `Não`,
+        }).then((result) => {       
+            if (result.isConfirmed) {
+                window.location.href = "/";
+            } else if (result.isDenied) {
+                
+            }
+        })
+    }
 </script>
 
 <div class="container">{% block content %}{% endblock %}</div>
@@ -241,58 +255,34 @@
         <!--Grid row-->
         <div class="row">
             <!--Grid column-->
+            <div class="col-lg-6 col-md-12 mb-4 mb-md-0 logoFooterCenter">
+                <div class="logoFooterJoin">
+                <h5 class="text-uppercase">Base de Dados II</h5>
+                <img src="https://www.freepnglogos.com/uploads/stitch-png/stitch-sticker-png-13.png" width="150px"  height="100px"> 
+            </div>
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
             <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-                <h5 class="text-uppercase">Footer Content</h5>
-
-                <p>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste atque ea quis
-                    molestias. Fugiat pariatur maxime quis culpa corporis vitae repudiandae aliquam
-                    voluptatem veniam, est atque cumque eum delectus sint!
+              
+                <p class="teamMembers">
+                    Projeto desenvolvido por:
+                    <br>
+                    <br>
+                    <strong>André Rodrigues</strong>
+                    <br>
+                    <strong>Hugo Santos</strong>
+                    <br>
+                    <strong>Miguel Costa</strong>
+                    <br>
+                    <strong>Paulo Cabral</strong>
                 </p>
+          
             </div>
             <!--Grid column-->
 
-            <!--Grid column-->
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                <h5 class="text-uppercase">Links</h5>
-
-                <ul class="list-unstyled mb-0">
-                    <li>
-                        <a href="#!" class="text-white">Link 1</a>
-                    </li>
-                    <li>
-                        <a href="#!" class="text-white">Link 2</a>
-                    </li>
-                    <li>
-                        <a href="#!" class="text-white">Link 3</a>
-                    </li>
-                    <li>
-                        <a href="#!" class="text-white">Link 4</a>
-                    </li>
-                </ul>
-            </div>
-            <!--Grid column-->
-
-            <!--Grid column-->
-            <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-                <h5 class="text-uppercase mb-0">Links</h5>
-
-                <ul class="list-unstyled">
-                    <li>
-                        <a href="#!" class="text-white">Link 1</a>
-                    </li>
-                    <li>
-                        <a href="#!" class="text-white">Link 2</a>
-                    </li>
-                    <li>
-                        <a href="#!" class="text-white">Link 3</a>
-                    </li>
-                    <li>
-                        <a href="#!" class="text-white">Link 4</a>
-                    </li>
-                </ul>
-            </div>
-            <!--Grid column-->
+  
         </div>
         <!--Grid row-->
     </div>
@@ -301,8 +291,8 @@
 
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-        © 2020 Copyright:
-        <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+        © 2023 Copyright:
+       <a class="text-white" href="#">basededadosII.com</a>
     </div>
     <!-- Copyright -->
 </footer>

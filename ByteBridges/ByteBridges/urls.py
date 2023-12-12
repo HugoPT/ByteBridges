@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import path
 from ByteBridges import views
 
-
 urlpatterns = [
     path("dashboard", views.IndexPage, name="dashboard"),
     #path("dashboard", views.dashboard, name="dashboard"),
