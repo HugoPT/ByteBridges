@@ -4,7 +4,9 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
-
+.col-lg-6 {
+  width: 100% !important;
+}
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -91,7 +93,7 @@ section {
 .headerImg {
   position: relative;
   width: 100%;
-  height: 15rem;
+  /*height: 15rem;*/
   overflow: hidden;
   background-image: url("https://img.freepik.com/free-photo/nobody-empty-call-center-workstation-with-computers-audio-instruments-no-people-customer-service-office-desks-with-telecommunications-technology-offering-helpline-assistance_482257-44179.jpg?w=1060&t=st=1700848036~exp=1700848636~hmac=026521c…");
   background-size: cover;
@@ -129,5 +131,75 @@ section {
   text-align: center;
   height: 30rem;
 }
-
+.groupTitle {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 15px;
+  font-size: 28px;
+  font-weight: bold;
+}
 /*cards*/
+.card {
+  border: none;
+}
+.card-img {
+  border-radius: 0;
+}
+
+.vgr-cards {
+  .card {
+    display: flex;
+    flex-flow: wrap;
+    flex: 100%;
+    margin-bottom: 40px;
+
+    &:nth-child(even) .card-img-body {
+      order: 2;
+    }
+
+    &:nth-child(even) .card-body {
+      padding-left: 0;
+      padding-right: 1.25rem;
+    }
+
+    @media (max-width: 576px) {
+      display: block;
+    }
+  }
+
+  .card-img-body {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+
+    @media (max-width: 576px) {
+      width: 100%;
+      height: 200px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .card-img {
+    width: 90%;
+    height: 85%;
+    position: relative;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    border: 1px solid;
+    @media (max-width: 1140px) {
+      margin: 0;
+      transform: none;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .card-body {
+    flex: 2;
+    padding: 0 0 0 1.25rem;
+
+    @media (max-width: 576px) {
+      padding: 0;
+    }
+  }
+}
