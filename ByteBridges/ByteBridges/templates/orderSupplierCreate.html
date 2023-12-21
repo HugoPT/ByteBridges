@@ -226,8 +226,9 @@
 
                 // Append the new options to the new select element with name attribute
                 data.articles.forEach(function (article) {
-                    newSelect.append("<option class='dropOptions' value='" + article.id + "' name='" + article.name + "'>" + article.name + "</option>");
-                });
+                    newSelect.append("<option class='dropOptions' value='" + article.idarticle + "' name='" + article.name + "'>" + article.name + "</option>");
+
+                  });
 
                 componentContainer.append(newSelect);
 
@@ -287,6 +288,10 @@
               "<option class='dropOptions' value='' disabled selected>Escolha um Componente</option></select></div></div></div></div>");
 
           // Append the new dropdown to the current column
+          {% for c in components %}
+              componentDropdown.find('select').append('<option class="dropOptions" value="{{ c.idcomponent }}" name="{{ c.name }}">{{ c.name }}</option>');
+          {% endfor %}
+
           componentColumn.append(componentDropdown);
 
           // Append the new column to the new row
@@ -319,33 +324,38 @@
 
         // Iterate through the dropdowns in the modal
         for (let i = 1; i <= counter; i++) {
-            // Assuming you have counter number of dropdowns, adjust accordingly
-            let family = $("#families" + i + " option:selected").attr('name');
-            let component = $("#compo" + i + " option:selected").attr('name');
-            let quantity = $("#quantityInput" + i).val();
-            // Check if a family is selected
-            if (family !== "" && component !== "" && quantity !== "") {
-                // Append a new row to the table with the selected values
-                $("#dataTable tbody").append(
-                    "<tr>" +
-                    '<th scope="row">' +
-                    i +
-                    "</th>" +
-                    "<td>" +
-                    family +
-                    "</td>" +
-                    "<td>" +
-                    component +
-                    "</td>" +
-                    "<td>" +
-                    quantity +
-                    "</td>" +
-                    "<td><button type='button' class='btn btn-danger btn-remove' onclick='removeRow(this)'>Remove</button></td>" +
-                    "</tr>"
-                );
-            }
+          let familyId = $("#families" + i).val();
+          let familyText = $("#families" + i + " option:selected").text();
+          let componentId = $("#compo" + i).val();
+          let componentText = $("#compo" + i + " option:selected").text();
+          let quantity = $("#quantityInput" + i).val();
+
+          // Check if a family is selected
+          if (familyId !== null && componentId !== null && quantity !== "") {
+            // Append a new row to the table with the selected values
+            $("#dataTable tbody").append(
+              "<tr>" +
+              '<th scope="row">' +
+              i +
+              "</th>" +
+              "<td data-family-id='" + familyId + "'>" +
+              "ID: " + familyId + "<br>" +
+              "Text: " + familyText +
+              "</td>" +
+              "<td data-component-id='" + componentId + "'>" +
+              "ID: " + componentId + "<br>" +
+              "Text: " + componentText +
+              "</td>" +
+              "<td>" +
+              quantity +
+              "</td>" +
+              "<td><button type='button' class='btn btn-danger btn-remove' onclick='removeRow(this)'>Remove</button></td>" +
+              "</tr>"
+            );
+          }
         }
-    }
+      }
+
 
     function removeRow(button) {
       // Get the closest table row (tr)
@@ -382,10 +392,13 @@
 
     // Iterate through each row and extract data
     rows.each(function (index, row) {
+      let familyId = $(row).find("td:eq(0)").attr("data-family-id");
+      let componentId = $(row).find("td:eq(1)").attr("data-component-id");
+
       let rowData = {
         number: $(row).find("th").text(),
-        family: $(row).find("td:eq(0)").text(),
-        component: $(row).find("td:eq(1)").text(),
+        family: familyId,
+        component: componentId,
         quantity: $(row).find("td:eq(2)").text(),
       };
 
@@ -420,6 +433,7 @@
       },
     });
   }
+
 
   //teste
 </script>

@@ -158,13 +158,12 @@ def orderSupplierCreate(request):
     if request.method == 'POST':
         data = json.loads(request.POST.get('data'))
         header = json.loads(request.POST.get('header'))
-        print("CHEGUEI AKI PAAAAAAAA:", data)
-        #fazer for each no data 
-      
+        
+        #cursor.execute("select id FROM fn_ordersupplier_create(%s,%s,%s,)",)
+    
         for item in data:
-            for key,value in item.items():
-                print("AKI", key, "--->" ,value)
-         
+            cursor.execute("CALL sp_buy_create(%s,%s,%s)",
+                           [20,data.component,data.quantity])
 
         return JsonResponse({'status': 'success'})
     return render(request, template_name='orderSupplierCreate.html', context=context)
