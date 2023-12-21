@@ -71,6 +71,12 @@
       Escolher Produtos
     </button>
   </div>
+
+  <div class="form-field col-lg-12 submitBtn">
+    <button type="button" class="submit-btn" onclick="sendForm()">
+      Enviar
+    </button>
+  </div>
 </form>
 
 <!-- Modal -->
@@ -317,9 +323,6 @@
             let family = $("#families" + i + " option:selected").attr('name');
             let component = $("#compo" + i + " option:selected").attr('name');
             let quantity = $("#quantityInput" + i).val();
-
-            console.log("Selected values for row " + i + ":", family, component, quantity);
-
             // Check if a family is selected
             if (family !== "" && component !== "" && quantity !== "") {
                 // Append a new row to the table with the selected values
@@ -361,6 +364,63 @@
       // Remove the row from the table
       row.remove();
   }
+
+  function sendForm() {
+    // Initialize an array to store the data
+    let data = [];
+    let header = [];
+
+    // Get the value from the textarea
+    let obsValue = $("#obs").val();
+
+    // Get the selected values from the dropdowns
+    let selectedSupplierId = $("#supplier").val();
+    let selectedWarehouse = $("#warehouse").val();
+
+    // Get all rows in the table body
+    let rows = $("#dataTable tbody tr");
+
+    // Iterate through each row and extract data
+    rows.each(function (index, row) {
+      let rowData = {
+        number: $(row).find("th").text(),
+        family: $(row).find("td:eq(0)").text(),
+        component: $(row).find("td:eq(1)").text(),
+        quantity: $(row).find("td:eq(2)").text(),
+      };
+
+      // Add the row data to the array
+      data.push(rowData);
+    });
+
+    // Add other form data to the array
+    header.push({
+      idsupplier: selectedSupplierId,
+      idwarehouse: selectedWarehouse,
+      obs: obsValue,
+    });
+
+    // Log or use the gathered data
+    console.log("Table data with textarea and dropdown:", data);
+
+    // Send data to the server using AJAX
+    $.ajax({
+      type: "POST",
+      url: "orderSupplierCreate",
+      data: {
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+        data: JSON.stringify(data),
+        firstdata: JSON.stringify(firstdata),
+      },
+      success: function (response) {
+        console.log("Data successfully sent to the server");
+      },
+      error: function (error) {
+        console.error("Error sending data to the server:", error);
+      },
+    });
+  }
+
   //teste
 </script>
 
