@@ -158,15 +158,13 @@ def orderSupplierCreate(request):
     if request.method == 'POST':
         data = json.loads(request.POST.get('data'))
         header = json.loads(request.POST.get('header'))
-        
+        print("CHEGUEI AKI PAAAAAAAA:", data)
         #fazer for each no data 
-        
-        
-        
-   
-
-       
-            
+      
+        for item in data:
+            for key,value in item.items():
+                print("AKI", key, "--->" ,value)
+         
 
         return JsonResponse({'status': 'success'})
     return render(request, template_name='orderSupplierCreate.html', context=context)
