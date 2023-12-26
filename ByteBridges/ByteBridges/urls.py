@@ -32,6 +32,7 @@ urlpatterns = [
     #suppliers
     path("supplierCreate", views.supplierCreate, name="supplierCreate"),
     path("supplierList", views.supplierList, name="supplierList"),
+    path('supplierEdit/<int:pk>/', views.supplierEdit, name='supplierEdit'),
 
     #order
     path("orderSupplierCreate", views.orderSupplierCreate, name="orderSupplierCreate"),

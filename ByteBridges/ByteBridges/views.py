@@ -1,6 +1,6 @@
 import datetime
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from .models import Supplier, Warehouse, Client, Family, Article, ArticleType, Equipment, ComponentListFamily
 
 from django.db import connections
@@ -278,3 +278,9 @@ def componentList(request):
         result = cursor.fetchall()
 
         return render(request, 'componentList.html', {'result': result})
+
+
+def supplierEdit(request, pk):
+    supplier = get_object_or_404(Supplier, pk=pk)
+
+    return render(request, 'supplierEdit.html', {'supplier': supplier})

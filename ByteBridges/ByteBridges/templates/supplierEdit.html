@@ -1,0 +1,10 @@
+{% extends 'base_template.html' %} {% block extra_css %} {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}"/>
+{% endblock %}{% block content %}
+
+    <h1>Para construir editar o fornecedor</h1>
+    <h2> {{ supplier.name }}</h2>
+
+
+
+{% endblock %}
