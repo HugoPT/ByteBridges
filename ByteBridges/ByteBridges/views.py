@@ -169,7 +169,6 @@ def orderSupplierCreate(request):
                            [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
             result = cursor.fetchone()
             if result:
-                print(result[0])
                 for item in data:
                     with connections['admin'].cursor() as cursor:
                         cursor.execute("CALL sp_buy_create(%s,%s,%s)",
