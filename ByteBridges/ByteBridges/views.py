@@ -257,7 +257,7 @@ def componentCreate(request):
         idcategory = None
         description = request.POST.get('description')
         image = ""
-        profit_margin = request.POST.get('profitmargin')
+        profit_margin = int(request.POST.get('profitmargin')) / 100
         barcode = request.POST.get('barcode')
         reference = request.POST.get('reference')
 
