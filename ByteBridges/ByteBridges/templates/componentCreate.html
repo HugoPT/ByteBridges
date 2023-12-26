@@ -1,81 +1,83 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
-<h1 class="title">Criar novo Componente</h1>
+    <h1 class="title">Criar novo Componente</h1>
 {% endblock %}
 
-<form class="allforms row" action="{% url 'componentCreate' %}" method="post">
-  {% csrf_token %}
-  <div class="form-field col-lg-6">
-    <input
-      id="name"
-      name="name"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="name">Nome</label>
-  </div>
+    <form class="allforms row" action="{% url 'componentCreate' %}" method="post">
+        {% csrf_token %}
+        <div class="form-field col-lg-6">
+            <input
+                    id="name"
+                    name="name"
+                    class="input-text js-input"
+                    type="text"
+                    required
+            />
+            <label class="label" for="name">Nome</label>
+        </div>
 
-  <div class="form-field col-lg-6">
-    <input
-      id="profitmargin"
-      name="profitmargin"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="profitmargin">Margem de Lucro</label>
-  </div>
+        <div class="form-field col-lg-6">
+            <input
+                    id="profitmargin"
+                    name="profitmargin"
+                    class="input-text js-input"
+                    type="number"
 
-  <div class="form-field col-lg-6">
-    <div class="mainbox">
-      <div class="formDrop">
-        <select id="family" name="idfamily" class="dropstyle">
-          {% for f in families %}
-          <option class="dropOptions" value="{{ f.idfamily }}">
-            {{ f.namefamily }}
-          </option>
-          {% endfor %}
-        </select>
-      </div>
-    </div>
-  </div>
+                    required
+                    placeholder="valor em percentagem"
+            />
+            <label class="label" for="profitmargin">Margem de Lucro</label>
+        </div>
 
-  <div class="form-field col-lg-6">
-    <input
-      id="description"
-      name="description"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="description">Descrição</label>
-  </div>
+        <div class="form-field col-lg-6">
+            <div class="mainbox">
+                <div class="formDrop">
+                    <select id="family" name="idfamily" class="dropstyle">
+                        {% for f in families %}
+                            <option class="dropOptions" value="{{ f.idfamily }}">
+                                {{ f.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-field col-lg-6">
+            <input
+                    id="description"
+                    name="description"
+                    class="input-text js-input"
+                    type="text"
+                    required
+            />
+            <label class="label" for="description">Descrição</label>
+        </div>
 
 
-  <div class="form-field col-lg-6">
-    <input
-      id="barcode"
-      name="barcode"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="barcode">Código de Barras</label>
-  </div>
+        <div class="form-field col-lg-6">
+            <input
+                    id="barcode"
+                    name="barcode"
+                    class="input-text js-input"
+                    type="text"
+                    required
+            />
+            <label class="label" for="barcode">Código de Barras</label>
+        </div>
 
-  <div class="form-field col-lg-6">
-    <input
-      id="reference"
-      name="reference"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="reference">Referência</label>
-  </div>
+        <div class="form-field col-lg-6">
+            <input
+                    id="reference"
+                    name="reference"
+                    class="input-text js-input"
+                    type="text"
+                    required
+            />
+            <label class="label" for="reference">Referência</label>
+        </div>
 
-  <div class="form-field col-lg-12 submitBtn">
-    <input class="submit-btn" type="submit" value="Criar Componente" />
-  </div>
-</form>
+        <div class="form-field col-lg-12 submitBtn">
+            <input class="submit-btn" type="submit" value="Criar Componente"/>
+        </div>
+    </form>
 {% endblock %}

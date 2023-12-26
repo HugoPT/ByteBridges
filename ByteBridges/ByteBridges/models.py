@@ -55,7 +55,7 @@ class Family(models.Model):
     description = models.CharField(max_length=500)
 
     def __str__(self):
-        return self.namefamily
+        return self.name
     class Meta:
         # Specify the table name
         db_table = 'families'        

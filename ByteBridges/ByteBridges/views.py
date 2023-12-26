@@ -1,6 +1,6 @@
 import datetime
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from .models import Supplier, Warehouse, Client, Family, Article, ArticleType, Equipment, ComponentListFamily
 
 from django.db import connections
@@ -169,6 +169,7 @@ def orderSupplierCreate(request):
                            [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
             result = cursor.fetchone()
             if result:
+<<<<<<< HEAD
                 print(result[0])
                 #for item in data:
                     #with connections['admin'].cursor() as cursor:
@@ -176,6 +177,14 @@ def orderSupplierCreate(request):
                           #             [result[0],
                            #             item['component'],
                             #            item['quantity']])
+=======
+                for item in data:
+                    with connections['admin'].cursor() as cursor:
+                        cursor.execute("CALL sp_buy_create(%s,%s,%s)",
+                                       [result[0],
+                                        item['component'],
+                                        item['quantity']])
+>>>>>>> 1b0e19814ae2bb53c8e8d7fa3ffac3a301de9ee0
                 return JsonResponse({'status': 'success'})
     return render(request, template_name='orderSupplierCreate.html', context=context)
 
@@ -274,7 +283,7 @@ def componentCreate(request):
         idcategory = None
         description = request.POST.get('description')
         image = ""
-        profit_margin = request.POST.get('profitmargin')
+        profit_margin = int(request.POST.get('profitmargin')) / 100
         barcode = request.POST.get('barcode')
         reference = request.POST.get('reference')
 
@@ -295,3 +304,9 @@ def componentList(request):
         result = cursor.fetchall()
 
         return render(request, 'componentList.html', {'result': result})
+
+
+def supplierEdit(request, pk):
+    supplier = get_object_or_404(Supplier, pk=pk)
+
+    return render(request, 'supplierEdit.html', {'supplier': supplier})
