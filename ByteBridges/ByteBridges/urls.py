@@ -41,6 +41,7 @@ urlpatterns = [
     
     #Family
     path("familyCreate", views.familyCreate, name="familyCreate"),
+    path("familyEdit", views.familyEdit, name="familyEdit"),
     
     #Equipment
     path("equipmentCreate", views.equipmentCreate, name="equipmentCreate"),

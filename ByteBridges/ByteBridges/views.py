@@ -170,12 +170,12 @@ def orderSupplierCreate(request):
             result = cursor.fetchone()
             if result:
                 print(result[0])
-                for item in data:
-                    with connections['admin'].cursor() as cursor:
-                        cursor.execute("CALL sp_buy_create(%s,%s,%s)",
-                                       [result[0],
-                                        item['component'],
-                                        item['quantity']])
+                #for item in data:
+                    #with connections['admin'].cursor() as cursor:
+                        #cursor.execute("CALL sp_buy_create(%s,%s,%s)",
+                          #             [result[0],
+                           #             item['component'],
+                            #            item['quantity']])
                 return JsonResponse({'status': 'success'})
     return render(request, template_name='orderSupplierCreate.html', context=context)
 
@@ -202,17 +202,33 @@ def get_articles(request):
 
 # Family  sp_families_create
 def familyCreate(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        desc = request.POST.get('desc')
-        with connections['admin'].cursor() as cursor:
-            # Call the stored procedure using the CALL statement
-            cursor.execute("CALL sp_families_create(%s,%s)",
-                           [name, desc])
+    with connections['admin'].cursor() as cursor:
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            desc = request.POST.get('desc')
+            with connections['admin'].cursor() as cursor:
+                # Call the stored procedure using the CALL statement
+                cursor.execute("CALL sp_families_create(%s,%s)",
+                            [name, desc])
 
-        print(f"Inserted Family " + name + " " + desc)
-        return redirect('dashboard')
-    return render(request, template_name='familyCreate.html')
+            print(f"Inserted Family " + name + " " + desc)
+            return redirect('dashboard')
+        return render(request, template_name='familyCreate.html')
+
+def familyEdit(request):  
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("select  * from view_families_list", [])
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
+        families = [Family(*row) for row in result]
+        context = {'families': families}
+        
+        if request.method == 'POST' and 'id' in request.POST:
+            p_id = request.POST['id']
+            cursor.execute("Call sp_families_delete(%s)", [p_id])
+            return JsonResponse({'status': 'success'})
+        return render(request, 'familyEdit.html', context=context)
 
 
 # Equipment
