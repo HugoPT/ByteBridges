@@ -169,22 +169,12 @@ def orderSupplierCreate(request):
                            [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
             result = cursor.fetchone()
             if result:
-<<<<<<< HEAD
-                print(result[0])
-                #for item in data:
-                    #with connections['admin'].cursor() as cursor:
-                        #cursor.execute("CALL sp_buy_create(%s,%s,%s)",
-                          #             [result[0],
-                           #             item['component'],
-                            #            item['quantity']])
-=======
                 for item in data:
                     with connections['admin'].cursor() as cursor:
                         cursor.execute("CALL sp_buy_create(%s,%s,%s)",
                                        [result[0],
                                         item['component'],
                                         item['quantity']])
->>>>>>> 1b0e19814ae2bb53c8e8d7fa3ffac3a301de9ee0
                 return JsonResponse({'status': 'success'})
     return render(request, template_name='orderSupplierCreate.html', context=context)
 
