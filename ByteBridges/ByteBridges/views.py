@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import render, redirect
 from .models import Supplier, Warehouse, Client, Family, Article, ArticleType, Equipment, ComponentListFamily
 
@@ -160,24 +162,21 @@ def orderSupplierCreate(request):
 
     if request.method == 'POST':
         data = json.loads(request.POST.get('data'))
-
         header = json.loads(request.POST.get('header'))
-        print(header)
-        #create a new supplier enc header
-        cursor.execute("select * from view_families_list")
-        result = cursor.fetchall()
-
-        # cursor.execute("select id FROM fn_ordersupplier_create(%s,%s,%s,)",)
-
-        for item in data:
-            with connections['admin'].cursor() as cursor:
-                print(item)
-                cursor.execute("CALL sp_buy_create(%s,%s,%s)",
-                               [17,
-                                item['component'],
-                                item['quantity']])
-
-        return JsonResponse({'status': 'success'})
+        # create a new supplier enc header
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("select fn_orderssupplier_create(%s,%s,%s)",
+                           [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
+            result = cursor.fetchone()
+            if result:
+                print(result[0])
+                for item in data:
+                    with connections['admin'].cursor() as cursor:
+                        cursor.execute("CALL sp_buy_create(%s,%s,%s)",
+                                       [result[0],
+                                        item['component'],
+                                        item['quantity']])
+                return JsonResponse({'status': 'success'})
     return render(request, template_name='orderSupplierCreate.html', context=context)
 
 
