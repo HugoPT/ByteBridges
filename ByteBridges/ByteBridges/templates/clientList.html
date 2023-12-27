@@ -14,6 +14,7 @@
         <th>Cidade</th>
         <th>Cod.Postal</th>
         <th>Email</th>
+        <th>Actions</th>  <!-- New column for buttons -->
       </tr>
     </thead>
     <tbody>
@@ -25,6 +26,10 @@
         <td>{{ c.city }}</td>
         <td>{{ c.zipCode }}</td>
         <td><a href="mailto:{{ c.email }}">{{ c.email }}</a></td>
+        <td>
+            <a href="{% url 'confirmation_delete' client_id=c.idclient %}" class="delete-btn">Delete</a>
+            <button class="edit-btn" data-client-id="{{ c.id }}">Edit</button>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
@@ -39,6 +44,17 @@
       language: {
         url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
       },
+    });
+
+    // Add event listeners for delete and edit buttons
+    $("#clientsTable").on("click", ".delete-btn", function() {
+      var clientId = $(this).data("client-id");
+      // Perform delete operation or redirect to delete view with the client ID
+    });
+
+    $("#clientsTable").on("click", ".edit-btn", function() {
+      var clientId = $(this).data("client-id");
+      // Redirect to edit view with the client ID
     });
   });
 </script>

@@ -58,6 +58,21 @@ def clientCreate(request):
     return render(request, template_name='clientCreate.html')
 
 
+def confirmation_delete(request, client_id):
+    # Assuming you have a 'confirmation_delete.html' template
+    return render(request, 'confirmation_delete.html', {'client_id': client_id})
+
+def delete_client(request, client_id):
+    if request.method == 'POST':
+        # Call the stored procedure to delete the client
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("CALL sp_clients_delete(%s)", [client_id])
+            # Commit the changes to the database
+
+        # Redirect to the client list page after deletion
+        return redirect('clientList')
+
+
 def orderClientList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement

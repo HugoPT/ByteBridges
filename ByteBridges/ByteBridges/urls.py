@@ -28,6 +28,8 @@ urlpatterns = [
     #Clients
     path("clientCreate", views.clientCreate, name="clientCreate"),
     path("clientList", views.clientList, name="clientList"),
+    path('confirmation_delete/<int:client_id>/', views.confirmation_delete, name='confirmation_delete'),
+    path('delete_client/<int:client_id>/', views.delete_client, name='delete_client'),
     
     #suppliers
     path("supplierCreate", views.supplierCreate, name="supplierCreate"),
