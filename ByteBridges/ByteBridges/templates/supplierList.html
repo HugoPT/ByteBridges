@@ -14,18 +14,23 @@
                 <th>Telefone</th>
                 <th>Email</th>
                 <th>NIF</th>
+                <th>Actions</th>  <!-- New column for buttons -->
             </tr>
             </thead>
             <tbody>
             {% for f in suppliers %}
                 <tr>
-                    <td><a href="{% url 'supplierEdit' pk=f.pk %}">{{ f.name }}</a></td>
+                    <td>{{ f.name }}</td>
                     <td>{{ f.address }}</td>
                     <td>{{ f.city }}</td>
                     <td>{{ f.zipcode }}</td>
                     <td><a href="tel:'{{ f.phone }}'">{{ f.phone }}</a></td>
                     <td><a href="mailto:{{ f.email }}">{{ f.email }}</a></td>
                     <td>{{ f.nif }}</td>
+                    <td>
+                    <a href="{% url 'supplierConfirmationDelete' supplier_id=f.idsupplier %}" class="delete-btn">Delete</a>
+                    <button class="edit-btn" data-supplier-id="{{ f.id }}">Edit</button>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -33,15 +38,26 @@
     </div>
 
     <script>
-        $(document).ready(function () {
-            $("#suppliersTable").DataTable({
-                dom: "Bfrtip",
-                buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
-                language: {
-                    url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
-                },
-            });
-        });
-    </script>
+  $(document).ready(function () {
+    $("#suppliersTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+      },
+    });
+
+    // Add event listeners for delete and edit buttons
+    $("#suppliersTable").on("click", ".delete-btn", function() {
+      var supplierId = $(this).data("supplier-id");
+      // Perform delete operation or redirect to delete view with the client ID
+    });
+
+    $("#suppliersTable").on("click", ".edit-btn", function() {
+      var supplierId = $(this).data("supplier-id");
+      // Redirect to edit view with the client ID
+    });
+  });
+</script>
 
 {% endblock %}

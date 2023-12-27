@@ -57,12 +57,37 @@ def clientCreate(request):
     # return the form
     return render(request, template_name='clientCreate.html')
 
+def clientEdit(request, client_id):
 
-def confirmation_delete(request, client_id):
-    # Assuming you have a 'confirmation_delete.html' template
-    return render(request, 'confirmation_delete.html', {'client_id': client_id})
+    if request.method == 'POST':
+        # Get the data from the form
+        email = request.POST.get('email')
+        individual = request.POST.get('individual') == 'True'
+        zipcode = request.POST.get('zipcode')
+        address = request.POST.get('address')
+        nif = request.POST.get('nif')
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        city = request.POST.get('city')
+        eletronicinvoice = request.POST.get('eletronicinvoice') == 'True'
 
-def delete_client(request, client_id):
+        # Call the stored procedure to update the client
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("CALL sp_clients_update(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                           [client_id, email, individual, zipcode, address, nif, name, description, city, eletronicinvoice])
+            # Commit the changes to the database
+
+        # Redirect to the client list page after update
+        return redirect('clientList')
+
+    return render(request, 'clientEdit.html', {'client_id': client_id})
+
+
+def clientConfirmationDelete(request, client_id):
+    # Assuming you have a 'clientConfirmationDelete.html' template
+    return render(request, 'clientConfirmationDelete.html', {'client_id': client_id})
+
+def clientDelete(request, client_id):
     if request.method == 'POST':
         # Call the stored procedure to delete the client
         with connections['admin'].cursor() as cursor:
@@ -120,6 +145,7 @@ def supplierList(request):
         return render(request, 'supplierList.html', {'suppliers': suppliers})
 
 
+
 def supplierCreate(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -142,6 +168,21 @@ def supplierCreate(request):
         # return render(request, 'your_template.html', {'result': result})
         return redirect('dashboard')
     return render(request, template_name='supplierCreate.html')
+
+
+def supplierConfirmationDelete(request, supplier_id):
+    # Assuming you have a 'clientConfirmationDelete.html' template
+    return render(request, 'supplierConfirmationDelete.html', {'supplier_id': supplier_id})
+
+def supplierDelete(request, supplier_id):
+    if request.method == 'POST':
+        # Call the stored procedure to delete the client
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("CALL sp_suppliers_delete(%s)", [supplier_id])
+            # Commit the changes to the database
+
+        # Redirect to the client list page after deletion
+        return redirect('supplierList')
 
 
 def orderSupplierList(request):

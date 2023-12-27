@@ -28,13 +28,16 @@ urlpatterns = [
     #Clients
     path("clientCreate", views.clientCreate, name="clientCreate"),
     path("clientList", views.clientList, name="clientList"),
-    path('confirmation_delete/<int:client_id>/', views.confirmation_delete, name='confirmation_delete'),
-    path('delete_client/<int:client_id>/', views.delete_client, name='delete_client'),
+    path('clientEdit/<int:client_id>/', views.clientEdit, name='clientEdit'),
+    path('clientConfirmationDelete/<int:client_id>/', views.clientConfirmationDelete, name='clientConfirmationDelete'),
+    path('clientDelete/<int:client_id>/', views.clientDelete, name='clientDelete'),
     
     #suppliers
     path("supplierCreate", views.supplierCreate, name="supplierCreate"),
     path("supplierList", views.supplierList, name="supplierList"),
     path('supplierEdit/<int:pk>/', views.supplierEdit, name='supplierEdit'),
+    path('supplierConfirmationDelete/<int:supplier_id>/', views.supplierConfirmationDelete, name='supplierConfirmationDelete'),
+    path('supplierDelete/<int:supplier_id>/', views.supplierDelete, name='supplierDelete'),
 
     #order
     path("orderSupplierCreate", views.orderSupplierCreate, name="orderSupplierCreate"),

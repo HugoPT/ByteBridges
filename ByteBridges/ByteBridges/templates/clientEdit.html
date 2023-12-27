@@ -1,0 +1,87 @@
+{% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
+<h1 class="title">Editar Cliente</h1>
+{% endblock %}
+    <form class="allforms row" method="post" action="{% url 'clientEdit' client_id %}">
+  {% csrf_token %}
+
+  <div class="form-field col-lg-6">
+    <input
+      id="name"
+      name="name"
+      class="input-text js-input"
+      type="text"
+      value="{{ client.name }}"
+      required
+    />
+    <label class="label" for="name">Nome</label>
+  </div>
+  <div class="form-field col-lg-6">
+    <input
+      id="nif"
+      name="nif"
+      class="input-text js-input"
+      type="text"
+      value="{{ client.nif }}"
+      required
+    />
+    <label class="label" for="nif">Contribuinte</label>
+  </div>
+
+  <div class="form-field col-lg-12">
+    <input
+      id="address"
+      name="address"
+      class="input-text js-input"
+      type="text"
+      value="{{ client.address }}"
+      required
+    />
+    <label class="label" for="address">Morada</label>
+  </div>
+
+  <div class="form-field col-lg-6">
+    <input
+      id="zipcode"
+      name="zipcode"
+      class="input-text js-input"
+      type="text"
+      value="{{ client.zipcode }}"
+      required
+    />
+    <label class="label" for="zipcode">Cod.Postal</label>
+  </div>
+
+  <div class="form-field col-lg-6">
+    <input
+      id="city"
+      name="city"
+      class="input-text js-input"
+      type="text"
+      value="{{ client.city }}"
+      required
+    />
+    <label class="label" for="city">Cidade</label>
+  </div>
+  <br />
+  <div class="form-field col-lg-6">
+    <input
+      id="email"
+      name="email"
+      class="input-text js-input"
+      type="email"
+      value="{{ client.email }}"
+      required
+    />
+    <label class="label" for="phone">Email</label>
+  </div>
+  <div class="form-field col-lg-12">
+    <label class="areaLabel" for="obs">Observações:</label>
+    <textarea id="obs" name="obs" rows="4" cols="100">{{ client.description }}</textarea><br />
+  </div>
+
+  <div class="form-field col-lg-12 submitBtn">
+    <input class="submit-btn" type="submit" value="Atualizar Cliente" />
+  </div>
+</form>
+
+{% endblock %}

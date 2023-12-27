@@ -27,8 +27,8 @@
         <td>{{ c.zipCode }}</td>
         <td><a href="mailto:{{ c.email }}">{{ c.email }}</a></td>
         <td>
-            <a href="{% url 'confirmation_delete' client_id=c.idclient %}" class="delete-btn">Delete</a>
-            <button class="edit-btn" data-client-id="{{ c.id }}">Edit</button>
+            <a href="{% url 'clientConfirmationDelete' client_id=c.idclient %}" class="delete-btn">Eliminar</a>
+            <a href="{% url 'clientEdit' client_id=c.idclient %}" class="delete-btn">Editar</a>
         </td>
       </tr>
       {% endfor %}
