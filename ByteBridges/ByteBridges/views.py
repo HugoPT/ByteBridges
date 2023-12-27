@@ -58,6 +58,10 @@ def clientCreate(request):
     return render(request, template_name='clientCreate.html')
 
 def clientEdit(request, client_id):
+    # Fetch the client information from the database
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("SELECT * FROM view_clients_list WHERE idclient = %s", [client_id])
+        client = cursor.fetchone()
 
     if request.method == 'POST':
         # Get the data from the form
@@ -80,7 +84,43 @@ def clientEdit(request, client_id):
         # Redirect to the client list page after update
         return redirect('clientList')
 
-    return render(request, 'clientEdit.html', {'client_id': client_id})
+    return render(request, 'clientEdit.html', {'client_id': client_id,
+                                               'client': {'email': client[1], 'individual': client[2],
+                                                          'zipcode': client[3], 'address': client[4], 'nif': client[5],
+                                                          'name': client[6], 'description': client[7],
+                                                          'city': client[8], 'eletronicinvoice': client[9]}})
+
+
+def supplierEdit(request, supplier_id):
+    # Fetch the client information from the database
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("SELECT * FROM view_suppliers_list WHERE idsupplier = %s", [supplier_id])
+        supplier = cursor.fetchone()
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        nif = request.POST.get('nif')
+        address = request.POST.get('address')
+        zipcode = request.POST.get('zipcode')
+        city = request.POST.get('city')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        obs = request.POST.get('obs')
+
+        # Call the stored procedure to update the client
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("CALL sp_suppliers_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                           [supplier_id, name, nif, address, zipcode, city, phone, email, obs])
+            # Commit the changes to the database
+
+        # Redirect to the client list page after update
+        return redirect('supplierList')
+
+    return render(request, 'supplierEdit.html', {'supplier_id': supplier_id,
+                                               'supplier': {'name': supplier[1], 'nif': supplier[2],
+                                                          'address': supplier[3], 'zipcode': supplier[4], 'city': supplier[5],
+                                                          'phone': supplier[6], 'email': supplier[7],
+                                                          'obs': supplier[8]}})
 
 
 def clientConfirmationDelete(request, client_id):
@@ -168,6 +208,8 @@ def supplierCreate(request):
         # return render(request, 'your_template.html', {'result': result})
         return redirect('dashboard')
     return render(request, template_name='supplierCreate.html')
+
+
 
 
 def supplierConfirmationDelete(request, supplier_id):

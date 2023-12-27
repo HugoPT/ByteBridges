@@ -1,6 +1,7 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
 <h1 class="title">Editar Cliente</h1>
 {% endblock %}
+    {% if client %}
     <form class="allforms row" method="post" action="{% url 'clientEdit' client_id %}">
   {% csrf_token %}
 
@@ -24,7 +25,7 @@
       value="{{ client.nif }}"
       required
     />
-    <label class="label" for="nif">Contribuinte</label>
+    <label class="label" for="nif">NIF</label>
   </div>
 
   <div class="form-field col-lg-12">
@@ -83,5 +84,7 @@
     <input class="submit-btn" type="submit" value="Atualizar Cliente" />
   </div>
 </form>
-
+{% else %}
+  <p>Client not found</p>
+{% endif %}
 {% endblock %}

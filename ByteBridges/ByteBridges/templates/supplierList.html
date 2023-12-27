@@ -29,7 +29,7 @@
                     <td>{{ f.nif }}</td>
                     <td>
                     <a href="{% url 'supplierConfirmationDelete' supplier_id=f.idsupplier %}" class="delete-btn">Delete</a>
-                    <button class="edit-btn" data-supplier-id="{{ f.id }}">Edit</button>
+                    <a href="{% url 'supplierEdit' supplier_id=f.idsupplier %}" class="delete-btn">Editar</a>
                     </td>
                 </tr>
             {% endfor %}
