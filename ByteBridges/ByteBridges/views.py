@@ -239,13 +239,41 @@ def orderSupplierList(request):
         return render(request, 'orderSupplierList.html', {'orders': result})
 def documentsSupplier(request):
     with connections['admin'].cursor() as cursor:
-        # Call the stored procedure using the CALL statement
-        cursor.execute("select  * from view_buy_list_supplier", [])
-        # If the stored procedure returns results, you can fetch them
+        cursor.execute("select * from view_suppliers_list")
         result = cursor.fetchall()
+        docNumber = [Supplier(*row) for row in result]
 
+        cursor.execute("select * from view_suppliers_list")
+        result = cursor.fetchall()
         suppliers = [Supplier(*row) for row in result]
-        return render(request, 'documentsSupplier.html', {'orders': result})
+
+        cursor.execute("select * from view_warehouses_list")
+        result = cursor.fetchall()
+        warehouses = [Warehouse(*row) for row in result]
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+        families = [Family(*row) for row in result]
+
+        context = {'suppliers': suppliers, 'warehouses': warehouses, 'families': families, 'docNumber': docNumber}
+
+    if request.method == 'POST':
+        data = json.loads(request.POST.get('data'))
+        header = json.loads(request.POST.get('header'))
+        # create a new supplier enc header
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("select fn_orderssupplier_create(%s,%s,%s)",
+                           [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
+            result = cursor.fetchone()
+            if result:
+                for item in data:
+                    with connections['admin'].cursor() as cursor:
+                        cursor.execute("CALL sp_buy_create(%s,%s,%s)",
+                                       [result[0],
+                                        item['component'],
+                                        item['quantity']])
+                return JsonResponse({'status': 'success'})
+    return render(request, template_name='documentsSupplier.html', context=context)
 
 
 def orderSupplierCreate(request):
