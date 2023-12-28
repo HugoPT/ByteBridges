@@ -29,8 +29,7 @@ urlpatterns = [
     path("clientCreate", views.clientCreate, name="clientCreate"),
     path("clientList", views.clientList, name="clientList"),
     path('clientEdit/<int:client_id>/', views.clientEdit, name='clientEdit'),
-    path('clientConfirmationDelete/<int:client_id>/', views.clientConfirmationDelete, name='clientConfirmationDelete'),
-    path('clientDelete/<int:client_id>/', views.clientDelete, name='clientDelete'),
+    path('clientDelete', views.clientDelete, name='clientDelete'),
     
     #suppliers
     path("supplierCreate", views.supplierCreate, name="supplierCreate"),
@@ -38,8 +37,7 @@ urlpatterns = [
 
     path('supplierEdit/<int:supplier_id>/', views.supplierEdit, name='supplierEdit'),
 
-    path('supplierConfirmationDelete/<int:supplier_id>/', views.supplierConfirmationDelete, name='supplierConfirmationDelete'),
-    path('supplierDelete/<int:supplier_id>/', views.supplierDelete, name='supplierDelete'),
+    path('supplierDelete', views.supplierDelete, name='supplierDelete'),
 
     #order
     path("orderSupplierCreate", views.orderSupplierCreate, name="orderSupplierCreate"),

@@ -123,17 +123,14 @@ def supplierEdit(request, supplier_id):
                                                           'obs': supplier[8]}})
 
 
-def clientConfirmationDelete(request, client_id):
-    # Assuming you have a 'clientConfirmationDelete.html' template
-    return render(request, 'clientConfirmationDelete.html', {'client_id': client_id})
+def clientDelete(request):
 
-def clientDelete(request, client_id):
-    if request.method == 'POST':
+    if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
         with connections['admin'].cursor() as cursor:
+            client_id = request.POST['id']
             cursor.execute("CALL sp_clients_delete(%s)", [client_id])
-            # Commit the changes to the database
-
+            return JsonResponse({'status': 'success'})
         # Redirect to the client list page after deletion
         return redirect('clientList')
 
@@ -211,19 +208,14 @@ def supplierCreate(request):
 
 
 
+def supplierDelete(request):
+    if request.method == 'POST' and 'id' in request.POST:
 
-def supplierConfirmationDelete(request, supplier_id):
-    # Assuming you have a 'clientConfirmationDelete.html' template
-    return render(request, 'supplierConfirmationDelete.html', {'supplier_id': supplier_id})
-
-def supplierDelete(request, supplier_id):
-    if request.method == 'POST':
-        # Call the stored procedure to delete the client
         with connections['admin'].cursor() as cursor:
+            supplier_id = request.POST['id']
             cursor.execute("CALL sp_suppliers_delete(%s)", [supplier_id])
-            # Commit the changes to the database
+            return JsonResponse({'status': 'success'})
 
-        # Redirect to the client list page after deletion
         return redirect('supplierList')
 
 

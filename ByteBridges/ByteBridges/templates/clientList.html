@@ -14,7 +14,7 @@
         <th>Cidade</th>
         <th>Cod.Postal</th>
         <th>Email</th>
-        <th>Actions</th>  <!-- New column for buttons -->
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -27,8 +27,8 @@
         <td>{{ c.zipCode }}</td>
         <td><a href="mailto:{{ c.email }}">{{ c.email }}</a></td>
         <td>
-            <a href="{% url 'clientConfirmationDelete' client_id=c.idclient %}" class="delete-btn">Eliminar</a>
-            <a href="{% url 'clientEdit' client_id=c.idclient %}" class="delete-btn">Editar</a>
+            <button type="button" class="btn btn-danger" onclick="alertDelete('{{c.idclient}}')">Eliminar</button>
+            <button class="btn btn-warning"><a href="{% url 'clientEdit' client_id=c.idclient %}">Editar</a></button>
         </td>
       </tr>
       {% endfor %}
@@ -37,6 +37,68 @@
 </div>
 
 <script>
+
+function alertDelete(id) {
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: "btn btn-danger",
+              cancelButton: "btn btn-primary"
+            },
+            buttonsStyling: true
+          });
+          swalWithBootstrapButtons.fire({
+            title: "Tem certeza?",
+            text: "Não poderá reverter esta ação!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sim, Eliminar!",
+            cancelButtonText: "Não, cancelar!",
+
+          }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "clientDelete",
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Cliente Eliminado",
+                            showConfirmButton: true,
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              location.reload();
+                            }
+                          });
+
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "OOPS...",
+                            text: "Ocorreu algo inesperado",
+                          });
+                    }
+                  });
+            } else if (
+              /* Read more about handling dismissals below */
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire({
+                title: "Cancelado",
+                text: "Nenhuma alteração foi feita",
+                icon: "error"
+              });
+            }
+          });
+
+      }
+
+
   $(document).ready(function () {
     $("#clientsTable").DataTable({
       dom: "Bfrtip",
