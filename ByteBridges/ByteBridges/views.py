@@ -222,12 +222,12 @@ def supplierDelete(request):
 def orderSupplierList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
-        cursor.execute("select  * from view_suppliers_list", [])
+        cursor.execute("select  * from view_buy_list_supplier", [])
         # If the stored procedure returns results, you can fetch them
         result = cursor.fetchall()
-        print(result)
+
         suppliers = [Supplier(*row) for row in result]
-        return render(request, 'orderSupplierList.html', {'suppliers': suppliers})
+        return render(request, 'orderSupplierList.html', {'orders': result})
 
 
 def orderSupplierCreate(request):
