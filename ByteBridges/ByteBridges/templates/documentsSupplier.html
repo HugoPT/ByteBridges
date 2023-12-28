@@ -113,7 +113,10 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td><input type="text" placeholder="Pesquisar produto"></td>
+                    <td>
+                        <input type="text" class="form-control"  id="productSearch" placeholder="Pesquize o produto">
+                        <ul id="searchResults" class="list-group mt-2"></ul>
+                    </td>
                     <td><input type="number" placeholder="0"></td>
                     <td><input type="number" placeholder="Preço custo"></td>
                     <td><input type="text" value="23" disabled></td>
@@ -251,43 +254,45 @@
             });
 //Handle supplier changed
             $('#supplier').change(function () {
-                    console.log(this.value)
-                    {#$.ajax({#}
-                    {#    type: "POST",#}
-                    {#    url: '{% url "familyEdit" this.value %}',#}
-                    {#    data: $("#familyEditForm").serialize(),#}
-                    {#    dataType: "json",#}
-                    {#    success: function (data) {#}
-                    {#        // Handle the success response#}
-                    {#        if (data.status === "success") {#}
-                    {#            Swal.fire({#}
-                    {#                title: "Sucesso!",#}
-                    {#                text: "Família atualizada com sucesso",#}
-                    {#                icon: "success",#}
-                    {#            }).then(function () {#}
-                    {#                // Redirect to familyList page#}
-                    {#                window.location.href = "{% url 'familyList' %}";#}
-                    {#            });#}
-                    {#        } else {#}
-                    {#            Swal.fire({#}
-                    {#                title: "Erro!",#}
-                    {#                text: "Falha ao atualizar família",#}
-                    {#                icon: "error",#}
-                    {#            });#}
-                    {#        }#}
-                    {#    },#}
-                    {#    error: function () {#}
-                    {#        Swal.fire({#}
-                    {#            title: "Erro!",#}
-                    {#            text: "Falha na comunicação com o servidor",#}
-                    {#            icon: "error",#}
-                    {#        });#}
-                    {#    },#}
+                console.log(this.value)
+                {#$.ajax({#}
+                {#    type: "POST",#}
+                {#    url: '{% url "familyEdit" this.value %}',#}
+                {#    data: $("#familyEditForm").serialize(),#}
+                {#    dataType: "json",#}
+                {#    success: function (data) {#}
+                {#        // Handle the success response#}
+                {#        if (data.status === "success") {#}
+                {#            Swal.fire({#}
+                {#                title: "Sucesso!",#}
+                {#                text: "Família atualizada com sucesso",#}
+                {#                icon: "success",#}
+                {#            }).then(function () {#}
+                {#                // Redirect to familyList page#}
+                {#                window.location.href = "{% url 'familyList' %}";#}
+                {#            });#}
+                {#        } else {#}
+                {#            Swal.fire({#}
+                {#                title: "Erro!",#}
+                {#                text: "Falha ao atualizar família",#}
+                {#                icon: "error",#}
+                {#            });#}
+                {#        }#}
+                {#    },#}
+                {#    error: function () {#}
+                {#        Swal.fire({#}
+                {#            title: "Erro!",#}
+                {#            text: "Falha na comunicação com o servidor",#}
+                {#            icon: "error",#}
+                {#        });#}
+                {#    },#}
 
 
-                });
+            });
 
         });
+
+
 
         var counter;
 
