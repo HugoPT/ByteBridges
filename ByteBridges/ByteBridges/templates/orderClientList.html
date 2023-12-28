@@ -3,7 +3,7 @@
 {%endblock%}{% block content %}
 
 <div class="listContainer">
-  <h1>Lista de Fornecedores</h1>
+  <h1>Lista de Encomendas</h1>
   <table id="suppliersTable" class="display">
     <thead>
       <tr>
@@ -17,7 +17,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for f in suppliers %}
+      {% for f in result %}
       <tr>
         <td>{{ f.name }}</td>
         <td>{{ f.address }}</td>

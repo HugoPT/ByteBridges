@@ -28,8 +28,8 @@
                     <td><a href="mailto:{{ f.email }}">{{ f.email }}</a></td>
                     <td>{{ f.nif }}</td>
                     <td>
-                    <a href="{% url 'supplierConfirmationDelete' supplier_id=f.idsupplier %}" class="delete-btn">Delete</a>
-                    <a href="{% url 'supplierEdit' supplier_id=f.idsupplier %}" class="delete-btn">Editar</a>
+                    <a href="{% url 'supplierConfirmationDelete' supplier_id=f.idsupplier %}" class="btn btn-danger">Delete</a>
+                    <a href="{% url 'supplierEdit' supplier_id=f.idsupplier %}" class="btn btn-warning">Editar</a>
                     </td>
                 </tr>
             {% endfor %}
