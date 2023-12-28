@@ -1,43 +1,51 @@
 {% extends 'base_template.html' %} {% block extra_css %} {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
 {% endblock %}{% block content %}
 
-    <div class="listContainer">
-        <h1>Lista de Fornecedores</h1>
-        <table id="suppliersTable" class="display">
-            <thead>
-            <tr>
-                <th>Nome</th>
-                <th>Morada</th>
-                <th>Cidade</th>
-                <th>Cod.Postal</th>
-                <th>Telefone</th>
-                <th>Email</th>
-                <th>NIF</th>
-                <th>Actions</th>  <!-- New column for buttons -->
-            </tr>
-            </thead>
-            <tbody>
-            {% for f in suppliers %}
-                <tr>
-                    <td>{{ f.name }}</td>
-                    <td>{{ f.address }}</td>
-                    <td>{{ f.city }}</td>
-                    <td>{{ f.zipcode }}</td>
-                    <td><a href="tel:'{{ f.phone }}'">{{ f.phone }}</a></td>
-                    <td><a href="mailto:{{ f.email }}">{{ f.email }}</a></td>
-                    <td>{{ f.nif }}</td>
-                    <td>
-                    <a href="{% url 'supplierConfirmationDelete' supplier_id=f.idsupplier %}" class="delete-btn">Delete</a>
-                    <a href="{% url 'supplierEdit' supplier_id=f.idsupplier %}" class="delete-btn">Editar</a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+<div class="listContainer">
+  <h1>Lista de Fornecedores</h1>
+  <table id="suppliersTable" class="display">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Morada</th>
+        <th>Cidade</th>
+        <th>Cod.Postal</th>
+        <th>Telefone</th>
+        <th>Email</th>
+        <th>NIF</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for f in suppliers %}
+      <tr>
+        <td>{{ f.name }}</td>
+        <td>{{ f.address }}</td>
+        <td>{{ f.city }}</td>
+        <td>{{ f.zipcode }}</td>
+        <td><a href="tel:'{{ f.phone }}'">{{ f.phone }}</a></td>
+        <td><a href="mailto:{{ f.email }}">{{ f.email }}</a></td>
+        <td>{{ f.nif }}</td>
+        <td>
+          <a
+            href="{% url 'supplierConfirmationDelete' supplier_id=f.idsupplier %}"
+            class="delete-btn"
+            >Delete</a
+          >
+          <a
+            href="{% url 'supplierEdit' idsupplier=f.idsupplier %}"
+            class="delete-btn"
+            >Editar</a
+          >
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
-    <script>
+<script>
   $(document).ready(function () {
     $("#suppliersTable").DataTable({
       dom: "Bfrtip",
@@ -48,12 +56,12 @@
     });
 
     // Add event listeners for delete and edit buttons
-    $("#suppliersTable").on("click", ".delete-btn", function() {
+    $("#suppliersTable").on("click", ".delete-btn", function () {
       var supplierId = $(this).data("supplier-id");
       // Perform delete operation or redirect to delete view with the client ID
     });
 
-    $("#suppliersTable").on("click", ".edit-btn", function() {
+    $("#suppliersTable").on("click", ".edit-btn", function () {
       var supplierId = $(this).data("supplier-id");
       // Redirect to edit view with the client ID
     });

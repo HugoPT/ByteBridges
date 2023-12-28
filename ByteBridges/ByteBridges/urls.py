@@ -36,11 +36,9 @@ urlpatterns = [
     path("supplierCreate", views.supplierCreate, name="supplierCreate"),
     path("supplierList", views.supplierList, name="supplierList"),
 
-    path('supplierEdit/<int:supplier_id>/', views.supplierEdit, name='supplierEdit'),
-
+    path('supplierEdit/<int:idsupplier>/', views.supplierEdit, name='supplierEdit'),
     path('supplierConfirmationDelete/<int:supplier_id>/', views.supplierConfirmationDelete, name='supplierConfirmationDelete'),
     path('supplierDelete/<int:supplier_id>/', views.supplierDelete, name='supplierDelete'),
-
     #order
     path("orderSupplierCreate", views.orderSupplierCreate, name="orderSupplierCreate"),
     path("orderSupplierList", views.orderSupplierList, name="orderSupplierList"),
@@ -49,7 +47,9 @@ urlpatterns = [
     
     #Family
     path("familyCreate", views.familyCreate, name="familyCreate"),
-    path("familyEdit", views.familyEdit, name="familyEdit"),
+    path("familyList", views.familyList, name="familyList"),
+    path('familyEdit/<int:idfamily>/', views.familyEdit, name='familyEdit'),
+
     
     #Equipment
     path("equipmentCreate", views.equipmentCreate, name="equipmentCreate"),

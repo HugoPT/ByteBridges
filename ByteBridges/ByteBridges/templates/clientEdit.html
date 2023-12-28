@@ -1,8 +1,11 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
 <h1 class="title">Editar Cliente</h1>
-{% endblock %}
-    {% if client %}
-    <form class="allforms row" method="post" action="{% url 'clientEdit' client_id %}">
+{% endblock %} {% if client %}
+<form
+  class="allforms row"
+  method="post"
+  action="{% url 'clientEdit' client_id %}"
+>
   {% csrf_token %}
 
   <div class="form-field col-lg-6">
@@ -77,7 +80,9 @@
   </div>
   <div class="form-field col-lg-12">
     <label class="areaLabel" for="obs">Observações:</label>
-    <textarea id="obs" name="obs" rows="4" cols="100">{{ client.description }}</textarea><br />
+    <textarea id="obs" name="obs" rows="4" cols="100">
+{{ client.description }}</textarea
+    ><br />
   </div>
 
   <div class="form-field col-lg-12 submitBtn">
@@ -85,6 +90,5 @@
   </div>
 </form>
 {% else %}
-  <p>Client not found</p>
-{% endif %}
-{% endblock %}
+<p>Client not found</p>
+{% endif %} {% endblock %}

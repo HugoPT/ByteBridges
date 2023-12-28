@@ -1,195 +1,81 @@
-{% extends 'base_template.html' %} {%block extra_css%} {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
-{%endblock%}{% block content %}
+{% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
+<h1 class="title">Editar Família de Componente</h1>
+{% endblock %} {% if family %}
+<form
+  id="familyEditForm"
+  class="allforms row"
+  method="post"
+  action="{% url 'familyEdit' idfamily %}"
+>
+  {% csrf_token %}
 
-<div class="listContainer">
-  <h1>Lista de Familias</h1>
-  <table id="suppliersTable" class="display">
-    <thead>
-      <tr>
-        
-        <th>Nome</th>
-        <th>Descrição</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for f in families %}
-      <tr>
-        <td>{{ f.name }}</td>
-        <td>{{ f.description }}</td>
-        <td>
-          <button
-            type="button"
-            class="btn btn-success"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModalCenter"
-            onclick="fillModal('{{f.idfamily}}', '{{f.name}}', '{{f.description}}')"
-          >
-            Editar
-          </button>
-          <button
-          type="button"
-          class="btn btn-danger"
-          onclick="alertDelete('{{f.idfamily}}')"
-        >
-          Eliminar
-        </button>
-        
-        </td>
-      </tr>
-
-      {% endfor %}
-    </tbody>
-  </table>
-  <div
-    class="modal fade"
-    id="exampleModalCenter"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="modalTitle"
-    aria-hidden="true"
-  >
-    <div
-      class="modal-dialog modal-dialog-centered"
-      id="modalCenter"
-      role="document"
-    >
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalTitle">Editar</h5>
-          <button
-            type="button"
-            class="close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="content">
-            <form action="#" method="post">
-              Nome:<br />
-              <input
-                type="text"
-                name="name"
-                id="modalName"
-                class="modalInput"
-              /><br />
-              Descrição:<br />
-              <textarea  
-                type="text"
-                name="description"
-                id="modalDescription"
-                class="modalAreaEdit"
-                rows="4"
-              ></textarea><br />
-            </form>
-            </div>
-          </div>
-
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              data-bs-dismiss="modal"
-              onclick="saveChanges()"
-            >
-              Salvar alterações
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="form-field col-lg-6">
+    <input
+      id="name"
+      name="name"
+      class="input-text js-input"
+      type="text"
+      value="{{ family.name }}"
+      required
+    />
+    <label class="label" for="name">Nome</label>
   </div>
 
-  <script>
-    function alertDelete(id) {
-       
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-              confirmButton: "btn btn-danger",
-              cancelButton: "btn btn-primary"
-            },
-            buttonsStyling: false
+  <div class="form-field col-lg-12">
+    <label class="areaLabel" for="obs">Observações:</label>
+    <textarea id="description" name="description" rows="4" cols="100">
+{{ family.description }}</textarea
+    ><br />
+  </div>
+
+  <div class="form-field col-lg-12 submitBtn">
+    <button
+      id="updateFamilyBtn"
+      class="submit-btn"
+      type="button"
+      onclick="updateFamily()"
+    >
+      Atualizar Família
+    </button>
+  </div>
+</form>
+<script>
+  function updateFamily() {
+    $.ajax({
+      type: "POST",
+      url: '{% url "familyEdit" idfamily %}',
+      data: $("#familyEditForm").serialize(),
+      dataType: "json",
+      success: function (data) {
+        // Handle the success response
+        if (data.status === "success") {
+          Swal.fire({
+            title: "Sucesso!",
+            text: "Família atualizada com sucesso",
+            icon: "success",
+          }).then(function () {
+            // Redirect to familyList page
+            window.location.href = "{% url 'familyList' %}";
           });
-          swalWithBootstrapButtons.fire({
-            title: "Tem certeza?",
-            text: "Não poderá reverter esta ação!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Sim, Eliminar!",
-            cancelButtonText: "Não, cancelar!",
-        
-          }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: "POST",
-                    url: "familyEdit",  
-                    data: { 
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                        id: id 
-                    },
-                    success: function(response) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Dado Eliminadado",
-                            showConfirmButton: true,
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              location.reload();
-                            }
-                          });
-                          
-                    },
-                    error: function(error) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Algo Correu Mal",                         
-                          });
-                    }
-                  });
-            } else if (
-              /* Read more about handling dismissals below */
-              result.dismiss === Swal.DismissReason.cancel
-            ) {
-              swalWithBootstrapButtons.fire({
-                title: "Cancelled",
-                text: "Your imaginary file is safe :)",
-                icon: "error"
-              });
-            }
+        } else {
+          Swal.fire({
+            title: "Erro!",
+            text: "Falha ao atualizar família",
+            icon: "error",
           });
-
-
-
-
-      }
-
-    function fillModal(id, name, description) {
-      document.getElementById("modalId").value = id;
-      document.getElementById("modalName").value = name;
-      document.getElementById("modalDescription").value = description;
-    }
-    $(document).ready(function () {
-      $("#suppliersTable").DataTable({
-        dom: "Bfrtip",
-        buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
-        language: {
-          url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
-        },
-      });
+        }
+      },
+      error: function () {
+        Swal.fire({
+          title: "Erro!",
+          text: "Falha na comunicação com o servidor",
+          icon: "error",
+        });
+      },
     });
-  </script>
+  }
+</script>
 
-  {% endblock %}
-</div>
+{% else %}
+<p>Família not found</p>
+{% endif %} {% endblock %}
