@@ -237,6 +237,15 @@ def orderSupplierList(request):
 
         suppliers = [Supplier(*row) for row in result]
         return render(request, 'orderSupplierList.html', {'orders': result})
+def documentsSupplier(request):
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("select  * from view_buy_list_supplier", [])
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
+
+        suppliers = [Supplier(*row) for row in result]
+        return render(request, 'documentsSupplier.html', {'orders': result})
 
 
 def orderSupplierCreate(request):
