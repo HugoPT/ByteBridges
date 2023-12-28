@@ -29,16 +29,18 @@
         <td><a href="mailto:{{ f.email }}">{{ f.email }}</a></td>
         <td>{{ f.nif }}</td>
         <td>
-          <a
-            href="{% url 'supplierConfirmationDelete' supplier_id=f.idsupplier %}"
+          <button
+            type="button"
             class="btn btn-danger"
-            >Delete</a
+            onclick="alertDelete('{{f.idsupplier}}')"
           >
-          <a
-            href="{% url 'supplierEdit' supplier_id=f.idsupplier %}"
-            class="btn btn-warning"
-            >Editar</a
-          >
+            Eliminar
+          </button>
+          <button class="btn btn-warning">
+            <a href="{% url 'supplierEdit' supplier_id=f.idsupplier %}"
+              >Editar</a
+            >
+          </button>
         </td>
       </tr>
       {% endfor %}
@@ -47,6 +49,64 @@
 </div>
 
 <script>
+  function alertDelete(id) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-danger",
+        cancelButton: "btn btn-primary",
+      },
+      buttonsStyling: true,
+    });
+    swalWithBootstrapButtons
+      .fire({
+        title: "Tem certeza?",
+        text: "Não poderá reverter esta ação!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sim, Eliminar!",
+        cancelButtonText: "Não, cancelar!",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: "supplierDelete",
+            data: {
+              csrfmiddlewaretoken: "{{ csrf_token }}",
+              id: id,
+            },
+            success: function (response) {
+              Swal.fire({
+                icon: "success",
+                title: "Fornecedor Eliminado",
+                showConfirmButton: true,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  location.reload();
+                }
+              });
+            },
+            error: function (error) {
+              Swal.fire({
+                icon: "error",
+                title: "OOPS...",
+                text: "Ocorreu algo inesperado",
+              });
+            },
+          });
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire({
+            title: "Cancelado",
+            text: "Nenhuma alteração foi feita",
+            icon: "error",
+          });
+        }
+      });
+  }
+
   $(document).ready(function () {
     $("#suppliersTable").DataTable({
       dom: "Bfrtip",
