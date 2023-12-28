@@ -1,49 +1,151 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
 <h1 class="title">Editar Fornecedor</h1>
 {% endblock %} {% if supplier %}
+<form
+  id="supplierEditForm"
+  class="allforms row"
+  method="post"
+  action="{% url 'supplierEdit' idsupplier %}"
+>
+  {% csrf_token %}
 
+  <div class="form-field col-lg-6">
+    <input
+      id="name"
+      name="name"
+      class="input-text js-input"
+      type="text"
+      value="{{ supplier.name }}"
+      required
+    />
+    <label class="label" for="name">Nome</label>
+  </div>
+
+  <div class="form-field col-lg-6">
+    <input
+      id="nif"
+      name="nif"
+      class="input-text js-input"
+      type="text"
+      value="{{ supplier.nif }}"
+      required
+    />
+    <label class="label" for="nif">NIF</label>
+  </div>
+
+  <div class="form-field col-lg-6">
+    <input
+      id="address"
+      name="address"
+      class="input-text js-input"
+      type="text"
+      value="{{ supplier.address }}"
+      required
+    />
+    <label class="label" for="address">Endereço</label>
+  </div>
+
+  <div class="form-field col-lg-6">
+    <input
+      id="zipcode"
+      name="zipcode"
+      class="input-text js-input"
+      type="text"
+      value="{{ supplier.zipcode }}"
+      required
+    />
+    <label class="label" for="zipcode">Cod.Postal</label>
+  </div>
+
+  <div class="form-field col-lg-6">
+    <input
+      id="city"
+      name="city"
+      class="input-text js-input"
+      type="text"
+      value="{{ supplier.city }}"
+      required
+    />
+    <label class="label" for="city">Cidade</label>
+  </div>
+
+  <div class="form-field col-lg-6">
+    <input
+      id="phone"
+      name="phone"
+      class="input-text js-input"
+      type="text"
+      value="{{ supplier.phone }}"
+      required
+    />
+    <label class="label" for="phone">Telefone</label>
+  </div>
+
+  <div class="form-field col-lg-6">
+    <input
+      id="email"
+      name="email"
+      class="input-text js-input"
+      type="email"
+      value="{{ supplier.email }}"
+      required
+    />
+    <label class="label" for="email">E-mail</label>
+  </div>
+
+  <div class="form-field col-lg-12">
+    <label class="areaLabel" for="obs">Observações:</label>
+    <textarea id="obs" name="obs" rows="4" cols="100">
+{{ supplier.obs }}</textarea
+    ><br />
+  </div>
+
+  <div class="form-field col-lg-12 submitBtn">
+    <button
+      id="updateSuppBtn"
+      class="submit-btn"
+      type="button"
+      onclick="updateSupplier()"
+    >
+      Atualizar Fornecedor
+    </button>
+  </div>
+</form>
 <script>
-  // Adicione este bloco de código no final do seu template
-  $(document).ready(function () {
-    $("#supplierEditForm").submit(function (event) {
-      event.preventDefault(); // Impede o envio normal do formulário
-
-      // Realiza a requisição Ajax
-      $.ajax({
-        type: "POST",
-        url: '{% url "supplierEdit" idsupplier %}',
-        data: $("#supplierEditForm").serialize(),
-        dataType: "json",
-        success: function (data) {
-          // Handle the success response
-          if (data.status === "success") {
-            Swal.fire({
-              title: "Sucesso!",
-              text: "Fornecedor atualizado com sucesso",
-              icon: "success",
-            }).then(function () {
-              // Redireciona para a página de fornecedores
-              window.location.href = "{% url 'supplierList' %}";
-            });
-          } else {
-            Swal.fire({
-              title: "Erro!",
-              text: "Falha ao atualizar fornecedor",
-              icon: "error",
-            });
-          }
-        },
-        error: function () {
-          // Handle the error response
+  function updateSupplier() {
+    $.ajax({
+      type: "POST",
+      url: '{% url "supplierEdit" idsupplier %}',
+      data: $("#supplierEditForm").serialize(),
+      dataType: "json",
+      success: function (data) {
+        // Handle the success response
+        if (data.status === "success") {
+          Swal.fire({
+            title: "Sucesso!",
+            text: "Fornecedor atualizado com sucesso",
+            icon: "success",
+          }).then(function () {
+            // Redirect to supplierList page
+            window.location.href = "{% url 'supplierList' %}";
+          });
+        } else {
           Swal.fire({
             title: "Erro!",
-            text: "Falha na comunicação com o servidor",
+            text: "Falha ao atualizar o Fornecedor",
             icon: "error",
           });
-        },
-      });
+        }
+      },
+      error: function () {
+        Swal.fire({
+          title: "Erro!",
+          text: "Falha na comunicação com o servidor",
+          icon: "error",
+        });
+      },
     });
-  });
+  }
 </script>
 {% else %}
 <p>Supplier not found</p>

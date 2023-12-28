@@ -29,8 +29,18 @@
         <td><a href="mailto:{{ f.email }}">{{ f.email }}</a></td>
         <td>{{ f.nif }}</td>
         <td>
-          <button type="button" class="btn btn-danger" onclick="alertDelete('{{f.idsupplier}}')">Eliminar</button>
-          <button class="btn btn-warning"><a href="{% url 'supplierEdit' supplier_id=f.idsupplier %}">Editar</a></button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            onclick="alertDelete('{{f.idsupplier}}')"
+          >
+            Eliminar
+          </button>
+          <a
+            href="{% url 'supplierEdit' idsupplier=f.idsupplier %}"
+            class="btn btn-warning"
+            >Editar</a
+          >
         </td>
       </tr>
       {% endfor %}

@@ -91,13 +91,18 @@ def clientEdit(request, client_id):
                                                           'city': client[8], 'eletronicinvoice': client[9]}})
 
 
-def supplierEdit(request, supplier_id):
-    # Fetch the client information from the database
+def supplierEdit(request, idsupplier):
+    # Fetch the supplier information from the database
     with connections['admin'].cursor() as cursor:
-        cursor.execute("SELECT * FROM view_suppliers_list WHERE idsupplier = %s", [supplier_id])
+        cursor.execute("SELECT * FROM view_suppliers_list WHERE idsupplier = %s", [idsupplier])
         supplier = cursor.fetchone()
 
+    if not supplier:
+        # If the supplier is not found, handle it accordingly (e.g., return a 404 or display an error message)
+        return render(request, 'supplierEdit.html', {'supplier_not_found': True})
+
     if request.method == 'POST':
+        # Get the data from the form
         name = request.POST.get('name')
         nif = request.POST.get('nif')
         address = request.POST.get('address')
@@ -107,20 +112,24 @@ def supplierEdit(request, supplier_id):
         email = request.POST.get('email')
         obs = request.POST.get('obs')
 
-        # Call the stored procedure to update the client
+        # Print the data before updating the supplier
+        print("Data before update:")
+        print(f"Name: {name}, NIF: {nif}, Address: {address}, Zipcode: {zipcode}, City: {city}, Phone: {phone}, Email: {email}, Observations: {obs}")
+
+        # Call the stored procedure to update the supplier
         with connections['admin'].cursor() as cursor:
             cursor.execute("CALL sp_suppliers_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                           [supplier_id, name, nif, address, zipcode, city, phone, email, obs])
+                           [idsupplier, name, nif, address, zipcode, city, phone, email, obs])
             # Commit the changes to the database
 
-        # Redirect to the client list page after update
-        return redirect('supplierList')
+        # Always return a JsonResponse for AJAX requests
+        return JsonResponse({'status': 'success'})
 
-    return render(request, 'supplierEdit.html', {'supplier_id': supplier_id,
-                                               'supplier': {'name': supplier[1], 'nif': supplier[2],
-                                                          'address': supplier[3], 'zipcode': supplier[4], 'city': supplier[5],
-                                                          'phone': supplier[6], 'email': supplier[7],
-                                                          'obs': supplier[8]}})
+    return render(request, 'supplierEdit.html', {'idsupplier': idsupplier,
+                                                 'supplier': {'name': supplier[1], 'nif': supplier[2],
+                                                              'address': supplier[3], 'zipcode': supplier[4], 'city': supplier[5],
+                                                              'phone': supplier[6], 'email': supplier[7],
+                                                              'obs': supplier[8]}})
 
 
 def clientDelete(request):
