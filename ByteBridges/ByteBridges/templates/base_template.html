@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <!-- Include Bootstrap CSS from CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
     <!-- Include Boxicons CSS from CDN -->
     <link
@@ -31,11 +32,15 @@
             href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap.min.css"
     />
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"
+            integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFpStnqpQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <!-- Include your custom CSS -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/posLogin.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/form.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/dropdown.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/form.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/dropdown.css' %}"/>
     {% block extra_css %}{% endblock %}
 
     <title>{% block title %}ByteBridges{% endblock %}</title>
@@ -48,7 +53,9 @@
 ></script>
 
 <!-- Include Bootstrap JS from CDN -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
 
 <!-- Include Datatables JS from CDN -->
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
@@ -60,37 +67,37 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 
-
 <script>
     document.addEventListener("DOMContentLoaded", function (event) {
-      const showNavbar = (toggleId, navId, bodyId, headerId) => {
-        const toggle = document.getElementById(toggleId),
-          nav = document.getElementById(navId),
-          bodypd = document.getElementById(bodyId),
-          headerpd = document.getElementById(headerId);
+        const showNavbar = (toggleId, navId, bodyId, headerId) => {
+            const toggle = document.getElementById(toggleId),
+                nav = document.getElementById(navId),
+                bodypd = document.getElementById(bodyId),
+                headerpd = document.getElementById(headerId);
 
-        if (toggle && nav && bodypd && headerpd) {
-          toggle.addEventListener("click", () => {
-            nav.classList.toggle("showbar");
-            toggle.classList.toggle("bx-x");
-            bodypd.classList.toggle("body-pd");
-            headerpd.classList.toggle("body-pd");
-          });
+            if (toggle && nav && bodypd && headerpd) {
+                toggle.addEventListener("click", () => {
+                    nav.classList.toggle("showbar");
+                    toggle.classList.toggle("bx-x");
+                    bodypd.classList.toggle("body-pd");
+                    headerpd.classList.toggle("body-pd");
+                });
+            }
+        };
+
+        showNavbar("header-toggle", "nav-bar", "body-pd", "header");
+
+        /*===== LINK ACTIVE =====*/
+        const linkColor = document.querySelectorAll(".nav_link");
+
+        function colorLink() {
+            if (linkColor) {
+                linkColor.forEach((l) => l.classList.remove("active"));
+                this.classList.add("active");
+            }
         }
-      };
 
-      showNavbar("header-toggle", "nav-bar", "body-pd", "header");
-
-      /*===== LINK ACTIVE =====*/
-      const linkColor = document.querySelectorAll(".nav_link");
-
-      function colorLink() {
-        if (linkColor) {
-          linkColor.forEach((l) => l.classList.remove("active"));
-          this.classList.add("active");
-        }
-      }
-      linkColor.forEach((l) => l.addEventListener("click", colorLink));
+        linkColor.forEach((l) => l.addEventListener("click", colorLink));
     });
 </script>
 <!--Menu-->
@@ -135,10 +142,10 @@
                 </div>
                 <div class="nav_link_dropdown">
                     <div>
-                    <a href="#" class="nav_link nav_hover">
-                        <i class="bx bx-user nav_icon"></i>
-                        <span class="nav_name">Clientes <i class='bx bx-chevron-right arrow'></i></span>
-                    </a>
+                        <a href="#" class="nav_link nav_hover">
+                            <i class="bx bx-user nav_icon"></i>
+                            <span class="nav_name">Clientes <i class='bx bx-chevron-right arrow'></i></span>
+                        </a>
                     </div>
                     <div class="dropdown_content nav_link">
                         <a href="clientList.html" class="dropHover">
@@ -165,7 +172,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <div class="nav_link_dropdown">
                     <div>
                         <a href="#" class="nav_link nav_hover">
@@ -182,7 +189,7 @@
                         </a>
                     </div>
                 </div>
-                <a href="#" class="nav_link nav_hover" >
+                <a href="#" class="nav_link nav_hover">
                     <i class="bx bx-chart nav_icon"></i>
                     <span class="nav_name">Reporting</span>
                 </a>
@@ -200,28 +207,28 @@
 </div>
 <!--Fim Menu-->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         var dropdowns = document.querySelectorAll('.nav_link_dropdown');
-    
-        dropdowns.forEach(function(dropdown) {
+
+        dropdowns.forEach(function (dropdown) {
             var content = dropdown.querySelector('.dropdown_content');
             var arrowIcon = dropdown.querySelector('.arrow');
-    
-            dropdown.addEventListener('click', function(event) {
+
+            dropdown.addEventListener('click', function (event) {
                 event.preventDefault();
                 content.style.display = (content.style.display === 'block') ? 'none' : 'block';
-    
+
                 // Toggle the class to change the arrow icon
                 arrowIcon.classList.toggle('rotate');
             });
-    
+
             // Stop the click event propagation when clicking inside the dropdown content
-            content.addEventListener('click', function(event) {
+            content.addEventListener('click', function (event) {
                 event.stopPropagation();
             });
-    
+
             // Close the dropdown when clicking outside its scope
-            document.addEventListener('click', function(event) {
+            document.addEventListener('click', function (event) {
                 if (!dropdown.contains(event.target)) {
                     content.style.display = 'none';
                     arrowIcon.classList.remove('rotate');
@@ -229,18 +236,19 @@
             });
         });
     });
-    function logoutRequest(){
+
+    function logoutRequest() {
         Swal.fire({
             title: 'Tem a certeza que pretende sair?',
             showDenyButton: true,
             showCancelButton: false,
             confirmButtonText: `Sim`,
             denyButtonText: `Não`,
-        }).then((result) => {       
+        }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = "/";
             } else if (result.isDenied) {
-                
+
             }
         })
     }
@@ -257,15 +265,16 @@
             <!--Grid column-->
             <div class="col-lg-6 col-md-12 mb-4 mb-md-0 logoFooterCenter">
                 <div class="logoFooterJoin">
-                <h5 class="text-uppercase">Base de Dados II</h5>
-                <img src="https://www.freepnglogos.com/uploads/stitch-png/stitch-sticker-png-13.png" width="150px"  height="100px"> 
-            </div>
+                    <h5 class="text-uppercase">Base de Dados II</h5>
+                    <img src="https://www.freepnglogos.com/uploads/stitch-png/stitch-sticker-png-13.png" width="150px"
+                         height="100px">
+                </div>
             </div>
             <!--Grid column-->
 
             <!--Grid column-->
             <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-              
+
                 <p class="teamMembers">
                     Projeto desenvolvido por:
                     <br>
@@ -278,11 +287,11 @@
                     <br>
                     <strong>Paulo Cabral</strong>
                 </p>
-          
+
             </div>
             <!--Grid column-->
 
-  
+
         </div>
         <!--Grid row-->
     </div>
@@ -292,7 +301,7 @@
     <!-- Copyright -->
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
         © 2023 Copyright:
-       <a class="text-white" href="#">basededadosII.com</a>
+        <a class="text-white" href="#">basededadosII.com</a>
     </div>
     <!-- Copyright -->
 </footer>
