@@ -130,3 +130,16 @@ class Equipment(models.Model):
         db_table = 'view_equipments_list'
 
 
+class User(models.Model):
+    iduser = models.AutoField(primary_key=True, unique=True)
+    idrole = models.IntegerField()
+    idlabor = models.IntegerField()
+    email = models.CharField(max_length=70)
+    password = models.CharField(max_length=100)
+    name = models.CharField(max_length=80)
+
+    def __str__(self):
+        return self.name
+    class Meta:
+        # Specify the table name
+        db_table = 'users'

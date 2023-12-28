@@ -1,7 +1,7 @@
 import datetime
 
 from django.shortcuts import render, redirect,get_object_or_404
-from .models import Supplier, Warehouse, Client, Family, Article, ArticleType, Equipment, ComponentListFamily
+from .models import Supplier, Warehouse, Client, Family, Article, ArticleType, Equipment, ComponentListFamily, User
 
 from django.db import connections
 from django.http import JsonResponse
@@ -410,7 +410,52 @@ def componentList(request):
         return render(request, 'componentList.html', {'result': result})
 
 
-def supplierEdit(request, pk):
-    supplier = get_object_or_404(Supplier, pk=pk)
+def userList(request):
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("SELECT * FROM view_users_list", [])
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
+        print(result)
+        users = [User(*row) for row in result]
+        return render(request, 'userList.html', {'users': users})
 
-    return render(request, 'supplierEdit.html', {'supplier': supplier})
+def userEdit(request, user_id):
+        # Fetch the client information from the database
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("SELECT * FROM view_users_list WHERE iduser = %s", [user_id])
+            user = cursor.fetchone()
+
+        if request.method == 'POST':
+            # Get the data from the form
+            idrole = request.POST.get('role')
+            idlabor = request.POST.get('labor')
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            name = request.POST.get('name')
+
+
+            # Call the stored procedure to update the client
+            with connections['admin'].cursor() as cursor:
+                cursor.execute("CALL sp_users_update(%s, %s, %s, %s, %s, %s)",
+                               [user_id, idrole, idlabor, email, password, name])
+                # Commit the changes to the database
+
+            # Redirect to the client list page after update
+            return redirect('userList')
+
+        return render(request, 'userEdit.html', {'user_id': user_id,
+                                                   'user': {'name': user[5], 'password': user[4],
+                                                              'email': user[3], 'labor': user[2],
+                                                              'role': user[1]}})
+
+def userDelete(request):
+
+    if request.method == 'POST' and 'id' in request.POST:
+        # Call the stored procedure to delete the client
+        with connections['admin'].cursor() as cursor:
+            user_id = request.POST['id']
+            cursor.execute("CALL sp_users_delete(%s)", [user_id])
+            return JsonResponse({'status': 'success'})
+        # Redirect to the client list page after deletion
+        return redirect('userList')

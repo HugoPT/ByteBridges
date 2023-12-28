@@ -1,0 +1,77 @@
+{% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
+<h1 class="title">Editar Cliente</h1>
+{% endblock %} {% if user %}
+<form
+  class="allforms row"
+  method="post"
+  action="{% url 'userEdit' user_id %}"
+>
+  {% csrf_token %}
+
+  <div class="form-field col-lg-6">
+    <input
+      id="name"
+      name="name"
+      class="input-text js-input"
+      type="text"
+      value="{{ user.name }}"
+      required
+    />
+    <label class="label" for="name">Nome</label>
+  </div>
+  <div class="form-field col-lg-6">
+    <input
+      id="password"
+      name="password"
+      class="input-text js-input"
+      type="text"
+      value="{{ user.password }}"
+      required
+    />
+    <label class="label" for="nif">Password</label>
+  </div>
+
+  <div class="form-field col-lg-12">
+    <input
+      id="email"
+      name="email"
+      class="input-text js-input"
+      type="text"
+      value="{{ user.email }}"
+      required
+    />
+    <label class="label" for="address">Morada</label>
+  </div>
+
+  <div class="form-field col-lg-6">
+    <input
+      id="labor"
+      name="labor"
+      class="input-text js-input"
+      type="text"
+      value="{{ user.labor }}"
+      required
+    />
+    <label class="label" for="zipcode">Tipo de Função</label>
+  </div>
+
+  <div class="form-field col-lg-6">
+    <input
+      id="role"
+      name="role"
+      class="input-text js-input"
+      type="text"
+      value="{{ user.role }}"
+      required
+    />
+    <label class="label" for="city">Função</label>
+  </div>
+  <br />
+
+  <div class="form-field col-lg-12 submitBtn">
+    <input class="submit-btn" type="submit" value="Atualizar Utilizador" />
+  </div>
+</form>
+{% else %}
+<p>Client not found</p>
+{% endif %} {% endblock %}

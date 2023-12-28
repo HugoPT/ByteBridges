@@ -1,0 +1,122 @@
+{% extends 'base_template.html' %} {%block extra_css%} {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
+{%endblock%}{% block content %}
+
+<div class="listContainer">
+  <h1>Lista de Utilizadores</h1>
+
+  <table id="clientsTable" class="display">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Password</th>
+        <th>Email</th>
+        <th>Função</th>
+        <th>Tipo de Função</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td>{{ u.name }}</td>
+        <td>{{ u.password }}</td>
+        <td><a href="mailto:{{ u.email }}">{{ u.email }}</a></td>
+        <td>{{ u.idrole }}</td>
+        <td>{{ u.idlabor }}</td>
+        <td>
+            <button type="button" class="btn btn-danger" onclick="alertDelete('{{u.iduser}}')">Eliminar</button>
+            <button class="btn btn-warning"><a href="{% url 'userEdit' user_id=u.iduser %}">Editar</a></button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+
+function alertDelete(id) {
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: "btn btn-danger",
+              cancelButton: "btn btn-primary"
+            },
+            buttonsStyling: true
+          });
+          swalWithBootstrapButtons.fire({
+            title: "Tem certeza?",
+            text: "Não poderá reverter esta ação!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sim, Eliminar!",
+            cancelButtonText: "Não, cancelar!",
+
+          }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "userDelete",
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Utilizador Eliminado",
+                            showConfirmButton: true,
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              location.reload();
+                            }
+                          });
+
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "OOPS...",
+                            text: "Ocorreu algo inesperado",
+                          });
+                    }
+                  });
+            } else if (
+              /* Read more about handling dismissals below */
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire({
+                title: "Cancelado",
+                text: "Nenhuma alteração foi feita",
+                icon: "error"
+              });
+            }
+          });
+
+      }
+
+
+  $(document).ready(function () {
+    $("#usersTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+      },
+    });
+
+    // Add event listeners for delete and edit buttons
+    $("#usersTable").on("click", ".delete-btn", function() {
+      var userId = $(this).data("user-id");
+      // Perform delete operation or redirect to delete view with the client ID
+    });
+
+    $("#clientsTable").on("click", ".edit-btn", function() {
+      var userId = $(this).data("user-id");
+      // Redirect to edit view with the client ID
+    });
+  });
+</script>
+
+{% endblock %}
