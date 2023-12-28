@@ -68,13 +68,13 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function (event) {
-        const showNavbar = (toggleId, navId, bodyId, headerId) => {
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleNavbar = (toggleId, navId, bodyId, headerId) => {
             const toggle = document.getElementById(toggleId),
                 nav = document.getElementById(navId),
                 bodypd = document.getElementById(bodyId),
                 headerpd = document.getElementById(headerId);
-
+    
             if (toggle && nav && bodypd && headerpd) {
                 toggle.addEventListener("click", () => {
                     nav.classList.toggle("showbar");
@@ -84,21 +84,62 @@
                 });
             }
         };
-
-        showNavbar("header-toggle", "nav-bar", "body-pd", "header");
-
-        /*===== LINK ACTIVE =====*/
-        const linkColor = document.querySelectorAll(".nav_link");
-
-        function colorLink() {
-            if (linkColor) {
-                linkColor.forEach((l) => l.classList.remove("active"));
-                this.classList.add("active");
-            }
-        }
-
-        linkColor.forEach((l) => l.addEventListener("click", colorLink));
+    
+        toggleNavbar("header-toggle", "nav-bar", "body-pd", "header");
+    
+        const menuLinks = document.querySelectorAll('.nav_link');
+    
+        menuLinks.forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                const nav = document.getElementById('nav-bar');
+                const toggle = document.getElementById('header-toggle');
+                const bodypd = document.getElementById('body-pd');
+                const headerpd = document.getElementById('header');
+    
+                if (!nav.classList.contains("showbar")) {
+                    // Only toggle when the menu is closed
+                    nav.classList.toggle("showbar");
+                    toggle.classList.toggle("bx-x");
+                    bodypd.classList.toggle("body-pd");
+                    headerpd.classList.toggle("body-pd");
+                }
+    
+                // Handle your link-specific behavior here
+            });
+        });
+    
+        const dropdowns = document.querySelectorAll('.nav_link_dropdown');
+    
+        dropdowns.forEach(function (dropdown) {
+            const content = dropdown.querySelector('.dropdown_content');
+            const arrowIcon = dropdown.querySelector('.arrow');
+    
+            dropdown.addEventListener('click', function (event) {
+                event.preventDefault();
+                content.classList.toggle('show-dropdown');
+                arrowIcon.classList.toggle('rotate');
+            });
+    
+            // Stop the click event propagation when clicking inside the dropdown content
+            content.addEventListener('click', function (event) {
+                event.stopPropagation();
+            });
+        });
+    
+        // Close the dropdowns when clicking outside their scope
+        document.addEventListener('click', function (event) {
+            dropdowns.forEach(function (dropdown) {
+                const content = dropdown.querySelector('.dropdown_content');
+                const arrowIcon = dropdown.querySelector('.arrow');
+                if (!dropdown.contains(event.target)) {
+                    content.classList.remove('show-dropdown');
+                    arrowIcon.classList.remove('rotate');
+                }
+            });
+        });
     });
+    
+    
 </script>
 <!--Menu-->
 <header class="header" id="header">
