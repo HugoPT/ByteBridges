@@ -36,7 +36,7 @@ urlpatterns = [
     path("supplierCreate", views.supplierCreate, name="supplierCreate"),
     path("supplierList", views.supplierList, name="supplierList"),
 
-    path('supplierEdit/<int:idsupplier>/', views.supplierEdit, name='supplierEdit'),
+    path('supplierEdit/<int:supplier_id>/', views.supplierEdit, name='supplierEdit'),
     path('supplierConfirmationDelete/<int:supplier_id>/', views.supplierConfirmationDelete, name='supplierConfirmationDelete'),
     path('supplierDelete/<int:supplier_id>/', views.supplierDelete, name='supplierDelete'),
     #order

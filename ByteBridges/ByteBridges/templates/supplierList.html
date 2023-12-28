@@ -15,6 +15,7 @@
         <th>Email</th>
         <th>NIF</th>
         <th>Actions</th>
+        <!-- New column for buttons -->
       </tr>
     </thead>
     <tbody>
@@ -30,12 +31,12 @@
         <td>
           <a
             href="{% url 'supplierConfirmationDelete' supplier_id=f.idsupplier %}"
-            class="delete-btn"
+            class="btn btn-danger"
             >Delete</a
           >
           <a
-            href="{% url 'supplierEdit' idsupplier=f.idsupplier %}"
-            class="delete-btn"
+            href="{% url 'supplierEdit' supplier_id=f.idsupplier %}"
+            class="btn btn-warning"
             >Editar</a
           >
         </td>

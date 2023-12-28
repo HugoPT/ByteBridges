@@ -1,6 +1,6 @@
 import datetime
 
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Supplier, Warehouse, Client, Family, Article, ArticleType, Equipment, ComponentListFamily
 
 from django.db import connections
@@ -57,6 +57,7 @@ def clientCreate(request):
     # return the form
     return render(request, template_name='clientCreate.html')
 
+
 def clientEdit(request, client_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -78,7 +79,8 @@ def clientEdit(request, client_id):
         # Call the stored procedure to update the client
         with connections['admin'].cursor() as cursor:
             cursor.execute("CALL sp_clients_update(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                           [client_id, email, individual, zipcode, address, nif, name, description, city, eletronicinvoice])
+                           [client_id, email, individual, zipcode, address, nif, name, description, city,
+                            eletronicinvoice])
             # Commit the changes to the database
 
         # Redirect to the client list page after update
@@ -91,12 +93,44 @@ def clientEdit(request, client_id):
                                                           'city': client[8], 'eletronicinvoice': client[9]}})
 
 
+def supplierEdit(request, supplier_id):
+    print(supplier_id)
+    # Fetch the client information from the database
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("SELECT * FROM view_suppliers_list WHERE idsupplier = %s", [supplier_id])
+        supplier = cursor.fetchone()
 
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        nif = request.POST.get('nif')
+        address = request.POST.get('address')
+        zipcode = request.POST.get('zipcode')
+        city = request.POST.get('city')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        obs = request.POST.get('obs')
+
+        # Call the stored procedure to update the client
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("CALL sp_suppliers_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                           [supplier_id, name, nif, address, zipcode, city, phone, email, obs])
+            # Commit the changes to the database
+
+        # Redirect to the client list page after update
+        return redirect('supplierList')
+
+    return render(request, 'supplierEdit.html', {'supplier_id': supplier_id,
+                                                 'supplier': {'name': supplier[1], 'nif': supplier[2],
+                                                              'address': supplier[3], 'zipcode': supplier[4],
+                                                              'city': supplier[5],
+                                                              'phone': supplier[6], 'email': supplier[7],
+                                                              'obs': supplier[8]}})
 
 
 def clientConfirmationDelete(request, client_id):
     # Assuming you have a 'clientConfirmationDelete.html' template
     return render(request, 'clientConfirmationDelete.html', {'client_id': client_id})
+
 
 def clientDelete(request, client_id):
     if request.method == 'POST':
@@ -155,36 +189,6 @@ def supplierList(request):
         suppliers = [Supplier(*row) for row in result]
         return render(request, 'supplierList.html', {'suppliers': suppliers})
 
-def supplierEdit(request, idsupplier):
-    # Fetch the client information from the database
-    with connections['admin'].cursor() as cursor:
-        cursor.execute("SELECT * FROM view_suppliers_list WHERE idsupplier = %s", [idsupplier])
-        supplier = cursor.fetchone()
-        print("aaaaaaaaaaaaaaaaaaaa",supplier)
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        nif = request.POST.get('nif')
-        address = request.POST.get('address')
-        zipcode = request.POST.get('zipcode')
-        city = request.POST.get('city')
-        phone = request.POST.get('phone')
-        email = request.POST.get('email')
-        obs = request.POST.get('obs')
-
-        # Call the stored procedure to update the client
-        with connections['admin'].cursor() as cursor:
-            cursor.execute("CALL sp_suppliers_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                           [idsupplier, name, nif, address, zipcode, city, phone, email, obs])
-            # Commit the changes to the database
-
-        # Redirect to the client list page after update
-        return redirect('supplierList')
-
-    return render(request, 'supplierEdit.html', {'idsupplier': idsupplier,
-                                               'supplier': {'name': supplier[1], 'nif': supplier[2],
-                                                          'address': supplier[3], 'zipcode': supplier[4], 'city': supplier[5],
-                                                          'phone': supplier[6], 'email': supplier[7],
-                                                          'obs': supplier[8]}})
 
 def supplierCreate(request):
     if request.method == 'POST':
@@ -210,11 +214,10 @@ def supplierCreate(request):
     return render(request, template_name='supplierCreate.html')
 
 
-
-
 def supplierConfirmationDelete(request, supplier_id):
     # Assuming you have a 'clientConfirmationDelete.html' template
     return render(request, 'supplierConfirmationDelete.html', {'supplier_id': supplier_id})
+
 
 def supplierDelete(request, supplier_id):
     if request.method == 'POST':
@@ -230,12 +233,13 @@ def supplierDelete(request, supplier_id):
 def orderSupplierList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
-        cursor.execute("select  * from view_suppliers_list", [])
+        cursor.execute("select * from view_buy_list_supplier", [])
         # If the stored procedure returns results, you can fetch them
         result = cursor.fetchall()
         print(result)
-        suppliers = [Supplier(*row) for row in result]
-        return render(request, 'orderSupplierList.html', {'suppliers': suppliers})
+        orders = [list(row) for row in result]
+
+        return render(request, 'orderSupplierList.html', {'orders': orders})
 
 
 def orderSupplierCreate(request):
@@ -306,7 +310,7 @@ def familyCreate(request):
             with connections['admin'].cursor() as cursor:
                 # Call the stored procedure using the CALL statement
                 cursor.execute("CALL sp_families_create(%s,%s)",
-                            [name, desc])
+                               [name, desc])
 
             print(f"Inserted Family " + name + " " + desc)
             return redirect('dashboard')
@@ -320,7 +324,7 @@ def familyList(request):
         result = cursor.fetchall()
         families = [Family(*row) for row in result]
         context = {'families': families}
-        
+
         if request.method == 'POST' and 'id' in request.POST:
             p_id = request.POST['id']
             cursor.execute("Call sp_families_delete(%s)", [p_id])
