@@ -52,17 +52,20 @@ urlpatterns = [
     #Family
     path("familyCreate", views.familyCreate, name="familyCreate"),
     path("familyList", views.familyList, name="familyList"),
-    path('familyEdit/<int:idSupplier>/', views.familyEdit, name='familyEdit'),
+    path('familyEdit/<int:family_id>/', views.familyEdit, name='familyEdit'),
 
     
     #Equipment
     path("equipmentCreate", views.equipmentCreate, name="equipmentCreate"),
     path("equipmentList", views.equipmentList, name="equipmentList"),
     path('equipmentEdit/<int:equipment_id>/', views.equipmentEdit, name='equipmentEdit'),
+    path('equipmentDelete', views.equipmentDelete, name='equipmentDelete'),
     
     #Component
     path("componentCreate", views.componentCreate, name="componentCreate"),
     path("componentList", views.componentList, name="componentList"),
+    path('componentEdit/<int:component_id>/', views.componentEdit, name='componentEdit'),
+    path('componentDelete', views.componentDelete, name='componentDelete'),
 
     #Users
     path("userList", views.userList, name="userList"),

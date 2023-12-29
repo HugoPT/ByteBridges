@@ -1,7 +1,7 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
-<h1 class="title">Editar Equipamento</h1>
-{% endblock %} {% if equipment %}
-<form class="allforms row" method="post" action="{% url 'equipmentEdit' equipment_id %}">
+<h1 class="title">Editar Componente</h1>
+{% endblock %} {% if component %}
+<form class="allforms row" method="post" action="{% url 'componentEdit' component_id %}">
   {% csrf_token %}
 
   <div class="form-field col-lg-6">
@@ -10,43 +10,57 @@
       name="name"
       class="input-text js-input"
       type="text"
-      value="{{ equipment.name }}"
+      value="{{ component.name }}"
       required
     />
     <label class="label" for="name">Nome</label>
   </div>
   <div class="form-field col-lg-6">
-    <select id="dropdown" name="idcategory" class="input-text js-input" required>
-        <option value="{{ c.name }}" selected></option>{% for c in category %}
-      <option value="{{ c.idcategory }}">{{ c.name }}</option>
+    <select id="dropdown" name="idfamily" class="input-text js-input" required>
+        <option value="{{ c.name }}" selected></option>{% for c in family %}
+      <option value="{{ c.idfamily }}">{{ c.name }}</option>
       {% endfor %}
     </select>
-      <label class="label" for="category">Categoria</label>
+      <label class="label" for="family">Familia</label>
   </div>
 
-  <div class="form-field col-lg-6">
+<div class="form-field col-lg-4">
+            <input
+                    id="profitmargin"
+                    name="profitmargin"
+                    class="input-text js-input"
+                    type="text"
+                    value="{{ component.profitmargin * 100}}"
+                    required
+            />
+            <label class="label" for="profitmargin">Margem de Lucro</label>
+        </div>
+
+  <div class="form-field col-lg-4">
       <input
               id="barcode"
               name="barcode"
               class="input-text js-input"
               type="text"
-              value="{{ equipment.barcode }}"
+              value="{{ component.barcode }}"
               required
       />
       <label class="label" for="barcode">Código de Barras</label>
   </div>
 
-   <div class="form-field col-lg-6">
+
+   <div class="form-field col-lg-4">
             <input
                     id="reference"
                     name="reference"
                     class="input-text js-input"
                     type="text"
-                    value="{{ equipment.reference }}"
+                    value="{{ component.reference }}"
                     required
             />
             <label class="label" for="reference">Referência</label>
         </div>
+
 
   <div class="form-field col-lg-12">
       <label class="arealabel" for="description">Descrição</label>
@@ -56,11 +70,11 @@
                     rows="4"
                     cols="97"
                     style="border: 2px solid black;"
-                    required>{{ equipment.description }}</textarea><br />
+                    required>{{ component.description }}</textarea><br />
         </div>
 
   <div class="form-field col-lg-12 submitBtn">
-    <input class="submit-btn" type="submit" value="Atualizar Equipamento" />
+    <input class="submit-btn" type="submit" value="Atualizar Componente" />
   </div>
 </form>
 {% else %}

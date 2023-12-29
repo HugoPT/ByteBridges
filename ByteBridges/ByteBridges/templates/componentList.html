@@ -14,18 +14,23 @@
           <th>Margem de Lucro</th>
           <th>Código de Barras</th>
           <th>Referência</th>
+          <th>Actions</th>
 
       </tr>
     </thead>
     <tbody>
-      {% for c in result %}
+      {% for c in components %}
       <tr>
-          <td>{{ c.0 }}</td>
-        <td>{{ c.1 }}</td>
-        <td>{{ c.3 }}</td>
-        <td>{{ c.4 }}</td>
-        <td>{{ c.5 }}</td>
-        <td>{{ c.6 }}</td>
+          <td>{{ c.name }}</td>
+        <td>{{ c.family }}</td>
+        <td>{{ c.description }}</td>
+        <td>{{ c.profitmargin }}</td>
+        <td>{{ c.barcode }}</td>
+        <td>{{ c.reference }}</td>
+        <td>
+            <button type="button" class="btn btn-danger" onclick="alertDelete('{{c.idarticletype}}')">Eliminar</button>
+            <a class="btn btn-warning" href="{% url 'componentEdit' component_id=c.idarticletype %}">Editar</a>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
@@ -33,6 +38,69 @@
 </div>
 
 <script>
+
+
+function alertDelete(id) {
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: "btn btn-danger",
+              cancelButton: "btn btn-primary"
+            },
+            buttonsStyling: true
+          });
+          swalWithBootstrapButtons.fire({
+            title: "Tem certeza?",
+            text: "Não poderá reverter esta ação!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sim, Eliminar!",
+            cancelButtonText: "Não, cancelar!",
+
+          }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "equipmentDelete",
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Equipamento Eliminado",
+                            showConfirmButton: true,
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              location.reload();
+                            }
+                          });
+
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "OOPS...",
+                            text: "Ocorreu algo inesperado",
+                          });
+                    }
+                  });
+            } else if (
+              /* Read more about handling dismissals below */
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire({
+                title: "Cancelado",
+                text: "Nenhuma alteração foi feita",
+                icon: "error"
+              });
+            }
+          });
+
+      }
+
+
   $(document).ready(function () {
     $("#componentsTable").DataTable({
       dom: "Bfrtip",

@@ -10,9 +10,7 @@
       <tr>
           <th>Nome</th>
           <th>Categoria</th>
-          <th>Armazém</th>
           <th>Descrição</th>
-          <th>Custo</th>
           <th>Código de Barras</th>
           <th>Referência</th>
           <th>Actions</th>
@@ -22,16 +20,14 @@
     <tbody>
       {% for e in equipments %}
       <tr>
-          <td>{{ e.equipment }}</td>
+          <td>{{ e.name }}</td>
         <td>{{ e.category }}</td>
-        <td>{{ e.warehouse }}</td>
         <td>{{ e.description }}</td>
-        <td>{{ e.cost }}</td>
         <td>{{ e.barcode }}</td>
         <td>{{ e.reference }}</td>
         <td>
-            <button type="button" class="btn btn-danger" onclick="alertDelete('{{e.idequipment}}')">Eliminar</button>
-            <a class="btn btn-warning" href="{% url 'equipmentEdit' equipment_id=e.idequipment %}">Editar</a>
+            <button type="button" class="btn btn-danger" onclick="alertDelete('{{e.idarticletype}}')">Eliminar</button>
+            <a class="btn btn-warning" href="{% url 'equipmentEdit' equipment_id=e.idarticletype %}">Editar</a>
         </td>
       </tr>
       {% endfor %}

@@ -15,31 +15,15 @@
             <label class="label" for="name">Nome</label>
         </div>
 
-        <div class="form-field col-lg-6">
-            <input
-                    id="profitmargin"
-                    name="profitmargin"
-                    class="input-text js-input"
-                    type="number"
-                    required
-                    placeholder="valor em percentagem"
-            />
-            <label class="label" for="profitmargin">Margem de Lucro</label>
+    <div class="form-field col-lg-6">
+        <select id="dropdown" name="family" class="input-text js-input" required>
+        <option value="" style="display: none;" selected></option>{% for c in family   %}
+      <option value="{{ c.idfamily }}">{{ c.name }}</option>
+      {% endfor %}
+        </select>
+        <label class="label" for="family">Familia</label>
         </div>
 
-        <div class="form-field col-lg-6">
-            <div class="mainbox">
-                <div class="formDrop">
-                    <select id="family" name="idfamily" class="dropstyle">
-                        {% for f in families %}
-                            <option class="dropOptions" value="{{ f.idfamily }}">
-                                {{ f.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-        </div>
 
         <div class="form-field col-lg-6">
             <input
@@ -50,6 +34,17 @@
                     required
             />
             <label class="label" for="description">Descrição</label>
+        </div>
+
+    <div class="form-field col-lg-6">
+            <input
+                    id="profitmargin"
+                    name="profitmargin"
+                    class="input-text js-input"
+                    type="text"
+                    required
+            />
+            <label class="label" for="profitmargin">Margem de Lucro</label>
         </div>
 
 
