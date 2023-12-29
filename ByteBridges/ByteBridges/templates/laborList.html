@@ -3,35 +3,24 @@
 {%endblock%}{% block content %}
 
 <div class="listContainer">
-  <h1>Lista de Equipamentos</h1>
+  <h1>Gerir Mão de Obra</h1>
 
-  <table id="componentsTable" class="display">
+  <table id="clientsTable" class="display">
     <thead>
       <tr>
-          <th>Nome</th>
-          <th>Categoria</th>
-          <th>Armazém</th>
-          <th>Descrição</th>
-          <th>Custo</th>
-          <th>Código de Barras</th>
-          <th>Referência</th>
-          <th>Actions</th>
-
+        <th>Escalão</th>
+        <th>Preço/hora</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      {% for e in equipments %}
+      {% for l in labors %}
       <tr>
-          <td>{{ e.equipment }}</td>
-        <td>{{ e.category }}</td>
-        <td>{{ e.warehouse }}</td>
-        <td>{{ e.description }}</td>
-        <td>{{ e.cost }}</td>
-        <td>{{ e.barcode }}</td>
-        <td>{{ e.reference }}</td>
+        <td>{{ l.name }}</td>
+        <td>{{ l.hourrate }}</td>
         <td>
-            <button type="button" class="btn btn-danger" onclick="alertDelete('{{e.idequipment}}')">Eliminar</button>
-            <a class="btn btn-warning" href="{% url 'equipmentEdit' equipment_id=e.idequipment %}">Editar</a>
+            <button type="button" class="btn btn-danger" onclick="alertDelete('{{l.idlabor}}')">Eliminar</button>
+            <a class="btn btn-warning" href="{% url 'laborEdit' labor_id=l.idlabor %}">Editar</a>
         </td>
       </tr>
       {% endfor %}
@@ -62,7 +51,7 @@ function alertDelete(id) {
             if (result.isConfirmed) {
                 $.ajax({
                     type: "POST",
-                    url: "equipmentDelete",
+                    url: "laborDelete",
                     data: {
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                         id: id
@@ -70,7 +59,7 @@ function alertDelete(id) {
                     success: function(response) {
                         Swal.fire({
                             icon: "success",
-                            title: "Equipamento Eliminado",
+                            title: "Mão de Obra Eliminada",
                             showConfirmButton: true,
                           }).then((result) => {
                             if (result.isConfirmed) {
@@ -103,7 +92,7 @@ function alertDelete(id) {
 
 
   $(document).ready(function () {
-    $("#componentsTable").DataTable({
+    $("#clientsTable").DataTable({
       dom: "Bfrtip",
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
       language: {

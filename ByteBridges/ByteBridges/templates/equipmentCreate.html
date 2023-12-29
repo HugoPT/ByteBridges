@@ -16,40 +16,52 @@
   </div>
 
   <div class="form-field col-lg-6">
-    <select id="dropdown" name="families">
-      {% for f in families %}
-      <option value="{{ f.idfamily }}">{{ f.namefamily }}</option>
+    <div class="mainbox">
+      <div class="formDrop">
+    <select id="dropdown" name="families" class="dropstyle">
+        <option value="" style="display: none;" selected></option>      {% for c in categories %}
+      <option value="{{ c.idcategory }}">{{ c.name }}</option>
       {% endfor %}
     </select>
-    <select id="dropdown" name="families">
-      {% for w in warehouse %}
-      <option value="{{ w.idwarehouse }}">{{ w.name }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div class="form-field col-lg-6">
-    <input
-      id="name"
-      name="name"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="name">Custo de Produção</label>
-  </div>
-  <div class="form-field col-lg-12">
-    <input
-      id="obs"
-      name="obs"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="obs">Observações</label>
+      </div>
+    </div>
   </div>
 
+        <div class="form-field col-lg-6">
+            <input
+                    id="barcode"
+                    name="barcode"
+                    class="input-text js-input"
+                    type="text"
+                    required
+            />
+            <label class="label" for="barcode">Código de Barras</label>
+        </div>
+
+        <div class="form-field col-lg-6">
+            <input
+                    id="reference"
+                    name="reference"
+                    class="input-text js-input"
+                    type="text"
+                    required
+            />
+            <label class="label" for="reference">Referência</label>
+        </div>
+
+  <div class="form-field col-lg-12">
+      <label class="arealabel" for="description">Descrição</label>
+            <textarea
+                    id="description"
+                    name="description"
+                    rows="4"
+                    cols="97"
+                    style="border: 2px solid black;"
+                    required></textarea><br />
+        </div>
+
   <div class="form-field col-lg-12 submitBtn">
-    <input class="submit-btn" type="submit" value="Criar Fornecedor" />
+    <input class="submit-btn" type="submit" value="Criar Equipamento" />
   </div>
 </form>
 

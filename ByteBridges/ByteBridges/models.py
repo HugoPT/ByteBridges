@@ -58,8 +58,33 @@ class Family(models.Model):
         return self.name
     class Meta:
         # Specify the table name
-        db_table = 'families'        
-        
+        db_table = 'families'
+
+
+class Category(models.Model):
+    idcategory = models.AutoField(primary_key=True, unique=True)
+    name = models.CharField(max_length=70)
+    description = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.name
+    class Meta:
+        # Specify the table name
+        db_table = 'categories'
+
+
+class Labor(models.Model):
+    idlabor = models.AutoField(primary_key=True, unique=True)
+    name = models.CharField(max_length=80)
+    hourrate = models.FloatField()
+
+    def __str__(self):
+        return self.name
+    class Meta:
+        # Specify the table name
+        db_table = 'labors'
+
+
 class Article(models.Model):
     idarticle = models.AutoField(primary_key=True, unique=True)
     idfamily = models.IntegerField()
@@ -68,7 +93,7 @@ class Article(models.Model):
     description = models.CharField(max_length=500)
     image = models.CharField(max_length=1024)
     cost = models.FloatField()
-    profitmargin =models.FloatField()
+    profitmargin = models.FloatField()
     barcode = models.CharField(max_length=13)
     serialnumber = models.CharField(max_length=100)
     reference = models.CharField(max_length=30)

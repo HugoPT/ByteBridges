@@ -69,4 +69,10 @@ urlpatterns = [
     path('userEdit/<int:user_id>/', views.userEdit, name='userEdit'),
     path('userDelete', views.userDelete, name='userDelete'),
 
+    #Labor
+    path("laborCreate", views.laborCreate, name="laborCreate"),
+    path("laborList", views.laborList, name="laborList"),
+    path('laborEdit/<int:labor_id>/', views.laborEdit, name='laborEdit'),
+    path('laborDelete', views.laborDelete, name='laborDelete'),
+
 ]

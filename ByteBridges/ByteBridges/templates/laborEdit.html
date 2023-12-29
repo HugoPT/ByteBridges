@@ -1,0 +1,40 @@
+{% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
+<h1 class="title">Editar Mão de Obra</h1>
+{% endblock %} {% if labor %}
+<form
+  class="allforms row"
+  method="post"
+  action="{% url 'laborEdit' labor_id %}"
+>
+  {% csrf_token %}
+
+  <div class="form-field col-lg-6">
+    <input
+      id="name"
+      name="name"
+      class="input-text js-input"
+      type="text"
+      value="{{ labor.name }}"
+      required
+    />
+    <label class="label" for="name">Nome</label>
+  </div>
+  <div class="form-field col-lg-6">
+    <input
+      id="hourrate"
+      name="hourrate"
+      class="input-text js-input"
+      type="text"
+      value="{{ labor.hourrate }}"
+      required
+    />
+    <label class="label" for="hourrate">Preço/hora</label>
+  </div>
+
+  <div class="form-field col-lg-12 submitBtn">
+    <input class="submit-btn" type="submit" value="Atualizar Mão de Obra" />
+  </div>
+</form>
+{% else %}
+<p>Labor not found</p>
+{% endif %} {% endblock %}
