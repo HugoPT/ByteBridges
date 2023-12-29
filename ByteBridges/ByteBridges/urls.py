@@ -46,12 +46,13 @@ urlpatterns = [
 
     #documentsSupplier
     path("documentsSupplier", views.documentsSupplier, name="documentsSupplier"),
+    path("documentsSupplierFetch", views.documentsSupplierFetch, name="documentsSupplierFetch"),
 
     
     #Family
     path("familyCreate", views.familyCreate, name="familyCreate"),
     path("familyList", views.familyList, name="familyList"),
-    path('familyEdit/<int:idfamily>/', views.familyEdit, name='familyEdit'),
+    path('familyEdit/<int:idSupplier>/', views.familyEdit, name='familyEdit'),
 
     
     #Equipment

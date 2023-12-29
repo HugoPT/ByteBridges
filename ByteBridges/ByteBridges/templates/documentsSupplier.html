@@ -39,7 +39,7 @@
             </div>
             <div class="form-group">
                 <label for="invoice_value"><strong>Valor do documento:</strong></label>
-                <input type="number" class="form-control" id="invoice_value" name="invoice_value" placeholder=Valor da
+                <input type="number" class="form-control" id="invoice_value" name="invoice_value" placeholder="Valor da
                        fatura">
             </div>
             <div class="form-group">
@@ -75,14 +75,7 @@
                 </div>
                 <div class="form-group " id="relatedDocs" style="display: none;">
                     <label for="relatedDocs">Documentos </label>
-                    <select id="warehouse" name="idwarehouse" class="dropstyle">
-                        <option class="dropOptions" value="" disabled selected>
-                        </option>
-                        {% for w in warehouses %}
-                            <option class="dropOptions" value="{{ w.idwarehouse }}">
-                                {{ w.name }}
-                            </option>
-                        {% endfor %}
+                    <select id="related_documents" name="related_documents" class="dropstyle">
                     </select>
                 </div>
             </div>
@@ -93,8 +86,7 @@
     <form
             class="allforms row"
             action="{% url 'orderSupplierCreate' %}"
-            method="post"
-    >
+            method="post">
         {% csrf_token %}
 
 
@@ -114,7 +106,7 @@
                 <tbody>
                 <tr>
                     <td>
-                        <input type="text" class="form-control"  id="productSearch" placeholder="Pesquize o produto">
+                        <input type="text" class="form-control" id="productSearch" placeholder="Pesquize o produto">
                         <ul id="searchResults" class="list-group mt-2"></ul>
                     </td>
                     <td><input type="number" placeholder="0"></td>
@@ -133,257 +125,272 @@
                 Enviar
             </button>
         </div>
-    </form>
 
-    <!-- Modal -->
 
-    <div
-            class="modal fade"
-            id="exampleModalCenter"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="modalTitle"
-            aria-hidden="true"
-    >
+        <!-- Modal -->
+
         <div
-                class="modal-dialog modal-dialog-centered"
-                id="modalCenter"
-                role="document"
+                class="modal fade"
+                id="exampleModalCenter"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="modalTitle"
+                aria-hidden="true"
         >
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalTitle">Criar Encomenda</h5>
-                    <button
-                            type="button"
-                            class="close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    >
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row modalContent" id="dropdown-container">
-                        <!-- Initial Dropdowns -->
-                        {% for i in "1" %}
+            <div
+                    class="modal-dialog modal-dialog-centered"
+                    id="modalCenter"
+                    role="document"
+            >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalTitle">Criar Encomenda</h5>
+                        <button
+                                type="button"
+                                class="close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                        >
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row modalContent" id="dropdown-container">
+                            <!-- Initial Dropdowns -->
+                            {% for i in "1" %}
+                                <div class="col-md-4">
+                                    <div class="form-field">
+                                        <div class="mainbox">
+                                            <div class="formDrop">
+                                                <select
+                                                        id="families{{ i }}"
+                                                        name="idfamilies{{ i }}"
+                                                        class="dropstyle"
+                                                        onchange="handleSelectChange(this)"
+                                                >
+                                                    {% for f in families %}
+                                                        <option
+                                                                class="dropOptions"
+                                                                value="{{ f.idfamily }}"
+                                                                name="{{ f.name }}"
+                                                        >
+                                                            {{ f.name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %} {% for i in "1" %}
                             <div class="col-md-4">
                                 <div class="form-field">
                                     <div class="mainbox">
                                         <div class="formDrop">
-                                            <select
-                                                    id="families{{ i }}"
-                                                    name="idfamilies{{ i }}"
-                                                    class="dropstyle"
-                                                    onchange="handleSelectChange(this)"
-                                            >
-                                                {% for f in families %}
-                                                    <option
-                                                            class="dropOptions"
-                                                            value="{{ f.idfamily }}"
-                                                            name="{{ f.name }}"
-                                                    >
-                                                        {{ f.name }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
+                                            <div id="componentContainer1"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %} {% for i in "1" %}
-                        <div class="col-md-4">
-                            <div class="form-field">
-                                <div class="mainbox">
-                                    <div class="formDrop">
-                                        <div id="componentContainer1"></div>
+                            <div class="col-md-4">
+                                <div class="form-field">
+                                    <div class="mainbox">
+                                        <div class="formDrop">
+                                            <div id="quantityinput1"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        {% endfor %}
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-field">
-                                <div class="mainbox">
-                                    <div class="formDrop">
-                                        <div id="quantityinput1"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
+
+                        <button
+                                type="button"
+                                class="btn addMoreBtn"
+                                onclick="addMoreDropdowns()"
+                        >
+                            <i class="bx bx-plus-circle plusicon"></i> Adicionar mais
+                        </button>
                     </div>
 
-                    <button
-                            type="button"
-                            class="btn addMoreBtn"
-                            onclick="addMoreDropdowns()"
-                    >
-                        <i class="bx bx-plus-circle plusicon"></i> Adicionar mais
-                    </button>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-bs-dismiss="modal"
-                            onclick="saveChanges()"
-                    >
-                        Salvar alterações
-                    </button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-bs-dismiss="modal"
+                                onclick="saveChanges()"
+                        >
+                            Salvar alterações
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
+    </form>
     <script>
 
+
+        function updateDropdownOptionsDocuments(options) {
+            $('#related_documents').empty();
+            $('#related_documents').append('<option value="">Documento referente</option>');
+            options['list'].forEach(function (option) {
+                $('#related_documents').append('<option value="' + option[0] + '">' + option[1] + '</option>');
+            });
+        }
 
         // Add an event listener to the checkbox
         $(document).ready(function () {
             $('#showListDocs').change(function () {
-
-                // If the checkbox is checked, show the hidden div; otherwise, hide it
                 if (this.checked) {
                     $('#relatedDocs').show();
                 } else {
                     $('#relatedDocs').hide();
                 }
             });
-//Handle supplier changed
-            $('#supplier').change(function () {
-                console.log(this.value)
-                {#$.ajax({#}
-                {#    type: "POST",#}
-                {#    url: '{% url "familyEdit" this.value %}',#}
-                {#    data: $("#familyEditForm").serialize(),#}
-                {#    dataType: "json",#}
-                {#    success: function (data) {#}
-                {#        // Handle the success response#}
-                {#        if (data.status === "success") {#}
-                {#            Swal.fire({#}
-                {#                title: "Sucesso!",#}
-                {#                text: "Família atualizada com sucesso",#}
-                {#                icon: "success",#}
-                {#            }).then(function () {#}
-                {#                // Redirect to familyList page#}
-                {#                window.location.href = "{% url 'familyList' %}";#}
-                {#            });#}
-                {#        } else {#}
-                {#            Swal.fire({#}
-                {#                title: "Erro!",#}
-                {#                text: "Falha ao atualizar família",#}
-                {#                icon: "error",#}
-                {#            });#}
-                {#        }#}
-                {#    },#}
-                {#    error: function () {#}
-                {#        Swal.fire({#}
-                {#            title: "Erro!",#}
-                {#            text: "Falha na comunicação com o servidor",#}
-                {#            icon: "error",#}
-                {#        });#}
-                {#    },#}
 
+            $('#related_documents').change(function () {
+                console.log(this.value)
+                $('#supplier').change(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: '{% url "documentsSupplierFetch" %}',
+                        data: {"id": this.value},
+                        dataType: "json",
+                        success: function (data) {
+                            // Handle the success response
+                            updateDropdownOptionsDocuments(data);
+                        },
+                        error: function () {
+                            Swal.fire({
+                                title: "Erro!",
+                                text: "Falha na comunicação com o servidor",
+                                icon: "error",
+                            });
+                        },
+
+
+                    });
+
+                });
+            });
+            //Handle supplier changed
+            $('#supplier').change(function () {
+                $.ajax({
+                    type: "POST",
+                    url: '{% url "documentsSupplierFetch" %}',
+                    data: {"id": this.value},
+                    dataType: "json",
+                    success: function (data) {
+                        // Handle the success response
+                        updateDropdownOptionsDocuments(data);
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Erro!",
+                            text: "Falha na comunicação com o servidor",
+                            icon: "error",
+                        });
+                    },
+
+
+                });
 
             });
+
 
         });
 
 
+        {% comment %}        function removeRow(button) {
+                    // Get the closest table row (tr)
+                    var row = $(button).closest('tr');
 
-        var counter;
+                    // Find the corresponding row in the modal
+                    var rowNumber = row.find('th').text();
+                    var modalRow = $("#families" + rowNumber).closest('.newrow');
 
+                    // Clear the values in the modal row
+                    modalRow.find('select').val('').change(); // Clear dropdown values
+                    modalRow.find('select').hide();
+                    modalRow.find('input').val(''); // Clear input values
+                    modalRow.find('input').hide();
 
-        function removeRow(button) {
-            // Get the closest table row (tr)
-            var row = $(button).closest('tr');
+                    // Remove the row from the table
+                    row.remove();
+                }
 
-            // Find the corresponding row in the modal
-            var rowNumber = row.find('th').text();
-            var modalRow = $("#families" + rowNumber).closest('.newrow');
+                function sendForm() {
+                    // Initialize an array to store the data
+                    let data = [];
+                    let header = [];
 
-            // Clear the values in the modal row
-            modalRow.find('select').val('').change(); // Clear dropdown values
-            modalRow.find('select').hide();
-            modalRow.find('input').val(''); // Clear input values
-            modalRow.find('input').hide();
+                    // Get the value from the textarea
+                    let obsValue = $("#obs").val();
 
-            // Remove the row from the table
-            row.remove();
-        }
+                    // Get the selected values from the dropdowns
+                    let selectedSupplierId = $("#supplier").val();
+                    let selectedWarehouse = $("#warehouse").val();
 
-        function sendForm() {
-            // Initialize an array to store the data
-            let data = [];
-            let header = [];
+                    // Get all rows in the table body
+                    let rows = $("#dataTable tbody tr");
 
-            // Get the value from the textarea
-            let obsValue = $("#obs").val();
+                    // Iterate through each row and extract data
+                    rows.each(function (index, row) {
+                        let familyId = $(row).find("td:eq(0)").attr("data-family-id");
+                        let componentId = $(row).find("td:eq(1)").attr("data-component-id");
 
-            // Get the selected values from the dropdowns
-            let selectedSupplierId = $("#supplier").val();
-            let selectedWarehouse = $("#warehouse").val();
+                        let rowData = {
+                            number: $(row).find("th").text(),
+                            family: familyId,
+                            component: componentId,
+                            quantity: $(row).find("td:eq(2)").text(),
+                        };
 
-            // Get all rows in the table body
-            let rows = $("#dataTable tbody tr");
+                        // Add the row data to the array
+                        data.push(rowData);
+                    });
 
-            // Iterate through each row and extract data
-            rows.each(function (index, row) {
-                let familyId = $(row).find("td:eq(0)").attr("data-family-id");
-                let componentId = $(row).find("td:eq(1)").attr("data-component-id");
+                    // Add other form data to the array
+                    header.push({
+                        idsupplier: selectedSupplierId,
+                        idwarehouse: selectedWarehouse,
+                        obs: obsValue,
+                    });
 
-                let rowData = {
-                    number: $(row).find("th").text(),
-                    family: familyId,
-                    component: componentId,
-                    quantity: $(row).find("td:eq(2)").text(),
-                };
+                    // Log or use the gathered data
+                    console.log("Table data with textarea and dropdown:", data);
 
-                // Add the row data to the array
-                data.push(rowData);
-            });
+                    // Send data to the server using AJAX
+                    $.ajax({
+                        type: "POST",
+                        url: "orderSupplierCreate",
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                            data: JSON.stringify(data),
+                            header: JSON.stringify(header),
+                        },
+                        success: function (response) {
+                            console.log("Data successfully sent to the server");
+                            Swal.fire({
+                                title: "Encomenda criada",
+                                text: "Foi criada a nova encomenda ao fornecedor",
+                                imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
+                                imageWidth: 200,
+                                imageHeight: 200,
+                                imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
+                            }).then((result) => {
+                                window.location.replace("/dashboard")
+                            })
 
-            // Add other form data to the array
-            header.push({
-                idsupplier: selectedSupplierId,
-                idwarehouse: selectedWarehouse,
-                obs: obsValue,
-            });
-
-            // Log or use the gathered data
-            console.log("Table data with textarea and dropdown:", data);
-
-            // Send data to the server using AJAX
-            $.ajax({
-                type: "POST",
-                url: "orderSupplierCreate",
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}',
-                    data: JSON.stringify(data),
-                    header: JSON.stringify(header),
-                },
-                success: function (response) {
-                    console.log("Data successfully sent to the server");
-                    Swal.fire({
-                        title: "Encomenda criada",
-                        text: "Foi criada a nova encomenda ao fornecedor",
-                        imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
-                        imageWidth: 200,
-                        imageHeight: 200,
-                        imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
-                    }).then((result) => {
-                        window.location.replace("/dashboard")
-                    })
-
-                },
-                error: function (error) {
-                    console.error("Error sending data to the server:", error);
-                },
-            });
-        }
+                        },
+                        error: function (error) {
+                            console.error("Error sending data to the server:", error);
+                        },
+                    });
+                }{% endcomment %}
 
 
         //teste
