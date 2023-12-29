@@ -1,5 +1,5 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
-<h1 class="title">Criar Familia de Componentes</h1>
+<h1 class="title">Criar Familia</h1>
 {% endblock %}
 
 <form class="allforms row" action="{% url 'familyCreate' %}" method="post">
@@ -14,15 +14,14 @@
     />
     <label class="label" for="name">Nome</label>
   </div>
-  <div class="form-field col-lg-12">
-    <input
+  <div class="form-field col-lg-12"><label class="areaLabel" for="obs">Observações:</label>
+    <textarea
       id="obs"
       name="desc"
-      class="input-text js-input"
-      type="text"
-      required
-    />
-    <label class="label" for="obs">Descrição</label>
+      rows="4"
+      cols="97"
+      style="border: 2px solid black;"
+      required></textarea><br />
   </div>
 
   <div class="form-field col-lg-12 submitBtn">

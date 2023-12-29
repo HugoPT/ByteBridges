@@ -1,5 +1,5 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
-<h1 class="title">Editar Cliente</h1>
+<h1 class="title">Editar Utilizador</h1>
 {% endblock %} {% if user %}
 <form
   class="allforms row"
@@ -40,7 +40,19 @@
       value="{{ user.email }}"
       required
     />
-    <label class="label" for="address">Morada</label>
+    <label class="label" for="address">Email</label>
+  </div>
+
+    <div class="form-field col-lg-6">
+    <input
+      id="role"
+      name="role"
+      class="input-text js-input"
+      type="text"
+      value="{{ user.role }}"
+      required
+    />
+    <label class="label" for="city">Função</label>
   </div>
 
   <div class="form-field col-lg-6">
@@ -54,18 +66,6 @@
     />
     <label class="label" for="zipcode">Tipo de Função</label>
   </div>
-
-  <div class="form-field col-lg-6">
-    <input
-      id="role"
-      name="role"
-      class="input-text js-input"
-      type="text"
-      value="{{ user.role }}"
-      required
-    />
-    <label class="label" for="city">Função</label>
-  </div>
   <br />
 
   <div class="form-field col-lg-12 submitBtn">
@@ -73,5 +73,5 @@
   </div>
 </form>
 {% else %}
-<p>Client not found</p>
+<p>Utilizador not found</p>
 {% endif %} {% endblock %}

@@ -1,15 +1,20 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
-<h1 class="title">Criar novo Fornecedor</h1>
-{% endblock %}
-
-<form class="allforms row" action="{% url 'supplierCreate' %}" method="post">
+<h1 class="title">Editar Equipamento</h1>
+{% endblock %} {% if client %}
+<form
+  class="allforms row"
+  method="post"
+  action="{% url 'equipmentEdit' equipment_id %}"
+>
   {% csrf_token %}
+
   <div class="form-field col-lg-6">
     <input
       id="name"
       name="name"
       class="input-text js-input"
       type="text"
+      value="{{ equipment.name }}"
       required
     />
     <label class="label" for="name">Nome</label>
@@ -20,6 +25,7 @@
       name="nif"
       class="input-text js-input"
       type="text"
+      value="{{ client.nif }}"
       required
     />
     <label class="label" for="nif">NIF</label>
@@ -31,6 +37,7 @@
       name="address"
       class="input-text js-input"
       type="text"
+      value="{{ client.address }}"
       required
     />
     <label class="label" for="address">Morada</label>
@@ -42,6 +49,7 @@
       name="zipcode"
       class="input-text js-input"
       type="text"
+      value="{{ client.zipcode }}"
       required
     />
     <label class="label" for="zipcode">Cod.Postal</label>
@@ -53,43 +61,37 @@
       name="city"
       class="input-text js-input"
       type="text"
+      value="{{ client.city }}"
       required
     />
     <label class="label" for="city">Cidade</label>
   </div>
-  <div class="form-field col-lg-6">
-    <input
-      id="phone"
-      name="phone"
-      class="input-text js-input"
-      type="tel"
-      required
-    />
-    <label class="label" for="phone">Telefone</label>
-  </div>
+  <br />
   <div class="form-field col-lg-6">
     <input
       id="email"
       name="email"
       class="input-text js-input"
       type="email"
+      value="{{ client.email }}"
       required
     />
     <label class="label" for="phone">Email</label>
   </div>
-
-    <div class="form-field col-lg-12">
+  <div class="form-field col-lg-12">
     <label class="areaLabel" for="obs">Observações:</label>
     <textarea id="obs"
-              name="obs"
-              rows="4"
-              cols="97"
-              style="border: 2px solid black;"
-              required></textarea><br />
+            name="obs"
+            rows="4"
+            cols="97"
+            style="border: 2px solid black;">{{ client.description }}</textarea
+    ><br />
   </div>
 
   <div class="form-field col-lg-12 submitBtn">
-    <input class="submit-btn" type="submit" value="Criar Fornecedor" />
+    <input class="submit-btn" type="submit" value="Atualizar Cliente" />
   </div>
 </form>
-{% endblock %}
+{% else %}
+<p>Equipment not found</p>
+{% endif %} {% endblock %}

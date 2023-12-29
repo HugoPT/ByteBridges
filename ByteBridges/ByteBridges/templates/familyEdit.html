@@ -1,5 +1,5 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
-<h1 class="title">Editar Família de Componente</h1>
+<h1 class="title">Editar Família</h1>
 {% endblock %} {% if family %}
 <form
   id="familyEditForm"
@@ -23,8 +23,11 @@
 
   <div class="form-field col-lg-12">
     <label class="areaLabel" for="obs">Observações:</label>
-    <textarea id="description" name="description" rows="4" cols="100">
-{{ family.description }}</textarea
+    <textarea id="description"
+              name="description"
+              rows="4"
+              cols="97"
+              style="border: 2px solid black;">{{ family.description }}</textarea
     ><br />
   </div>
 
@@ -77,5 +80,5 @@
 </script>
 
 {% else %}
-<p>Família not found</p>
+<p>Family not found</p>
 {% endif %} {% endblock %}

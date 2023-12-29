@@ -19,15 +19,8 @@
         <td>{{ f.name }}</td>
         <td>{{ f.description }}</td>
         <td>
+            <button type="button" class="btn btn-danger" onclick="alertDelete('{{f.idfamily}}')">Eliminar</button>
           <a href="{% url 'familyEdit' idfamily=f.idfamily %}" class="btn btn-warning">Editar</a>
-          <button
-          type="button"
-          class="btn btn-danger"
-          onclick="alertDelete('{{f.idfamily}}')"
-        >
-          Eliminar
-        </button>
-        
         </td>
       </tr>
 
@@ -45,7 +38,7 @@
               confirmButton: "btn btn-danger",
               cancelButton: "btn btn-primary"
             },
-            buttonsStyling: false
+            buttonsStyling: true
           });
           swalWithBootstrapButtons.fire({
             title: "Tem certeza?",
@@ -59,7 +52,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: "POST",
-                    url: "familyEdit",  
+                    url: "familyDelete",
                     data: { 
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                         id: id 
@@ -67,7 +60,7 @@
                     success: function(response) {
                         Swal.fire({
                             icon: "success",
-                            title: "Dado Eliminadado",
+                            title: "Familia Eliminada",
                             showConfirmButton: true,
                           }).then((result) => {
                             if (result.isConfirmed) {
@@ -79,8 +72,8 @@
                     error: function(error) {
                         Swal.fire({
                             icon: "error",
-                            title: "Oops...",
-                            text: "Algo Correu Mal",                         
+                            title: "OOPS...",
+                            text: "Ocorreu algo inesperado",
                           });
                     }
                   });
@@ -89,16 +82,12 @@
               result.dismiss === Swal.DismissReason.cancel
             ) {
               swalWithBootstrapButtons.fire({
-                title: "Cancelled",
-                text: "Your imaginary file is safe :)",
+                title: "Cancelado",
+                text: "Nenhuma alteração foi feita",
                 icon: "error"
               });
             }
           });
-
-
-
-
       }
 
 

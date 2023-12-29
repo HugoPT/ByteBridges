@@ -57,6 +57,7 @@ urlpatterns = [
     #Equipment
     path("equipmentCreate", views.equipmentCreate, name="equipmentCreate"),
     path("equipmentList", views.equipmentList, name="equipmentList"),
+    path('equipmentEdit/<int:equipment_id>/', views.equipmentEdit, name='equipmentEdit'),
     
     #Component
     path("componentCreate", views.componentCreate, name="componentCreate"),

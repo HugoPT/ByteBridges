@@ -16,19 +16,25 @@
           <th>Código de Barras</th>
           <th>Número de Série</th>
           <th>Referência</th>
+          <th>Actions</th>
+
       </tr>
     </thead>
     <tbody>
-      {% for c in equipments %}
+      {% for e in equipments %}
       <tr>
-          <td>{{ c.name }}</td>
-        <td>{{ c.family }}</td>
-        <td>{{ c.description }}</td>
-        <td>{{ c.warehouse }}</td>
-        <td>{{ c.cost }}</td>
-        <td>{{ c.barcode }}</td>
-        <td>{{ c.serialnumber }}</td>
-        <td>{{ c.reference }}</td>
+          <td>{{ e.equipment }}</td>
+        <td>{{ e.category }}</td>
+        <td>{{ e.warehouse }}</td>
+        <td>{{ e.description }}</td>
+        <td>{{ e.cost }}</td>
+        <td>{{ e.barcode }}</td>
+        <td>{{ e.serialnumber }}</td>
+        <td>{{ e.reference }}</td>
+        <td>
+            <button type="button" class="btn btn-danger" onclick="alertDelete('{{e.idequipment}}')">Eliminar</button>
+            <a class="btn btn-warning" href="{% url 'equipmentEdit' equipment_id=e.idequipment %}">Editar</a>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
@@ -36,6 +42,68 @@
 </div>
 
 <script>
+
+function alertDelete(id) {
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+              confirmButton: "btn btn-danger",
+              cancelButton: "btn btn-primary"
+            },
+            buttonsStyling: true
+          });
+          swalWithBootstrapButtons.fire({
+            title: "Tem certeza?",
+            text: "Não poderá reverter esta ação!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sim, Eliminar!",
+            cancelButtonText: "Não, cancelar!",
+
+          }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "equipmentDelete",
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        id: id
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Equipamento Eliminado",
+                            showConfirmButton: true,
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              location.reload();
+                            }
+                          });
+
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "OOPS...",
+                            text: "Ocorreu algo inesperado",
+                          });
+                    }
+                  });
+            } else if (
+              /* Read more about handling dismissals below */
+              result.dismiss === Swal.DismissReason.cancel
+            ) {
+              swalWithBootstrapButtons.fire({
+                title: "Cancelado",
+                text: "Nenhuma alteração foi feita",
+                icon: "error"
+              });
+            }
+          });
+
+      }
+
+
   $(document).ready(function () {
     $("#componentsTable").DataTable({
       dom: "Bfrtip",

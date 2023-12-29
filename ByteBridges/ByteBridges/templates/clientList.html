@@ -28,7 +28,7 @@
         <td><a href="mailto:{{ c.email }}">{{ c.email }}</a></td>
         <td>
             <button type="button" class="btn btn-danger" onclick="alertDelete('{{c.idclient}}')">Eliminar</button>
-            <button class="btn btn-warning"><a href="{% url 'clientEdit' client_id=c.idclient %}">Editar</a></button>
+            <a class="btn btn-warning" href="{% url 'clientEdit' client_id=c.idclient %}">Editar</a>
         </td>
       </tr>
       {% endfor %}
@@ -106,17 +106,6 @@ function alertDelete(id) {
       language: {
         url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
       },
-    });
-
-    // Add event listeners for delete and edit buttons
-    $("#clientsTable").on("click", ".delete-btn", function() {
-      var clientId = $(this).data("client-id");
-      // Perform delete operation or redirect to delete view with the client ID
-    });
-
-    $("#clientsTable").on("click", ".edit-btn", function() {
-      var clientId = $(this).data("client-id");
-      // Redirect to edit view with the client ID
     });
   });
 </script>

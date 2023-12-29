@@ -22,11 +22,11 @@
         <td>{{ u.name }}</td>
         <td>{{ u.password }}</td>
         <td><a href="mailto:{{ u.email }}">{{ u.email }}</a></td>
-        <td>{{ u.idrole }}</td>
-        <td>{{ u.idlabor }}</td>
+        <td>{{ u.role }}</td>
+        <td>{{ u.labor }}</td>
         <td>
             <button type="button" class="btn btn-danger" onclick="alertDelete('{{u.iduser}}')">Eliminar</button>
-            <button class="btn btn-warning"><a href="{% url 'userEdit' user_id=u.iduser %}">Editar</a></button>
+            <a class="btn btn-warning" href="{% url 'userEdit' user_id=u.iduser %}">Editar</a>
         </td>
       </tr>
       {% endfor %}
@@ -98,23 +98,12 @@ function alertDelete(id) {
 
 
   $(document).ready(function () {
-    $("#usersTable").DataTable({
+    $("#clientsTable").DataTable({
       dom: "Bfrtip",
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
       language: {
         url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
       },
-    });
-
-    // Add event listeners for delete and edit buttons
-    $("#usersTable").on("click", ".delete-btn", function() {
-      var userId = $(this).data("user-id");
-      // Perform delete operation or redirect to delete view with the client ID
-    });
-
-    $("#clientsTable").on("click", ".edit-btn", function() {
-      var userId = $(this).data("user-id");
-      // Redirect to edit view with the client ID
     });
   });
 </script>

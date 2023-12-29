@@ -110,33 +110,35 @@ class ArticleType(models.Model):
 
 
 class Equipment(models.Model):
-    idEquipment = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=80)
-    family = models.CharField(max_length=120)  # Assuming the data type for the family field
-    warehouse = models.CharField(max_length=80)  # Assuming the data type for the warehouse field
+    equipment = models.CharField(max_length=80)
+    idequipment = models.IntegerField(primary_key=True)
     description = models.CharField(max_length=500)
-    image = models.CharField(max_length=1024)
     cost = models.IntegerField()
+    serialnumber = models.CharField(max_length=100)
+    image = models.CharField(max_length=1024)
     profitmargin = models.FloatField()
     barcode = models.CharField(max_length=13)
-    serialnumber = models.CharField(max_length=100)
     reference = models.CharField(max_length=30)
+    category = models.CharField(max_length=80)  # Assuming the data type for the family field
+    warehouse = models.CharField(max_length=80)  # Assuming the data type for the warehouse field
+
 
     def __str__(self):
-        return self.name
+        return self.equipment
 
     class Meta:
         # Specify the table name
-        db_table = 'view_equipments_list'
+        db_table = 'equipments'
 
 
 class User(models.Model):
     iduser = models.AutoField(primary_key=True, unique=True)
-    idrole = models.IntegerField()
-    idlabor = models.IntegerField()
+    name = models.CharField(max_length=80)
     email = models.CharField(max_length=70)
     password = models.CharField(max_length=100)
-    name = models.CharField(max_length=80)
+    role = models.IntegerField()
+    labor = models.IntegerField()
+
 
     def __str__(self):
         return self.name
