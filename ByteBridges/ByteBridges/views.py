@@ -31,69 +31,6 @@ def clientList(request):
         clients = [Client(*row) for row in result]
         return render(request, 'clientList.html', {'clients': clients})
 
-def laborList(request):
-        with connections['admin'].cursor() as cursor:
-            # Call the stored procedure using the CALL statement
-            cursor.execute("SELECT * FROM view_labors_list", [])
-            # If the stored procedure returns results, you can fetch them
-            result = cursor.fetchall()
-            labors = [Labor(*row) for row in result]
-            return render(request, 'laborList.html', {'labors': labors})
-
-
-def laborEdit(request, labor_id):
-    # Fetch the client information from the database
-    with connections['admin'].cursor() as cursor:
-        cursor.execute("SELECT * FROM view_labors_list WHERE idlabor = %s", [labor_id])
-        labor = cursor.fetchone()
-
-    if request.method == 'POST':
-        # Get the data from the form
-        name = request.POST.get('name')
-        hourrate = request.POST.get('hourrate')
-
-        # Call the stored procedure to update the client
-        with connections['admin'].cursor() as cursor:
-            cursor.execute("CALL sp_labors_update(%s, %s, %s)",
-                           [labor_id, name, hourrate])
-            # Commit the changes to the database
-
-        # Redirect to the client list page after update
-        return redirect('laborList')
-
-    return render(request, 'laborEdit.html', {'labor_id': labor_id,
-                                              'labor': {'name': labor[1], 'hourrate': labor[2]}})
-
-def laborCreate(request):
-    if request.method == 'POST':
-        # Get the data from the form
-        name = request.POST.get('name')
-        hourrate = request.POST.get('hourrate')
-
-        print(
-            f"Inserted labor {name} {hourrate}")
-
-        with connections['admin'].cursor() as cursor:
-            # Call the stored procedure using the CALL statement
-            cursor.execute("CALL sp_labors_create(%s,%s)",
-                           [name, hourrate])
-
-        return redirect('dashboard')
-
-    # return the form
-    return render(request, template_name='laborCreate.html')
-
-
-def laborDelete(request):
-        if request.method == 'POST' and 'id' in request.POST:
-            # Call the stored procedure to delete the client
-            with connections['admin'].cursor() as cursor:
-                labor_id = request.POST['id']
-                cursor.execute("CALL sp_labors_delete(%s)", [labor_id])
-                return JsonResponse({'status': 'success'})
-            # Redirect to the client list page after deletion
-            return redirect('laborList')
-
 
 def clientCreate(request):
     if request.method == 'POST':
@@ -595,6 +532,70 @@ def componentList(request):
         result = cursor.fetchall()
 
         return render(request, 'componentList.html', {'result': result})
+
+    def laborList(request):
+        with connections['admin'].cursor() as cursor:
+            # Call the stored procedure using the CALL statement
+            cursor.execute("SELECT * FROM view_labors_list", [])
+            # If the stored procedure returns results, you can fetch them
+            result = cursor.fetchall()
+            labors = [Labor(*row) for row in result]
+            return render(request, 'laborList.html', {'labors': labors})
+
+
+def laborEdit(request, labor_id):
+    # Fetch the client information from the database
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("SELECT * FROM view_labors_list WHERE idlabor = %s", [labor_id])
+        labor = cursor.fetchone()
+
+    if request.method == 'POST':
+        # Get the data from the form
+        name = request.POST.get('name')
+        hourrate = request.POST.get('hourrate')
+
+        # Call the stored procedure to update the client
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("CALL sp_labors_update(%s, %s, %s)",
+                           [labor_id, name, hourrate])
+            # Commit the changes to the database
+
+        # Redirect to the client list page after update
+        return redirect('laborList')
+
+    return render(request, 'laborEdit.html', {'labor_id': labor_id,
+                                              'labor': {'name': labor[1], 'hourrate': labor[2]}})
+
+
+def laborCreate(request):
+    if request.method == 'POST':
+        # Get the data from the form
+        name = request.POST.get('name')
+        hourrate = request.POST.get('hourrate')
+
+        print(
+            f"Inserted labor {name} {hourrate}")
+
+        with connections['admin'].cursor() as cursor:
+            # Call the stored procedure using the CALL statement
+            cursor.execute("CALL sp_labors_create(%s,%s)",
+                           [name, hourrate])
+
+        return redirect('dashboard')
+
+    # return the form
+    return render(request, template_name='laborCreate.html')
+
+
+def laborDelete(request):
+    if request.method == 'POST' and 'id' in request.POST:
+        # Call the stored procedure to delete the client
+        with connections['admin'].cursor() as cursor:
+            labor_id = request.POST['id']
+            cursor.execute("CALL sp_labors_delete(%s)", [labor_id])
+            return JsonResponse({'status': 'success'})
+        # Redirect to the client list page after deletion
+        return redirect('laborList')
 
 
 def userList(request):
