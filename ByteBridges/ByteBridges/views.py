@@ -533,7 +533,7 @@ def componentList(request):
 
         return render(request, 'componentList.html', {'result': result})
 
-    def laborList(request):
+def laborList(request):
         with connections['admin'].cursor() as cursor:
             # Call the stored procedure using the CALL statement
             cursor.execute("SELECT * FROM view_labors_list", [])
