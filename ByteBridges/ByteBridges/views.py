@@ -1,7 +1,8 @@
 import datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor,Terms
+from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, \
+    Stock
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connections
 from django.http import JsonResponse
@@ -261,7 +262,8 @@ def documentsSupplier(request):
         result = cursor.fetchall()
         families = [Family(*row) for row in result]
 
-        context = {'suppliers': suppliers,'terms_list' :terms_list,'warehouses': warehouses, 'families': families, 'docNumber': docNumber}
+        context = {'suppliers': suppliers, 'terms_list': terms_list, 'warehouses': warehouses, 'families': families,
+                   'docNumber': docNumber}
 
     if request.method == 'POST':
         data = json.loads(request.POST.get('data'))
@@ -304,20 +306,30 @@ def documentsSupplierLinesFetch(request):
         print(list)
         return JsonResponse({'list': list})
 
+
 @csrf_exempt
 def documentsSupplierRegisterInvoice(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
         id = request.POST.get('id')
-        id = request.POST.get('id')
-        id = request.POST.get('id')
-        id = request.POST.get('id')
+        supplier = request.POST.get('supplier')
+        invoice_type = request.POST.get('invoice_type')
+        invoice_number = request.POST.get('invoice_number')
+        invoice_value = request.POST.get('invoice_value')
+        invoice_date = request.POST.get('invoice_date')
+        payment_type = request.POST.get('payment_type')
+        warehouse_id = request.POST.get('warehouse_id')
+        documentLines = json.loads(request.POST.get('documentLines'))
+        related_document_id = request.POST.get('related_document_id')
+        obs = request.POST.get('obs')
 
-        cursor.execute("CALL  fn_generate_ordersSupplier_invoice(%s,%s,%s,%s);", [id])
+        cursor.execute("select fn_generate_ordersSupplier_invoice(%s,%s,%s,%s);", [payment_type,related_document_id,obs,invoice_type])
         doc = cursor.fetchone()
-        cursor.execute("CALL  sp_lines_create(%s,%s,%s);", [id])
-        print(list)
-        return JsonResponse({'list': list})
+
+        for line in documentLines:
+            cursor.execute("CALL  sp_lines_create(%s,%s,%s);", [doc[0],line[0],line[6]])
+        return JsonResponse({'list': related_document_id})
+
 
 @csrf_exempt
 def documentsSupplierRegisterInvoiceLines(request):
@@ -328,6 +340,42 @@ def documentsSupplierRegisterInvoiceLines(request):
         list = cursor.fetchall()
         print(list)
         return JsonResponse({'list': list})
+
+
+def productionEquipmentCreate(request, equipment_id):
+    # Fetch the client information from the database
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("SELECT * FROM view_equipments_list WHERE idarticletype = %s", [equipment_id])
+        equipment = cursor.fetchone()
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+        family = [Family(*row) for row in result]
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        idfamily = None
+        idcategory = request.POST.get('idcategory')
+        description = request.POST.get('description')
+        image = ""
+        profit_margin = 0
+        barcode = request.POST.get('barcode')
+        reference = request.POST.get('reference')
+
+        # Call the stored procedure to update the client
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("CALL sp_articletypes_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                           [equipment_id, idfamily, idcategory, name, description, image, profit_margin, barcode,
+                            reference])
+            # Commit the changes to the database
+
+        # Redirect to the client list page after update
+        return redirect('equipmentList')
+
+    return render(request, 'equipmentEdit.html', {'equipment_id': equipment_id, 'family': family,
+                                                  'equipment': {'name': equipment[1], 'category': equipment[3],
+                                                                'description': equipment[4], 'barcode': equipment[6],
+                                                                'reference': equipment[7]}})
 
 
 def orderSupplierCreate(request):
@@ -615,6 +663,25 @@ def componentDelete(request):
             return JsonResponse({'status': 'success'})
         # Redirect to the client list page after deletion
         return redirect('componentList')
+
+
+def stockList(request):
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("select  * from view_getstock_equipments")
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
+        equipments = [Stock(*row) for row in result]
+
+        cursor.execute("select  * from view_getstock_components")
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
+
+        components = [Stock(*row) for row in result]
+
+        context = {'equipments': equipments, 'components': components}
+
+        return render(request, 'stockList.html', context=context)
 
 
 def laborList(request):

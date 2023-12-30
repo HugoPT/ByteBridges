@@ -25,11 +25,11 @@
             <div class="form-group">
                 <label><strong>Natureza do documento:</strong></label>
                 <div class="form-check">
-                    <input type="radio" class="form-check-input" checked name="invoice_type" value="FT">
+                    <input type="radio" class="form-check-input" checked name="invoice_type" value="T">
                     <label class="form-check-label" for="radioOption1">Fatura</label>
                 </div>
                 <div class="form-check">
-                    <input type="radio" class="form-check-input" name="invoice_type" value="GR">
+                    <input type="radio" class="form-check-input" name="invoice_type" value="P">
                     <label class="form-check-label" for="radioOption2">Guia de remessa</label>
                 </div>
             </div>
@@ -81,16 +81,14 @@
             {##}
             {#            </div>#}
             <div class="form-group ">
-                <label><strong>Documento relacionado:</strong></label>
-
+                <label for="relatedDocs"><strong>Documento relacionado:</strong></label>
                 <div class="form-group " id="relatedDocs">
-                    <label for="relatedDocs">Documentos </label>
                     <select id="related_documents" name="related_documents" class="dropstyle">
                     </select>
                 </div>
             </div>
             <hr>
-            <button type="button" id="registerInvoice" class="btn btn-primary col-md-12">Registar encomenda</button>
+            <button type="button" id="registerInvoice" class="btn btn-primary col-md-12">Registar documento</button>
         </form>
     </div>
     <form
@@ -116,19 +114,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                {#                <tr>#}
-                {#                    <td>#}
-                {#                        <input type="text" class="form-control" id="productSearch" placeholder="Pesquize o produto">#}
-                {#                        <ul id="searchResults" class="list-group mt-2"></ul>#}
-                {#                    </td>#}
-                {#                    <td><input type="number" readonly></td>#}
-                {#                    <td><input type="text" placeholder="0"></td>#}
-                {#                    <td><input type="number" placeholder="0"></td>#}
-                {#                    <td><input type="number" placeholder="Preço custo"></td>#}
-                {#                    <td><input type="text" value="23" disabled></td>#}
-                {#                    <td><input type="number" placeholder="Preço Venda"></td>#}
-                {#                    <td><input type="number">Total</td>#}
-                {#                </tr>#}
                 </tbody>
             </table>
         </div>
@@ -180,8 +165,7 @@
             });
 
             $('#registerInvoice').click(function () {
-                console.log(this)
-                console.log($('#supplier').val())
+
                 let supplier = $('#supplier').val()
                 let invoice_number = $('#invoice_number').val()
                 let invoice_type = $('input[name="invoice_type"]:checked').val();
@@ -189,7 +173,7 @@
                 let invoice_date = $('#invoice_date').val()
                 let warehouse_id = $('#warehouse').val()
                 let payment_type = $('#payment_type').val()
-                let related_documents = $('#related_documents').val()
+                let related_document_id = $('#related_documents').val()
                 console.log(supplier)
                 console.log(invoice_type)
                 console.log(invoice_number)
@@ -197,69 +181,104 @@
                 console.log(invoice_date)
                 console.log(payment_type)
                 console.log(warehouse_id)
-                console.log(related_documents)
-                {#$.ajax({#}
-                {#    type: "POST",#}
-                {#    url: '{% url "documentsSupplierRegisterInvoice" %}',#}
-                {#    data: {"id": this.value},#}
-                {#    dataType: "json",#}
-                {#    success: function (data) {#}
-                {#        // Handle the success response#}
-                {#        updateDocumentsLines(data)#}
-                {##}
-                {#    },#}
-                {#    error: function () {#}
-                {#        Swal.fire({#}
-                {#            title: "Erro!",#}
-                {#            text: "Falha na comunicação com o servidor",#}
-                {#            icon: "error",#}
-                {#        });#}
-                {#    },#}
-            });
-        });
+                console.log(related_document_id)
 
+                var documentLines = [];
+                $('#componentsTable tbody tr').each(function () {
+                    var line = [];
 
-        $('#related_documents').change(function () {
-            console.log(this.value)
-            $.ajax({
-                type: "POST",
-                url: '{% url "documentsSupplierLinesFetch" %}',
-                data: {"id": this.value},
-                dataType: "json",
-                success: function (data) {
-                    // Handle the success response
-                    updateDocumentsLines(data)
+                    // Iterate over each cell in the row
+                    $(this).find('td').each(function () {
+                        line.push($(this).text());
 
-                },
-                error: function () {
-                    Swal.fire({
-                        title: "Erro!",
-                        text: "Falha na comunicação com o servidor",
-                        icon: "error",
+                        $(this).find('input').each(function () {
+                            line.push($(this).val());
+                        });
                     });
-                },
-            });
-        });
-        //Handle supplier changed
-        $('#supplier').change(function () {
-            $.ajax({
-                type: "POST",
-                url: '{% url "documentsSupplierFetch" %}',
-                data: {"id": this.value},
-                dataType: "json",
-                success: function (data) {
-                    // Handle the success response
-                    updateDropdownOptionsDocuments(data);
-                },
-                error: function () {
-                    Swal.fire({
-                        title: "Erro!",
-                        text: "Falha na comunicação com o servidor",
-                        icon: "error",
-                    });
-                },
+                    documentLines.push(line);
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: '{% url "documentsSupplierRegisterInvoice" %}',
+                    data: {
+                        "supplier": supplier,
+                        "invoice_type": invoice_type,
+                        "invoice_number": invoice_number,
+                        "invoice_value": invoice_value,
+                        "invoice_date": invoice_date,
+                        "obs": "implementar na view",
+                        "payment_type": payment_type,
+                        "warehouse_id": warehouse_id,
+                        "related_document_id": related_document_id,
+                        "documentLines": JSON.stringify(documentLines)
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        Swal.fire({
+                            title: "Documento criado",
+                            text: "Documento de compra criado com sucesso",
+                            imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
+                            imageWidth: 200,
+                            imageHeight: 200,
+                            imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
+                        }).then((result) => {
+                            window.location.replace("/dashboard")
+                        })
+
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Erro!",
+                            text: "Falha na comunicação com o servidor",
+                            icon: "error",
+                        });
+                    },
+                });
             });
 
+
+            $('#related_documents').change(function () {
+                console.log(this.value)
+                $.ajax({
+                    type: "POST",
+                    url: '{% url "documentsSupplierLinesFetch" %}',
+                    data: {"id": this.value},
+                    dataType: "json",
+                    success: function (data) {
+                        // Handle the success response
+                        updateDocumentsLines(data)
+
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Erro!",
+                            text: "Falha na comunicação com o servidor",
+                            icon: "error",
+                        });
+                    },
+                });
+            });
+            //Handle supplier changed
+            $('#supplier').change(function () {
+                $.ajax({
+                    type: "POST",
+                    url: '{% url "documentsSupplierFetch" %}',
+                    data: {"id": this.value},
+                    dataType: "json",
+                    success: function (data) {
+                        // Handle the success response
+                        updateDropdownOptionsDocuments(data);
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Erro!",
+                            text: "Falha na comunicação com o servidor",
+                            icon: "error",
+                        });
+                    },
+                });
+            });
         });
 
 
