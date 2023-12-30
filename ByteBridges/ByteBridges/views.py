@@ -694,3 +694,52 @@ def userDelete(request):
             return JsonResponse({'status': 'success'})
         # Redirect to the client list page after deletion
         return redirect('userList')
+
+def sellOrderCreate(request):
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("select * from view_equipments_list")
+        toSell = cursor.fetchall()
+        
+       
+
+    context = {'toSell': toSell}
+    return render(request, 'sellOrderCreate.html', context)
+'''
+def orderSupplierCreate(request):
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("select * from view_suppliers_list")
+        result = cursor.fetchall()
+        docNumber = [Supplier(*row) for row in result]
+
+        cursor.execute("select * from view_suppliers_list")
+        result = cursor.fetchall()
+        suppliers = [Supplier(*row) for row in result]
+
+        cursor.execute("select * from view_warehouses_list")
+        result = cursor.fetchall()
+        warehouses = [Warehouse(*row) for row in result]
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+        families = [Family(*row) for row in result]
+
+        context = {'suppliers': suppliers, 'warehouses': warehouses, 'families': families, 'docNumber': docNumber}
+
+    if request.method == 'POST':
+        data = json.loads(request.POST.get('data'))
+        header = json.loads(request.POST.get('header'))
+        # create a new supplier enc header
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("select fn_orderssupplier_create(%s,%s,%s)",
+                           [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
+            result = cursor.fetchone()
+            if result:
+                for item in data:
+                    with connections['admin'].cursor() as cursor:
+                        cursor.execute("CALL sp_buy_create(%s,%s,%s)",
+                                       [result[0],
+                                        item['component'],
+                                        item['quantity']])
+                return JsonResponse({'status': 'success'})
+    return render(request, template_name='orderSupplierCreate.html', context=context)
+'''

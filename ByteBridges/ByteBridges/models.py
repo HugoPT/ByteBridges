@@ -147,3 +147,6 @@ class User(models.Model):
     class Meta:
         # Specify the table name
         db_table = 'users'
+        
+        
+        
