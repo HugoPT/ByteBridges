@@ -4,7 +4,7 @@
 
 <form
   class="allforms row"
-  action="{% url 'productionEquipmentCreate' %}"
+  action="{% url 'productionEquipmentCreate' equipment_id %}"
   method="post"
 >
   {% csrf_token %}

@@ -330,32 +330,24 @@ def orderSupplierCreate(request):
     return render(request, template_name='orderSupplierCreate.html', context=context)
 
 
-def productionEquipmentCreate(request):
+def productionEquipmentCreate(request, equipment_id):
     with connections['admin'].cursor() as cursor:
 
         cursor.execute("select * from view_families_list")
         result = cursor.fetchall()
         families = [Family(*row) for row in result]
 
-        context = {'families': families }
 
-    if request.method == 'POST':
-        data = json.loads(request.POST.get('data'))
-        header = json.loads(request.POST.get('header'))
-        # create a new supplier enc header
-        with connections['admin'].cursor() as cursor:
-            cursor.execute("select fn_orderssupplier_create(%s,%s,%s)",
-                           [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
-            result = cursor.fetchone()
-            if result:
-                for item in data:
-                    with connections['admin'].cursor() as cursor:
-                        cursor.execute("CALL sp_buy_create(%s,%s,%s)",
-                                       [result[0],
-                                        item['component'],
-                                        item['quantity']])
-                return JsonResponse({'status': 'success'})
-    return render(request, template_name='productionEquipmentCreate.html', context=context)
+        if request.method == 'POST':
+            data = json.loads(request.POST.get('data'))
+
+            for item in data:
+                with connections['admin'].cursor() as cursor:
+                    cursor.execute("CALL sp_productionitems_add(%s,%s,%s)",
+                                       [equipment_id,item['component'],item['quantity']])
+            return JsonResponse({'status': 'success'})
+
+        return render(request, template_name='productionEquipmentCreate.html', context={'equipment_id': equipment_id, 'families': families})
 
 
 
