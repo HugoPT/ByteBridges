@@ -49,6 +49,10 @@ urlpatterns = [
     #documentsSupplier
     path("documentsSupplier", views.documentsSupplier, name="documentsSupplier"),
     path("documentsSupplierFetch", views.documentsSupplierFetch, name="documentsSupplierFetch"),
+    path("documentsSupplierLinesFetch", views.documentsSupplierLinesFetch, name="documentsSupplierLinesFetch"),
+    path("documentsSupplierRegisterInvoice", views.documentsSupplierRegisterInvoice, name="documentsSupplierRegisterInvoice"),
+    # path("documentsSupplierRegisterInvoiceHeader", views.documentsSupplierRegisterInvoiceHeader, name="documentsSupplierRegisterInvoiceHeader"),
+    # path("documentsSupplierRegisterInvoiceLines", views.documentsSupplierRegisterInvoiceLines, name="documentsSupplierRegisterInvoiceLines"),
 
     
     #Family
