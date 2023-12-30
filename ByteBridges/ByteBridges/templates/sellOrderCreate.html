@@ -39,97 +39,123 @@
       {% endfor %}
     </tbody>
   </table>
-  <button id="getSelectedRowsBtn" class="btn btn-success">
+  <button id="getSelectedRowsBtn" class="btn btn-primary">
     Adicionar items selecionados
   </button>
 
   <div id="selectedRowsContainer" class="display"></div>
+  <div id="selectClient" class="display">
+    <div class="clientBox">
+      <h5>Selecionar Cliente</h5>
+
+      <form action="#" method="POST">
+        {% csrf_token %}
+        <label for="client">Cliente:</label>
+        <select name="client" id="client" class="dropstyleClient">
+            <option value="" disabled selected>Selecione um Cliente</option>
+            {% for c in clients %}
+                <option value="{{ c.idclient }}">{{ c.name }}</option>
+            {% endfor %}
+        </select>
+        <br />
+    </form>
+    
+    </div>
+
+  </div>
+<div id="createSell">
+  <button type="submit" class="btn btn-success submitDisplay">  Criar Venda </button>
 </div>
-<script>
-  $(document).ready(function () {
-    var table = $("#suppliersTable").DataTable({
-      dom: "Bfrtip",
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
-      language: {
-        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
-      },
-      columnDefs: [
-        {
-          targets: 0,
-          orderable: false,
-          className: "dt-body-center",
-          render: function (data, type, row) {
-            return (
-              '<input type="checkbox" class="select-checkbox" data-supplier-id="' +
-              row[1] +
-              '">'
-            );
-          },
+  </div>
+  <script>
+    $(document).ready(function () {
+      var table = $("#suppliersTable").DataTable({
+        dom: "Bfrtip",
+        buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+        language: {
+          url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
         },
-      ],
-    });
-
-    // Button click event to get selected rows
-    $("#getSelectedRowsBtn").on("click", function () {
-      var selectedRowsContainer = $("#selectedRowsContainer");
-      var selectedCheckboxes = $("#suppliersTable tbody").find(
-        ".select-checkbox:checked"
-      );
-
-      // Check if no rows are selected
-      if (selectedCheckboxes.length === 0) {
-        // Show SweetAlert if no rows are selected
-        Swal.fire({
-          icon: "info",
-          title: "Não foi selecionado nenhum Equipamento",
-          text: "Por favor selecione um equipamento antes de efectuar esta operação",
-        });
-        return;
-      }
-
-      // Toggle the display property
-      selectedRowsContainer.toggle();
-
-      // Clear existing content if the container is hidden
-      if (!selectedRowsContainer.is(":visible")) {
-        selectedRowsContainer.empty();
-        return;
-      }
-
-      // Create a title for the list
-      var listTitle = $("<div>").addClass("list-title").text("Carrinho:");
-      selectedRowsContainer.append(listTitle);
-
-      // Create a new list and append selected rows to it
-      var list = $("<ul>");
-
-      // Iterate over the checkboxes and append data from selected rows to the list
-      selectedCheckboxes.each(function () {
-        var row = $(this).closest("tr");
-        var listItem = $("<li>").text(
-          "ID: " +
-            row.find("td:eq(1)").text() +
-            ", Name: " +
-            row.find("td:eq(2)").text() +
-            ", Family: " +
-            row.find("td:eq(3)").text() +
-            ", Category: " +
-            row.find("td:eq(4)").text() +
-            ", Description: " +
-            row.find("td:eq(5)").text() +
-            ", Profit Margin: " +
-            row.find("td:eq(6)").text() +
-            ", Barcode: " +
-            row.find("td:eq(7)").text() +
-            ", Reference: " +
-            row.find("td:eq(8)").text()
-        );
-        list.append(listItem);
+        columnDefs: [
+          {
+            targets: 0,
+            orderable: false,
+            className: "dt-body-center",
+            render: function (data, type, row) {
+              return (
+                '<input type="checkbox" class="select-checkbox" data-supplier-id="' +
+                row[1] +
+                '">'
+              );
+            },
+          },
+        ],
       });
 
-      // Append the list to the container
-      selectedRowsContainer.append(list);
+      // Button click event to get selected rows
+      $("#getSelectedRowsBtn").on("click", function () {
+        var selectedRowsContainer = $("#selectedRowsContainer");
+        var selectedCheckboxes = $("#suppliersTable tbody").find(
+          ".select-checkbox:checked"
+        );
+        var selectClient = $("#selectClient");
+        // Check if no rows are selected
+        if (selectedCheckboxes.length === 0) {
+          // Show SweetAlert if no rows are selected
+          Swal.fire({
+            icon: "info",
+            title: "Não foi selecionado nenhum Equipamento",
+            text: "Por favor selecione um equipamento antes de efectuar esta operação",
+          });
+          return;
+        }
+
+        // Toggle the display property
+        selectedRowsContainer.toggle();
+        selectClient.toggle();
+        // Clear existing content if the container is hidden
+        if (!selectedRowsContainer.is(":visible")) {
+          selectedRowsContainer.empty();
+          return;
+        }
+        if (!selectClient.is(":visible")) {
+          selectClient.empty();
+          return;
+        }
+        // Create a title for the list
+        var listTitle = $("<div>").addClass("list-title").text("Carrinho:");
+        selectedRowsContainer.append(listTitle);
+
+        // Create a new list and append selected rows to it
+        var list = $("<ul>");
+
+        // Iterate over the checkboxes and append data from selected rows to the list
+        selectedCheckboxes.each(function () {
+          var row = $(this).closest("tr");
+          var listItem = $("<li>").text(
+            "ID: " +
+              row.find("td:eq(1)").text() +
+              ", Name: " +
+              row.find("td:eq(2)").text() +
+              ", Family: " +
+              row.find("td:eq(3)").text() +
+              ", Category: " +
+              row.find("td:eq(4)").text() +
+              ", Description: " +
+              row.find("td:eq(5)").text() +
+              ", Profit Margin: " +
+              row.find("td:eq(6)").text() +
+              ", Barcode: " +
+              row.find("td:eq(7)").text() +
+              ", Reference: " +
+              row.find("td:eq(8)").text()
+          );
+          list.append(listItem);
+        });
+
+        // Append the list to the container
+        selectedRowsContainer.append(list);
+      });
     });
-  });
-</script>
-{% endblock %}
+  </script>
+  {% endblock %}
+</div>

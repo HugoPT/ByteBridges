@@ -331,22 +331,16 @@ def orderSupplierCreate(request):
 
 
 def get_articles(request):
-    print(request)
     if request.method == 'GET':
         family_id = request.GET.get('family_id')
-
         with connections['admin'].cursor() as cursor:
             cursor.execute("SELECT * FROM fn_components_list_family(CAST(%s AS INTEGER))", [family_id])
-            result = cursor.fetchall()
-            print(result)
+            result = cursor.fetchall() 
             articles = [ComponentListFamily(*row) for row in result]
-
         # Convert ComponentListFamily objects to dictionaries
         articles_data = [{'idarticle': article.at_id, 'name': article.at_name} for article in articles]
-        print(articles_data)
-
         data = {'articles': articles_data}
-        print(data)
+   
         return JsonResponse(data)
 
 
@@ -717,10 +711,15 @@ def sellOrderCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_equipments_list")
         toSell = cursor.fetchall()
-        
+        # Call the stored procedure using the CALL statement
+        cursor.execute("SELECT * FROM view_clients_list", [])
+        # If the stored procedure returns results, you can fetch them
+        resultClient = cursor.fetchall()
+        clients = [Client(*row) for row in resultClient]
+        print("aaaaaaaa",resultClient)
        
 
-    context = {'toSell': toSell}
+    context = {'toSell': toSell,'clients':clients}
     return render(request, 'sellOrderCreate.html', context)
 '''
 def orderSupplierCreate(request):

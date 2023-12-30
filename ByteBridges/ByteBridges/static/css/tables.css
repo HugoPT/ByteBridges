@@ -31,7 +31,13 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: none;
 }
-
+#selectClient {
+  margin-top: 20px;
+  border: 1px solid #dbdbdb;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: none;
+}
 ul {
   list-style: none;
   padding: 0;
@@ -48,4 +54,30 @@ li {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
+}
+.clientBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.dropstyleClient {
+  width: fit-content;
+  height: 100%;
+  overflow: auto;
+  padding: 10px;
+  margin: 0px;
+}
+.submitDisplay {
+  margin-top: 15px;
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+#createSell {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
 }
