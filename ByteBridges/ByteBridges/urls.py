@@ -50,7 +50,6 @@ urlpatterns = [
     path("documentsSupplier", views.documentsSupplier, name="documentsSupplier"),
     path("documentsSupplierFetch", views.documentsSupplierFetch, name="documentsSupplierFetch"),
 
-    
     #Family
     path("familyCreate", views.familyCreate, name="familyCreate"),
     path("familyList", views.familyList, name="familyList"),
@@ -62,7 +61,7 @@ urlpatterns = [
     path("equipmentList", views.equipmentList, name="equipmentList"),
     path('equipmentEdit/<int:equipment_id>/', views.equipmentEdit, name='equipmentEdit'),
     path('equipmentDelete', views.equipmentDelete, name='equipmentDelete'),
-    path('productionEquipmentCreate/<int:equipment_id>/', views.productionEquipmentCreate, name='productionEquipmentCreate'),
+    path('productionEquipmentCreate', views.productionEquipmentCreate, name='productionEquipmentCreate'),
     
     #Component
     path("componentCreate", views.componentCreate, name="componentCreate"),
