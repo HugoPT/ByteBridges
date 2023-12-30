@@ -34,7 +34,6 @@ urlpatterns = [
     #suppliers
     path("supplierCreate", views.supplierCreate, name="supplierCreate"),
     path("supplierList", views.supplierList, name="supplierList"),
-
     path('supplierEdit/<int:idsupplier>/', views.supplierEdit, name='supplierEdit'),
     path('supplierDelete', views.supplierDelete, name='supplierDelete'),
 

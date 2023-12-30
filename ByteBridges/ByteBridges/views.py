@@ -375,10 +375,10 @@ def familyCreate(request):
         return render(request, template_name='familyCreate.html')
 
 
-def familyEdit(request, id_family):
+def familyEdit(request, family_id):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
-        cursor.execute("SELECT * FROM view_families_list WHERE idfamily = %s", [id_family])
+        cursor.execute("SELECT * FROM view_families_list WHERE idfamily = %s", [family_id])
         family = cursor.fetchone()
 
     if request.method == 'POST':
@@ -388,18 +388,15 @@ def familyEdit(request, id_family):
 
         # Call the stored procedure to update the family
         with connections['admin'].cursor() as cursor:
-            cursor.execute("CALL sp_families_update(%s, %s, %s)", [id_family, name, description])
+            cursor.execute("CALL sp_families_update(%s, %s, %s)", [family_id, name, description])
             # Commit the changes to the database
 
-        if request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
-            # If it's an AJAX request, return a JsonResponse
-            return JsonResponse({'status': 'success'})
-        else:
-            # If it's a regular form submission, redirect to the family list page after update
-            return redirect('familyList')
+
+        return redirect('familyList')
 
     return render(request, 'familyEdit.html',
-                  {'idfamily': id_family, 'family': {'name': family[1], 'description': family[2]}})
+                  {'idfamily': family_id, 'family': {'name': family[1], 'description': family[2]}})
+
 
 
 def familyDelete(request):
@@ -566,7 +563,7 @@ def componentEdit(request, component_id):
 
     return render(request, 'componentEdit.html', {'component_id': component_id, 'family': family,
                                                'component': {'name': component[1], 'family': component[2],
-                                                             'description': component[4], 'profitmargin': component[5], 'barcode': component[6],
+                                                             'description': component[4], 'profitmargin': int(component[5]*100), 'barcode': component[6],
                                                              'reference': component[7]}})
 
 def componentDelete(request):
@@ -588,6 +585,26 @@ def laborList(request):
             result = cursor.fetchall()
             labors = [Labor(*row) for row in result]
             return render(request, 'laborList.html', {'labors': labors})
+
+def laborCreate(request):
+    if request.method == 'POST':
+        # Get the data from the form
+        name = request.POST.get('name')
+        hourrate = request.POST.get('hourrate')
+
+        print(
+            f"Inserted labor {name} {hourrate}")
+
+        with connections['admin'].cursor() as cursor:
+            # Call the stored procedure using the CALL statement
+            cursor.execute("CALL sp_labors_create(%s,%s)",
+                           [name, hourrate])
+
+        return redirect('dashboard')
+
+    # return the form
+    return render(request, template_name='laborCreate.html')
+
 
 
 def laborEdit(request, labor_id):
@@ -612,26 +629,6 @@ def laborEdit(request, labor_id):
 
     return render(request, 'laborEdit.html', {'labor_id': labor_id,
                                               'labor': {'name': labor[1], 'hourrate': labor[2]}})
-
-
-def laborCreate(request):
-    if request.method == 'POST':
-        # Get the data from the form
-        name = request.POST.get('name')
-        hourrate = request.POST.get('hourrate')
-
-        print(
-            f"Inserted labor {name} {hourrate}")
-
-        with connections['admin'].cursor() as cursor:
-            # Call the stored procedure using the CALL statement
-            cursor.execute("CALL sp_labors_create(%s,%s)",
-                           [name, hourrate])
-
-        return redirect('dashboard')
-
-    # return the form
-    return render(request, template_name='laborCreate.html')
 
 
 def laborDelete(request):

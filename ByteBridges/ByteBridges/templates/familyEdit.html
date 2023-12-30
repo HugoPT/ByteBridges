@@ -9,7 +9,7 @@
 >
   {% csrf_token %}
 
-  <div class="form-field col-lg-6">
+  <div class="form-field col-lg-12">
     <input
       id="name"
       name="name"
@@ -36,48 +36,12 @@
       id="updateFamilyBtn"
       class="submit-btn"
       type="button"
-      onclick="updateFamily()"
     >
       Atualizar Família
     </button>
   </div>
 </form>
-<script>
-  function updateFamily() {
-    $.ajax({
-      type: "POST",
-      url: '{% url "familyEdit" idfamily %}',
-      data: $("#familyEditForm").serialize(),
-      dataType: "json",
-      success: function (data) {
-        // Handle the success response
-        if (data.status === "success") {
-          Swal.fire({
-            title: "Sucesso!",
-            text: "Família atualizada com sucesso",
-            icon: "success",
-          }).then(function () {
-            // Redirect to familyList page
-            window.location.href = "{% url 'familyList' %}";
-          });
-        } else {
-          Swal.fire({
-            title: "Erro!",
-            text: "Falha ao atualizar família",
-            icon: "error",
-          });
-        }
-      },
-      error: function () {
-        Swal.fire({
-          title: "Erro!",
-          text: "Falha na comunicação com o servidor",
-          icon: "error",
-        });
-      },
-    });
-  }
-</script>
+
 
 {% else %}
 <p>Family not found</p>

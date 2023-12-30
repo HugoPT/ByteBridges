@@ -15,11 +15,14 @@
     />
     <label class="label" for="name">Nome</label>
   </div>
+
   <div class="form-field col-lg-6">
     <select id="dropdown" name="idfamily" class="input-text js-input" required>
-        <option value="{{ c.name }}" selected></option>{% for c in family %}
-      <option value="{{ c.idfamily }}">{{ c.name }}</option>
-      {% endfor %}
+        {% for f in family %}
+            <option value="{{ f.idfamily }}" {% if f.name == component.family %}selected{% endif %}>
+                {{ f.name }}
+            </option>
+        {% endfor %}
     </select>
       <label class="label" for="family">Familia</label>
   </div>
@@ -30,10 +33,11 @@
                     name="profitmargin"
                     class="input-text js-input"
                     type="text"
-                    value="{{ component.profitmargin * 100}}"
+                    value="{{component.profitmargin}}"
                     required
             />
             <label class="label" for="profitmargin">Margem de Lucro</label>
+
         </div>
 
   <div class="form-field col-lg-4">
@@ -63,7 +67,7 @@
 
 
   <div class="form-field col-lg-12">
-      <label class="arealabel" for="description">Descrição</label>
+      <label class="areaLabel" for="description">Descrição:</label>
             <textarea
                     id="description"
                     name="description"

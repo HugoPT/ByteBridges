@@ -17,12 +17,14 @@
   </div>
   <div class="form-field col-lg-6">
     <select id="dropdown" name="idcategory" class="input-text js-input" required>
-        <option value="{{ c.name }}" selected></option>{% for c in category %}
-      <option value="{{ c.idcategory }}">{{ c.name }}</option>
-      {% endfor %}
+        {% for c in category %}
+            <option value="{{ c.idcategory }}" {% if c.name == equipment.category %}selected{% endif %}>
+                {{ c.name }}
+            </option>
+        {% endfor %}
     </select>
-      <label class="label" for="category">Categoria</label>
-  </div>
+    <label class="label" for="category">Categoria</label>
+</div>
 
   <div class="form-field col-lg-6">
       <input
@@ -49,7 +51,7 @@
         </div>
 
   <div class="form-field col-lg-12">
-      <label class="arealabel" for="description">Descrição</label>
+      <label class="areaLabel" for="description">Descrição:</label>
             <textarea
                     id="description"
                     name="description"
