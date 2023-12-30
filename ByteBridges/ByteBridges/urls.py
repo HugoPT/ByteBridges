@@ -54,7 +54,6 @@ urlpatterns = [
     # path("documentsSupplierRegisterInvoiceHeader", views.documentsSupplierRegisterInvoiceHeader, name="documentsSupplierRegisterInvoiceHeader"),
     # path("documentsSupplierRegisterInvoiceLines", views.documentsSupplierRegisterInvoiceLines, name="documentsSupplierRegisterInvoiceLines"),
 
-    
     #Family
     path("familyCreate", views.familyCreate, name="familyCreate"),
     path("familyList", views.familyList, name="familyList"),
