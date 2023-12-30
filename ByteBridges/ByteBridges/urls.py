@@ -62,6 +62,7 @@ urlpatterns = [
     path("equipmentList", views.equipmentList, name="equipmentList"),
     path('equipmentEdit/<int:equipment_id>/', views.equipmentEdit, name='equipmentEdit'),
     path('equipmentDelete', views.equipmentDelete, name='equipmentDelete'),
+    path('productionEquipmentCreate/<int:equipment_id>/', views.productionEquipmentCreate, name='productionEquipmentCreate'),
     
     #Component
     path("componentCreate", views.componentCreate, name="componentCreate"),

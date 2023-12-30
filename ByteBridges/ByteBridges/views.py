@@ -330,6 +330,43 @@ def orderSupplierCreate(request):
     return render(request, template_name='orderSupplierCreate.html', context=context)
 
 
+def productionEquipmentCreate(request, equipment_id):
+    # Fetch the client information from the database
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("SELECT * FROM view_equipments_list WHERE idarticletype = %s", [equipment_id])
+        equipment = cursor.fetchone()
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+        family = [Family(*row) for row in result]
+
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        idfamily = None
+        idcategory = request.POST.get('idcategory')
+        description = request.POST.get('description')
+        image = ""
+        profit_margin = 0
+        barcode = request.POST.get('barcode')
+        reference = request.POST.get('reference')
+
+        # Call the stored procedure to update the client
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("CALL sp_articletypes_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                           [equipment_id, idfamily, idcategory, name, description, image, profit_margin, barcode, reference])
+            # Commit the changes to the database
+
+        # Redirect to the client list page after update
+        return redirect('equipmentList')
+
+    return render(request, 'equipmentEdit.html', {'equipment_id': equipment_id, 'family': family,
+                                               'equipment': {'name': equipment[1], 'category': equipment[3],
+                                                             'description': equipment[4], 'barcode': equipment[6],
+                                                             'reference': equipment[7]}})
+
+
+
 def get_articles(request):
     if request.method == 'GET':
         family_id = request.GET.get('family_id')
@@ -486,6 +523,7 @@ def equipmentDelete(request):
             return JsonResponse({'status': 'success'})
         # Redirect to the client list page after deletion
         return redirect('equipmentList')
+
 
 
 def componentList(request):
@@ -721,42 +759,3 @@ def sellOrderCreate(request):
 
     context = {'toSell': toSell,'clients':clients}
     return render(request, 'sellOrderCreate.html', context)
-'''
-def orderSupplierCreate(request):
-    with connections['admin'].cursor() as cursor:
-        cursor.execute("select * from view_suppliers_list")
-        result = cursor.fetchall()
-        docNumber = [Supplier(*row) for row in result]
-
-        cursor.execute("select * from view_suppliers_list")
-        result = cursor.fetchall()
-        suppliers = [Supplier(*row) for row in result]
-
-        cursor.execute("select * from view_warehouses_list")
-        result = cursor.fetchall()
-        warehouses = [Warehouse(*row) for row in result]
-
-        cursor.execute("select * from view_families_list")
-        result = cursor.fetchall()
-        families = [Family(*row) for row in result]
-
-        context = {'suppliers': suppliers, 'warehouses': warehouses, 'families': families, 'docNumber': docNumber}
-
-    if request.method == 'POST':
-        data = json.loads(request.POST.get('data'))
-        header = json.loads(request.POST.get('header'))
-        # create a new supplier enc header
-        with connections['admin'].cursor() as cursor:
-            cursor.execute("select fn_orderssupplier_create(%s,%s,%s)",
-                           [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
-            result = cursor.fetchone()
-            if result:
-                for item in data:
-                    with connections['admin'].cursor() as cursor:
-                        cursor.execute("CALL sp_buy_create(%s,%s,%s)",
-                                       [result[0],
-                                        item['component'],
-                                        item['quantity']])
-                return JsonResponse({'status': 'success'})
-    return render(request, template_name='orderSupplierCreate.html', context=context)
-'''
