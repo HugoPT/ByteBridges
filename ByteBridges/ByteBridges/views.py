@@ -1,7 +1,7 @@
 import datetime
 
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor
+from django.shortcuts import render, redirect
+from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Stock
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connections
 from django.http import JsonResponse
@@ -575,6 +575,27 @@ def componentDelete(request):
             return JsonResponse({'status': 'success'})
         # Redirect to the client list page after deletion
         return redirect('componentList')
+
+
+def stockList(request):
+        with connections['admin'].cursor() as cursor:
+            # Call the stored procedure using the CALL statement
+            cursor.execute("select  * from view_getstock_equipments")
+            # If the stored procedure returns results, you can fetch them
+            result = cursor.fetchall()
+            equipments = [Stock(*row) for row in result]
+
+            cursor.execute("select  * from view_getstock_components")
+            # If the stored procedure returns results, you can fetch them
+            result = cursor.fetchall()
+
+            components = [Stock(*row) for row in result]
+
+            context = {'equipments': equipments, 'components': components}
+
+
+            return render(request, 'stockList.html', context=context)
+
 
 
 def laborList(request):

@@ -133,6 +133,18 @@ class ArticleType(models.Model):
         db_table = 'articletypes'
 
 
+class Stock(models.Model):
+    quantity = models.BigIntegerField()
+    name = models.CharField(max_length=80)
+    idarticletype = models.IntegerField(primary_key=True)
+
+    def __str__(self):
+        return self.name
+    class Meta:
+        # Specify the table name
+        db_table = 'stocks'
+
+
 class User(models.Model):
     iduser = models.AutoField(primary_key=True, unique=True)
     name = models.CharField(max_length=80)

@@ -69,6 +69,10 @@ urlpatterns = [
     path('componentEdit/<int:component_id>/', views.componentEdit, name='componentEdit'),
     path('componentDelete', views.componentDelete, name='componentDelete'),
 
+
+    #Stocks
+    path("stockList", views.stockList, name="stockList"),
+
     #Users
     path("userList", views.userList, name="userList"),
     path('userEdit/<int:user_id>/', views.userEdit, name='userEdit'),
