@@ -1,0 +1,107 @@
+{% extends 'base_template.html' %} {%block extra_css%} {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
+{%endblock%}{% block content %}
+
+<div class="listContainer">
+
+  <label>
+    <input type="radio" name="listType" value="equipments" checked> Equipments
+  </label>
+  <label>
+    <input type="radio" name="listType" value="components"> Components
+  </label>
+
+  <div id="equipmentsList" class="list">
+    <h2>Lista de Equipamentos</h2>
+
+    <table id="componentsTable" class="display">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Quantidade</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in equipments %}
+        <tr>
+          <td>{{ e.name }}</td>
+          <td>{{ e.quantity }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div id="componentsList" class="list" style="display: none;">
+    <h2>Lista de Componentes</h2>
+
+    <table id="equipmentsTable" class="display">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Quantidade</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in components %}
+        <tr>
+          <td>{{ c.name }}</td>
+          <td>{{ c.quantity }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+
+
+  $(document).ready(function () {
+    $("#componentsTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+      },
+    });
+  });
+
+  $(document).ready(function () {
+    $("#equipmentsTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+      },
+    });
+  });
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const equipmentsRadio = document.querySelector('input[value="equipments"]');
+    const componentsRadio = document.querySelector('input[value="components"]');
+    const equipmentsList = document.getElementById('equipmentsList');
+    const componentsList = document.getElementById('componentsList');
+
+    function showEquipmentsList() {
+      equipmentsList.style.display = 'block';
+      componentsList.style.display = 'none';
+    }
+
+    function showComponentsList() {
+      componentsList.style.display = 'block';
+      equipmentsList.style.display = 'none';
+    }
+
+    equipmentsRadio.addEventListener('change', showEquipmentsList);
+    componentsRadio.addEventListener('change', showComponentsList);
+
+    // Initial state
+    showEquipmentsList();
+  });
+
+
+</script>
+
+{% endblock %}

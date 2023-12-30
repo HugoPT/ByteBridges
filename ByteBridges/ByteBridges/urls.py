@@ -66,12 +66,17 @@ urlpatterns = [
     path("equipmentList", views.equipmentList, name="equipmentList"),
     path('equipmentEdit/<int:equipment_id>/', views.equipmentEdit, name='equipmentEdit'),
     path('equipmentDelete', views.equipmentDelete, name='equipmentDelete'),
+    path('productionEquipmentCreate/<int:equipment_id>/', views.productionEquipmentCreate, name='productionEquipmentCreate'),
     
     #Component
     path("componentCreate", views.componentCreate, name="componentCreate"),
     path("componentList", views.componentList, name="componentList"),
     path('componentEdit/<int:component_id>/', views.componentEdit, name='componentEdit'),
     path('componentDelete', views.componentDelete, name='componentDelete'),
+
+
+    #Stocks
+    path("stockList", views.stockList, name="stockList"),
 
     #Users
     path("userList", views.userList, name="userList"),
