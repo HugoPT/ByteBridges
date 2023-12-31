@@ -17,13 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from ByteBridges import views
+from django.contrib.auth import authenticate, login
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("dashboard", views.IndexPage, name="dashboard"),
     # path("dashboard", views.dashboard, name="dashboard"),
-    path("loginForm", views.loginForm, name="loginForm"),
+    path("login", views.loginForm, name="login"),
     path('logout', views.logout, name='logout'),
+
+
     path("", views.Login, name="login"),
     path('get_articles/', views.get_articles, name='get_articles'),
     path('productionEquipmentCreate/get_articles/', views.get_articles, name='get_articles'),

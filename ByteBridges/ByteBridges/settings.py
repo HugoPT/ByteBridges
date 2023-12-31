@@ -57,7 +57,9 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 #LOGIN_URL = '/admin/login/'
-LOGIN_URL = '/loginForm'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/dashboard'
+LOGOUT_REDIRECT_URL = '/'
 
 TEMPLATES = [
     {

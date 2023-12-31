@@ -19,6 +19,21 @@ def logout(request):
 
 
 def loginForm(request):
+    if request.method == 'POST':
+        # Your login form processing logic goes here
+        username = request.POST['username']
+        password = request.POST['password']
+        print(username, password)
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+
+            # Redirect to the 'next' parameter if it exists, or a default page
+            next_url = request.GET.get('next', '/dashboard')
+            return redirect(next_url)
+
     return render(request, "loginForm.html")
 
 
