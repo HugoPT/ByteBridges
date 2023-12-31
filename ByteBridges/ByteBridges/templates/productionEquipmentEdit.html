@@ -1,6 +1,6 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
 <h1 class="title">Criar nova Produção</h1>
-{% endblock %}
+{% endblock %}{% if equipment %}
 
 <form class="allforms row" action="{% url 'productionEquipmentCreate' equipment_id %}" method="post">
   {% csrf_token %}
@@ -297,6 +297,7 @@
           // Check if a family is selected
           if (familyId !== null && componentId !== null && quantity !== "") {
               // Append a new row to the table with the selected values
+
               $("#dataTable tbody").append(
                   "<tr>" +
                   '<th scope="row">' +
@@ -397,5 +398,6 @@
 
   //teste
 </script>
-
-{% endblock %}
+{% else %}
+<p>Equipment not found</p>
+{% endif %} {% endblock %}

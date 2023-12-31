@@ -24,6 +24,8 @@ urlpatterns = [
     path("loginForm", views.loginForm, name="loginForm"),
     path("", views.Login, name="login"),
     path('get_articles/', views.get_articles, name='get_articles'),
+    path('productionEquipmentCreate/get_articles/', views.get_articles, name='get_articles'),
+    path('productionEquipmentEdit/get_articles/', views.get_articles, name='get_articles'),
 
     #Clients
     path("clientCreate", views.clientCreate, name="clientCreate"),
@@ -42,6 +44,7 @@ urlpatterns = [
     path("orderSupplierList", views.orderSupplierList, name="orderSupplierList"),
     path("orderClientCreate", views.orderClientCreate, name="orderClientCreate"),
     path("orderClientList", views.orderClientList, name="orderClientList"),
+    path("orderSupplierLinesFetch", views.orderSupplierLinesFetch, name="orderSupplierLinesFetch"),
 
     #Sells
     path("sellOrderCreate", views.sellOrderCreate, name="sellOrderCreate"),
@@ -66,7 +69,8 @@ urlpatterns = [
     path('equipmentEdit/<int:equipment_id>/', views.equipmentEdit, name='equipmentEdit'),
     path('equipmentDelete', views.equipmentDelete, name='equipmentDelete'),
     path('productionEquipmentCreate/<int:equipment_id>/', views.productionEquipmentCreate, name='productionEquipmentCreate'),
-    
+    path('productionEquipmentEdit/<int:equipment_id>/', views.productionEquipmentEdit, name='productionEquipmentEdit'),
+
     #Component
     path("componentCreate", views.componentCreate, name="componentCreate"),
     path("componentList", views.componentList, name="componentList"),
