@@ -1,7 +1,8 @@
 import datetime
 
-from django.shortcuts import render, redirect
-from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Stock
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, \
+    Stock
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connections
 from django.http import JsonResponse
@@ -102,7 +103,6 @@ def clientDelete(request):
             return JsonResponse({'status': 'success'})
         # Redirect to the client list page after deletion
         return redirect('clientList')
-
 
 
 def orderClientList(request):
@@ -254,11 +254,16 @@ def documentsSupplier(request):
         result = cursor.fetchall()
         warehouses = [Warehouse(*row) for row in result]
 
+        cursor.execute("select * from view_terms_list")
+        result = cursor.fetchall()
+        terms_list = [Terms(*row) for row in result]
+
         cursor.execute("select * from view_families_list")
         result = cursor.fetchall()
         families = [Family(*row) for row in result]
 
-        context = {'suppliers': suppliers, 'warehouses': warehouses, 'families': families, 'docNumber': docNumber}
+        context = {'suppliers': suppliers, 'terms_list': terms_list, 'warehouses': warehouses, 'families': families,
+                   'docNumber': docNumber}
 
     if request.method == 'POST':
         data = json.loads(request.POST.get('data'))
@@ -278,7 +283,8 @@ def documentsSupplier(request):
                 return JsonResponse({'status': 'success'})
     return render(request, template_name='documentsSupplier.html', context=context)
 
-#todo fix this csrf
+
+# todo fix this csrf
 @csrf_exempt
 def documentsSupplierFetch(request):
     # Fetch the family information from the database
@@ -289,6 +295,87 @@ def documentsSupplierFetch(request):
         return JsonResponse({'list': list})
 
 
+# todo fix this csrf
+@csrf_exempt
+def documentsSupplierLinesFetch(request):
+    # Fetch the family information from the database
+    with connections['admin'].cursor() as cursor:
+        id = request.POST.get('id')
+        cursor.execute("SELECT * FROM fn_orderssuplier_getlines(%s);", [id])
+        list = cursor.fetchall()
+        print(list)
+        return JsonResponse({'list': list})
+
+
+@csrf_exempt
+def documentsSupplierRegisterInvoice(request):
+    # Fetch the family information from the database
+    with connections['admin'].cursor() as cursor:
+        id = request.POST.get('id')
+        supplier = request.POST.get('supplier')
+        invoice_type = request.POST.get('invoice_type')
+        invoice_number = request.POST.get('invoice_number')
+        invoice_value = request.POST.get('invoice_value')
+        invoice_date = request.POST.get('invoice_date')
+        payment_type = request.POST.get('payment_type')
+        warehouse_id = request.POST.get('warehouse_id')
+        documentLines = json.loads(request.POST.get('documentLines'))
+        related_document_id = request.POST.get('related_document_id')
+        obs = request.POST.get('obs')
+
+        cursor.execute("select fn_generate_ordersSupplier_invoice(%s,%s,%s,%s);", [payment_type,related_document_id,obs,invoice_type])
+        doc = cursor.fetchone()
+
+        for line in documentLines:
+            cursor.execute("CALL  sp_lines_create(%s,%s,%s);", [doc[0],line[0],line[6]])
+        return JsonResponse({'list': related_document_id})
+
+
+@csrf_exempt
+def documentsSupplierRegisterInvoiceLines(request):
+    # Fetch the family information from the database
+    with connections['admin'].cursor() as cursor:
+        id = request.POST.get('id')
+        cursor.execute("SELECT * FROM fn_orderssuplier_getlines(%s);", [id])
+        list = cursor.fetchall()
+        print(list)
+        return JsonResponse({'list': list})
+
+
+def productionEquipmentCreate(request, equipment_id):
+    # Fetch the client information from the database
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("SELECT * FROM view_equipments_list WHERE idarticletype = %s", [equipment_id])
+        equipment = cursor.fetchone()
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+        family = [Family(*row) for row in result]
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        idfamily = None
+        idcategory = request.POST.get('idcategory')
+        description = request.POST.get('description')
+        image = ""
+        profit_margin = 0
+        barcode = request.POST.get('barcode')
+        reference = request.POST.get('reference')
+
+        # Call the stored procedure to update the client
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("CALL sp_articletypes_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                           [equipment_id, idfamily, idcategory, name, description, image, profit_margin, barcode,
+                            reference])
+            # Commit the changes to the database
+
+        # Redirect to the client list page after update
+        return redirect('equipmentList')
+
+    return render(request, 'equipmentEdit.html', {'equipment_id': equipment_id, 'family': family,
+                                                  'equipment': {'name': equipment[1], 'category': equipment[3],
+                                                                'description': equipment[4], 'barcode': equipment[6],
+                                                                'reference': equipment[7]}})
 
 
 def orderSupplierCreate(request):
@@ -330,54 +417,23 @@ def orderSupplierCreate(request):
     return render(request, template_name='orderSupplierCreate.html', context=context)
 
 
-def productionEquipmentCreate(request, equipment_id):
-    # Fetch the client information from the database
-    with connections['admin'].cursor() as cursor:
-        cursor.execute("SELECT * FROM view_equipments_list WHERE idarticletype = %s", [equipment_id])
-        equipment = cursor.fetchone()
-
-        cursor.execute("select * from view_families_list")
-        result = cursor.fetchall()
-        family = [Family(*row) for row in result]
-
-
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        idfamily = None
-        idcategory = request.POST.get('idcategory')
-        description = request.POST.get('description')
-        image = ""
-        profit_margin = 0
-        barcode = request.POST.get('barcode')
-        reference = request.POST.get('reference')
-
-        # Call the stored procedure to update the client
-        with connections['admin'].cursor() as cursor:
-            cursor.execute("CALL sp_articletypes_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                           [equipment_id, idfamily, idcategory, name, description, image, profit_margin, barcode, reference])
-            # Commit the changes to the database
-
-        # Redirect to the client list page after update
-        return redirect('equipmentList')
-
-    return render(request, 'equipmentEdit.html', {'equipment_id': equipment_id, 'family': family,
-                                               'equipment': {'name': equipment[1], 'category': equipment[3],
-                                                             'description': equipment[4], 'barcode': equipment[6],
-                                                             'reference': equipment[7]}})
-
-
-
 def get_articles(request):
+    print(request)
     if request.method == 'GET':
         family_id = request.GET.get('family_id')
+
         with connections['admin'].cursor() as cursor:
             cursor.execute("SELECT * FROM fn_components_list_family(CAST(%s AS INTEGER))", [family_id])
-            result = cursor.fetchall() 
+            result = cursor.fetchall()
+            print(result)
             articles = [ComponentListFamily(*row) for row in result]
+
         # Convert ComponentListFamily objects to dictionaries
         articles_data = [{'idarticle': article.at_id, 'name': article.at_name} for article in articles]
+        print(articles_data)
+
         data = {'articles': articles_data}
-   
+        print(data)
         return JsonResponse(data)
 
 
@@ -422,12 +478,10 @@ def familyEdit(request, family_id):
             cursor.execute("CALL sp_families_update(%s, %s, %s)", [family_id, name, description])
             # Commit the changes to the database
 
-
         return redirect('familyList')
 
     return render(request, 'familyEdit.html',
                   {'idfamily': family_id, 'family': {'name': family[1], 'description': family[2]}})
-
 
 
 def familyDelete(request):
@@ -453,7 +507,6 @@ def equipmentList(request):
 
 def equipmentCreate(request):
     with connections['admin'].cursor() as cursor:
-
         cursor.execute("select * from view_categories_list")
         result = cursor.fetchall()
         category = [Category(*row) for row in result]
@@ -488,7 +541,6 @@ def equipmentEdit(request, equipment_id):
         result = cursor.fetchall()
         category = [Category(*row) for row in result]
 
-
     if request.method == 'POST':
         name = request.POST.get('name')
         idfamily = None
@@ -502,16 +554,17 @@ def equipmentEdit(request, equipment_id):
         # Call the stored procedure to update the client
         with connections['admin'].cursor() as cursor:
             cursor.execute("CALL sp_articletypes_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                           [equipment_id, idfamily, idcategory, name, description, image, profit_margin, barcode, reference])
+                           [equipment_id, idfamily, idcategory, name, description, image, profit_margin, barcode,
+                            reference])
             # Commit the changes to the database
 
         # Redirect to the client list page after update
         return redirect('equipmentList')
 
     return render(request, 'equipmentEdit.html', {'equipment_id': equipment_id, 'category': category,
-                                               'equipment': {'name': equipment[1], 'category': equipment[3],
-                                                             'description': equipment[4], 'barcode': equipment[6],
-                                                             'reference': equipment[7]}})
+                                                  'equipment': {'name': equipment[1], 'category': equipment[3],
+                                                                'description': equipment[4], 'barcode': equipment[6],
+                                                                'reference': equipment[7]}})
 
 
 def equipmentDelete(request):
@@ -525,16 +578,16 @@ def equipmentDelete(request):
         return redirect('equipmentList')
 
 
-
 def componentList(request):
-        with connections['admin'].cursor() as cursor:
-            # Call the stored procedure using the CALL statement
-            cursor.execute("select  * from view_components_list", [])
-            # If the stored procedure returns results, you can fetch them
-            result = cursor.fetchall()
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("select  * from view_components_list", [])
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
 
-            components = [ArticleType(*row) for row in result]
-            return render(request, 'componentList.html', {'components': components})
+        components = [ArticleType(*row) for row in result]
+        return render(request, 'componentList.html', {'components': components})
+
 
 def componentCreate(request):
     with connections['admin'].cursor() as cursor:
@@ -573,30 +626,33 @@ def componentEdit(request, component_id):
         result = cursor.fetchall()
         family = [Family(*row) for row in result]
 
-
     if request.method == 'POST':
         name = request.POST.get('name')
         idfamily = request.POST.get('idfamily')
         idcategory = None
         description = request.POST.get('description')
         image = ""
-        profit_margin = int(request.POST.get('profitmargin'))/100
+        profit_margin = int(request.POST.get('profitmargin')) / 100
         barcode = request.POST.get('barcode')
         reference = request.POST.get('reference')
 
         # Call the stored procedure to update the client
         with connections['admin'].cursor() as cursor:
             cursor.execute("CALL sp_articletypes_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                           [component_id, idfamily, idcategory, name, description, image, profit_margin, barcode, reference])
+                           [component_id, idfamily, idcategory, name, description, image, profit_margin, barcode,
+                            reference])
             # Commit the changes to the database
 
         # Redirect to the client list page after update
         return redirect('componentList')
 
     return render(request, 'componentEdit.html', {'component_id': component_id, 'family': family,
-                                               'component': {'name': component[1], 'family': component[2],
-                                                             'description': component[4], 'profitmargin': int(component[5]*100), 'barcode': component[6],
-                                                             'reference': component[7]}})
+                                                  'component': {'name': component[1], 'family': component[2],
+                                                                'description': component[4],
+                                                                'profitmargin': int(component[5] * 100),
+                                                                'barcode': component[6],
+                                                                'reference': component[7]}})
+
 
 def componentDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
@@ -610,34 +666,33 @@ def componentDelete(request):
 
 
 def stockList(request):
-        with connections['admin'].cursor() as cursor:
-            # Call the stored procedure using the CALL statement
-            cursor.execute("select  * from view_getstock_equipments")
-            # If the stored procedure returns results, you can fetch them
-            result = cursor.fetchall()
-            equipments = [Stock(*row) for row in result]
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("select  * from view_getstock_equipments")
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
+        equipments = [Stock(*row) for row in result]
 
-            cursor.execute("select  * from view_getstock_components")
-            # If the stored procedure returns results, you can fetch them
-            result = cursor.fetchall()
+        cursor.execute("select  * from view_getstock_components")
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
 
-            components = [Stock(*row) for row in result]
+        components = [Stock(*row) for row in result]
 
-            context = {'equipments': equipments, 'components': components}
+        context = {'equipments': equipments, 'components': components}
 
-
-            return render(request, 'stockList.html', context=context)
-
+        return render(request, 'stockList.html', context=context)
 
 
 def laborList(request):
-        with connections['admin'].cursor() as cursor:
-            # Call the stored procedure using the CALL statement
-            cursor.execute("SELECT * FROM view_labors_list", [])
-            # If the stored procedure returns results, you can fetch them
-            result = cursor.fetchall()
-            labors = [Labor(*row) for row in result]
-            return render(request, 'laborList.html', {'labors': labors})
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("SELECT * FROM view_labors_list", [])
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
+        labors = [Labor(*row) for row in result]
+        return render(request, 'laborList.html', {'labors': labors})
+
 
 def laborCreate(request):
     if request.method == 'POST':
@@ -657,7 +712,6 @@ def laborCreate(request):
 
     # return the form
     return render(request, template_name='laborCreate.html')
-
 
 
 def laborEdit(request, labor_id):
@@ -745,6 +799,7 @@ def userDelete(request):
         # Redirect to the client list page after deletion
         return redirect('userList')
 
+
 def sellOrderCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_equipments_list")
@@ -771,3 +826,44 @@ def sellOrderCreate(request):
 
     context = {'toSell': toSell, 'clients': clients}
     return render(request, 'sellOrderCreate.html', context)
+
+
+'''
+def orderSupplierCreate(request):
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("select * from view_suppliers_list")
+        result = cursor.fetchall()
+        docNumber = [Supplier(*row) for row in result]
+
+        cursor.execute("select * from view_suppliers_list")
+        result = cursor.fetchall()
+        suppliers = [Supplier(*row) for row in result]
+
+        cursor.execute("select * from view_warehouses_list")
+        result = cursor.fetchall()
+        warehouses = [Warehouse(*row) for row in result]
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+        families = [Family(*row) for row in result]
+
+        context = {'suppliers': suppliers, 'warehouses': warehouses, 'families': families, 'docNumber': docNumber}
+
+    if request.method == 'POST':
+        data = json.loads(request.POST.get('data'))
+        header = json.loads(request.POST.get('header'))
+        # create a new supplier enc header
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("select fn_orderssupplier_create(%s,%s,%s)",
+                           [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
+            result = cursor.fetchone()
+            if result:
+                for item in data:
+                    with connections['admin'].cursor() as cursor:
+                        cursor.execute("CALL sp_buy_create(%s,%s,%s)",
+                                       [result[0],
+                                        item['component'],
+                                        item['quantity']])
+                return JsonResponse({'status': 'success'})
+    return render(request, template_name='orderSupplierCreate.html', context=context)
+'''

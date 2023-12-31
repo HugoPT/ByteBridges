@@ -7,7 +7,7 @@
             <hr>
         </div>
     </div>
-    <div class="container">
+    <div class="">
         <form>
             <div class="form-group">
                 <label for="supplier"><strong>Fornecedor:</strong></label>
@@ -25,26 +25,26 @@
             <div class="form-group">
                 <label><strong>Natureza do documento:</strong></label>
                 <div class="form-check">
-                    <input type="radio" class="form-check-input" checked name="radioGroup" id="invoice_type" value="FT">
+                    <input type="radio" class="form-check-input" checked name="invoice_type" value="T">
                     <label class="form-check-label" for="radioOption1">Fatura</label>
                 </div>
                 <div class="form-check">
-                    <input type="radio" class="form-check-input" name="radioGroup" id="guia_type" value="GR">
+                    <input type="radio" class="form-check-input" name="invoice_type" value="P">
                     <label class="form-check-label" for="radioOption2">Guia de remessa</label>
                 </div>
             </div>
             <div class="form-group">
-                <label for="input2"><strong>Número de documento fornecedor:</strong></label>
-                <input type="text" class="form-control" id="input2" placeholder="Numero de fatura">
+                <label for="invoice_number"><strong>Número de documento fornecedor:</strong></label>
+                <input type="text" class="form-control" id="invoice_number" placeholder="Numero de fatura">
             </div>
             <div class="form-group">
                 <label for="invoice_value"><strong>Valor do documento:</strong></label>
-                <input type="number" class="form-control" id="invoice_value" name="invoice_value" placeholder="Valor da
-                       fatura">
+                <input type="number" class="form-control" id="invoice_value" name="invoice_value"
+                       placeholder="Valor da fatura">
             </div>
             <div class="form-group">
-                <label for="input4"><strong>Data de documento:</strong></label>
-                <input type="date" class="form-control" id="input4">
+                <label for="invoice_date"><strong>Data de documento:</strong></label>
+                <input type="date" class="form-control" id="invoice_date">
             </div>
 
             <div class="form-group">
@@ -60,6 +60,19 @@
                     {% endfor %}
                 </select>
             </div>
+            <div class="form-group">
+                <label for="payment_type"><strong>Modalidade de Pagamento:</strong></label>
+                <select id="payment_type" name="payment_type" class="dropstyle">
+                    <option class="dropOptions" value="" disabled selected>
+                        Escolha a modalidade de pagamento
+                    </option>
+                    {% for t in terms_list %}
+                        <option class="dropOptions" value="{{ t.idterm }}">
+                            {{ t.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
             {#            <div class="form-group col-lg-12">#}
             {##}
             {#                <label class="areaLabel" for="obs">Observações adicionais:</label>#}
@@ -68,166 +81,41 @@
             {##}
             {#            </div>#}
             <div class="form-group ">
-                <label>Documento relacionado:</label>
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="showListDocs">
-                    <label class="form-check-label" for="showListDocs">Sim</label>
-                </div>
-                <div class="form-group " id="relatedDocs" style="display: none;">
-                    <label for="relatedDocs">Documentos </label>
+                <label for="relatedDocs"><strong>Documento relacionado:</strong></label>
+                <div class="form-group " id="relatedDocs">
                     <select id="related_documents" name="related_documents" class="dropstyle">
                     </select>
                 </div>
             </div>
             <hr>
-            <button type="submit" class="btn btn-primary col-md-12">Adicionar</button>
+            <button type="button" id="registerInvoice" class="btn btn-primary col-md-12">Registar documento</button>
         </form>
     </div>
     <form
-            class="allforms row"
-            action="{% url 'orderSupplierCreate' %}"
+
+
             method="post">
         {% csrf_token %}
 
 
         <!-- Table -->
         <div class="ordertable">
-            <table class="table" id="dataTable">
+            <table class="table" style="width: 800px" id="componentsTable">
                 <thead>
                 <tr>
+                    <th scope="col">ID</th>
                     <th scope="col">Produto</th>
-                    <th scope="col">Qtd</th>
+                    <th scope="col">Ref</th>
                     <th scope="col">Custo</th>
                     <th scope="col">IVA</th>
+                    <th scope="col">Qtd</th>
                     <th scope="col">Atualizar PVP</th>
                     <th scope="col">Total</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>
-                        <input type="text" class="form-control" id="productSearch" placeholder="Pesquize o produto">
-                        <ul id="searchResults" class="list-group mt-2"></ul>
-                    </td>
-                    <td><input type="number" placeholder="0"></td>
-                    <td><input type="number" placeholder="Preço custo"></td>
-                    <td><input type="text" value="23" disabled></td>
-                    <td><input type="number" placeholder="Preço Venda"></td>
-                    <td><input type="number">Total</td>
-                </tr>
                 </tbody>
             </table>
-        </div>
-
-
-        <div class="form-field col-lg-12 submitBtn">
-            <button type="button" class="submit-btn" onclick="sendForm()">
-                Enviar
-            </button>
-        </div>
-
-
-        <!-- Modal -->
-
-        <div
-                class="modal fade"
-                id="exampleModalCenter"
-                tabindex="-1"
-                role="dialog"
-                aria-labelledby="modalTitle"
-                aria-hidden="true"
-        >
-            <div
-                    class="modal-dialog modal-dialog-centered"
-                    id="modalCenter"
-                    role="document"
-            >
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalTitle">Criar Encomenda</h5>
-                        <button
-                                type="button"
-                                class="close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                        >
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row modalContent" id="dropdown-container">
-                            <!-- Initial Dropdowns -->
-                            {% for i in "1" %}
-                                <div class="col-md-4">
-                                    <div class="form-field">
-                                        <div class="mainbox">
-                                            <div class="formDrop">
-                                                <select
-                                                        id="families{{ i }}"
-                                                        name="idfamilies{{ i }}"
-                                                        class="dropstyle"
-                                                        onchange="handleSelectChange(this)"
-                                                >
-                                                    {% for f in families %}
-                                                        <option
-                                                                class="dropOptions"
-                                                                value="{{ f.idfamily }}"
-                                                                name="{{ f.name }}"
-                                                        >
-                                                            {{ f.name }}
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %} {% for i in "1" %}
-                            <div class="col-md-4">
-                                <div class="form-field">
-                                    <div class="mainbox">
-                                        <div class="formDrop">
-                                            <div id="componentContainer1"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-field">
-                                    <div class="mainbox">
-                                        <div class="formDrop">
-                                            <div id="quantityinput1"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        </div>
-
-                        <button
-                                type="button"
-                                class="btn addMoreBtn"
-                                onclick="addMoreDropdowns()"
-                        >
-                            <i class="bx bx-plus-circle plusicon"></i> Adicionar mais
-                        </button>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button
-                                type="button"
-                                class="btn btn-primary"
-                                data-bs-dismiss="modal"
-                                onclick="saveChanges()"
-                        >
-                            Salvar alterações
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
     </form>
     <script>
@@ -241,8 +129,33 @@
             });
         }
 
+        function calculatePrice(cost, profit) {
+            return (cost * profit) + cost;
+        }
+
+        function updateDocumentsLines(options) {
+            // Find the table body
+            var tableBody = $('#componentsTable tbody');
+            options['list'].forEach(function (option) {
+                console.log(option)
+                const newRow = $('<tr>');
+                newRow.append('<td>' + option[0] + '</td>');
+                newRow.append('<td>' + option[1] + '</td>');
+                newRow.append('<td>' + option[7] + '</td>');
+                newRow.append('<td>' + '<input type="number" value="' + option[4] + '"></td>');
+                newRow.append('<td>' + '23%' + '</td>');
+                newRow.append('<td>' + option[8] + '</td>');
+                newRow.append('<td>' + '<input type="number" value="' + calculatePrice(option[4], option[5]) + '"></td>');
+                newRow.append('<td>' + '<input type="number" value="' + calculatePrice(option[4], option[5]) * option[8] + '" ></td>');
+                // Append the new row to the table body
+                tableBody.append(newRow);
+            });
+        }
+
         // Add an event listener to the checkbox
         $(document).ready(function () {
+
+
             $('#showListDocs').change(function () {
                 if (this.checked) {
                     $('#relatedDocs').show();
@@ -251,29 +164,99 @@
                 }
             });
 
+            $('#registerInvoice').click(function () {
+
+                let supplier = $('#supplier').val()
+                let invoice_number = $('#invoice_number').val()
+                let invoice_type = $('input[name="invoice_type"]:checked').val();
+                let invoice_value = $('#invoice_value').val()
+                let invoice_date = $('#invoice_date').val()
+                let warehouse_id = $('#warehouse').val()
+                let payment_type = $('#payment_type').val()
+                let related_document_id = $('#related_documents').val()
+                console.log(supplier)
+                console.log(invoice_type)
+                console.log(invoice_number)
+                console.log(invoice_value)
+                console.log(invoice_date)
+                console.log(payment_type)
+                console.log(warehouse_id)
+                console.log(related_document_id)
+
+                var documentLines = [];
+                $('#componentsTable tbody tr').each(function () {
+                    var line = [];
+
+                    // Iterate over each cell in the row
+                    $(this).find('td').each(function () {
+                        line.push($(this).text());
+
+                        $(this).find('input').each(function () {
+                            line.push($(this).val());
+                        });
+                    });
+                    documentLines.push(line);
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: '{% url "documentsSupplierRegisterInvoice" %}',
+                    data: {
+                        "supplier": supplier,
+                        "invoice_type": invoice_type,
+                        "invoice_number": invoice_number,
+                        "invoice_value": invoice_value,
+                        "invoice_date": invoice_date,
+                        "obs": "implementar na view",
+                        "payment_type": payment_type,
+                        "warehouse_id": warehouse_id,
+                        "related_document_id": related_document_id,
+                        "documentLines": JSON.stringify(documentLines)
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        Swal.fire({
+                            title: "Documento criado",
+                            text: "Documento de compra criado com sucesso",
+                            imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
+                            imageWidth: 200,
+                            imageHeight: 200,
+                            imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
+                        }).then((result) => {
+                            window.location.replace("/dashboard")
+                        })
+
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Erro!",
+                            text: "Falha na comunicação com o servidor",
+                            icon: "error",
+                        });
+                    },
+                });
+            });
+
+
             $('#related_documents').change(function () {
                 console.log(this.value)
-                $('#supplier').change(function () {
-                    $.ajax({
-                        type: "POST",
-                        url: '{% url "documentsSupplierFetch" %}',
-                        data: {"id": this.value},
-                        dataType: "json",
-                        success: function (data) {
-                            // Handle the success response
-                            updateDropdownOptionsDocuments(data);
-                        },
-                        error: function () {
-                            Swal.fire({
-                                title: "Erro!",
-                                text: "Falha na comunicação com o servidor",
-                                icon: "error",
-                            });
-                        },
+                $.ajax({
+                    type: "POST",
+                    url: '{% url "documentsSupplierLinesFetch" %}',
+                    data: {"id": this.value},
+                    dataType: "json",
+                    success: function (data) {
+                        // Handle the success response
+                        updateDocumentsLines(data)
 
-
-                    });
-
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Erro!",
+                            text: "Falha na comunicação com o servidor",
+                            icon: "error",
+                        });
+                    },
                 });
             });
             //Handle supplier changed
@@ -294,13 +277,8 @@
                             icon: "error",
                         });
                     },
-
-
                 });
-
             });
-
-
         });
 
 
