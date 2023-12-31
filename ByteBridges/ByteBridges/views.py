@@ -236,8 +236,17 @@ def orderSupplierList(request):
         # If the stored procedure returns results, you can fetch them
         result = cursor.fetchall()
 
-        suppliers = [Supplier(*row) for row in result]
         return render(request, 'orderSupplierList.html', {'orders': result})
+
+@csrf_exempt
+def orderSupplierLinesFetch(request):
+        # Fetch the family information from the database
+        with connections['admin'].cursor() as cursor:
+            id = request.POST.get('id')
+            cursor.execute("SELECT * FROM fn_orderssuplier_getlines(%s);", [id])
+            list = cursor.fetchall()
+            print(list)
+            return JsonResponse({'list': list})
 
 
 def documentsSupplier(request):
