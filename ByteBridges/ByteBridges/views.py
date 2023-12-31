@@ -749,13 +749,25 @@ def sellOrderCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_equipments_list")
         toSell = cursor.fetchall()
-        # Call the stored procedure using the CALL statement
+
         cursor.execute("SELECT * FROM view_clients_list", [])
-        # If the stored procedure returns results, you can fetch them
         resultClient = cursor.fetchall()
         clients = [Client(*row) for row in resultClient]
-        print("aaaaaaaa",resultClient)
-       
 
-    context = {'toSell': toSell,'clients':clients}
+        if request.method == 'POST':
+            client_id = request.POST.get('client')
+            rows_data = json.loads(request.POST.get('rows'))
+            observations = request.POST.get('observations')
+
+            # Create order client
+            cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s)", [client_id, observations])
+            idorderclient = cursor.fetchone()
+            print("aaaaaaaaaaaaaaaaaaaaa", rows_data)
+            if idorderclient:
+                for row in rows_data:                   
+                    cursor.execute("CALL sp_sales_create(%s,%s,%s)", [idorderclient[0], row['id'], row['quantity']])
+
+                return JsonResponse({'status': 'success'})
+
+    context = {'toSell': toSell, 'clients': clients}
     return render(request, 'sellOrderCreate.html', context)

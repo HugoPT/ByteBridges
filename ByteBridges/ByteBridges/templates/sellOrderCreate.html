@@ -1,5 +1,6 @@
 {% extends 'base_template.html' %} {% block extra_css %} {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
+
 {% endblock %} {% block content %}
 <div class="listContainer">
   <h1>Venda Equipamento/s</h1>
@@ -52,110 +53,243 @@
         {% csrf_token %}
         <label for="client">Cliente:</label>
         <select name="client" id="client" class="dropstyleClient">
-            <option value="" disabled selected>Selecione um Cliente</option>
-            {% for c in clients %}
-                <option value="{{ c.idclient }}">{{ c.name }}</option>
-            {% endfor %}
+          <option value="" disabled selected>Selecione um Cliente</option>
+          {% for c in clients %}
+          <option value="{{ c.idclient }}">{{ c.name }}</option>
+          {% endfor %}
         </select>
         <br />
-    </form>
-    
+        <div class="obsSell">
+          <label for="clientDescription">Observações:</label>
+          <textarea
+            id="observations"
+            name="clientDescription"
+            rows="4"
+            cols="50"
+          ></textarea>
+        </div>
+      </form>
     </div>
-
   </div>
-<div id="createSell">
-  <button type="submit" class="btn btn-success submitDisplay">  Criar Venda </button>
+  <div id="createSell">
+    <button
+      type="submit"
+      class="btn btn-success submitDisplay"
+      onclick="sendInfo()"
+    >
+      Criar Venda
+    </button>
+  </div>
 </div>
-  </div>
-  <script>
-    $(document).ready(function () {
-      var table = $("#suppliersTable").DataTable({
-        dom: "Bfrtip",
-        buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
-        language: {
-          url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
-        },
-        columnDefs: [
-          {
-            targets: 0,
-            orderable: false,
-            className: "dt-body-center",
-            render: function (data, type, row) {
-              return (
-                '<input type="checkbox" class="select-checkbox" data-supplier-id="' +
-                row[1] +
-                '">'
-              );
-            },
+<script>
+  $(document).ready(function () {
+    var table = $("#suppliersTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+      },
+      columnDefs: [
+        {
+          targets: 0,
+          orderable: false,
+          className: "dt-body-center",
+          render: function (data, type, row) {
+            return (
+              '<input type="checkbox" class="select-checkbox" data-supplier-id="' +
+              row[1] +
+              '">'
+            );
           },
-        ],
-      });
-      // teste
-      // Button click event to get selected rows
-      $("#getSelectedRowsBtn").on("click", function () {
-        var selectedRowsContainer = $("#selectedRowsContainer");
-        var selectedCheckboxes = $("#suppliersTable tbody").find(
-          ".select-checkbox:checked"
-        );
-        var selectClient = $("#selectClient");
-        // Check if no rows are selected
-        if (selectedCheckboxes.length === 0) {
-          // Show SweetAlert if no rows are selected
-          Swal.fire({
-            icon: "info",
-            title: "Não foi selecionado nenhum Equipamento",
-            text: "Por favor selecione um equipamento antes de efectuar esta operação",
-          });
-          return;
-        }
-
-        // Toggle the display property
-        selectedRowsContainer.toggle();
-        selectClient.toggle();
-        // Clear existing content if the container is hidden
-        if (!selectedRowsContainer.is(":visible")) {
-          selectedRowsContainer.empty();
-          return;
-        }
-        if (!selectClient.is(":visible")) {
-          selectClient.empty();
-          return;
-        }
-        // Create a title for the list
-        var listTitle = $("<div>").addClass("list-title").text("Carrinho:");
-        selectedRowsContainer.append(listTitle);
-
-        // Create a new list and append selected rows to it
-        var list = $("<ul>");
-
-        // Iterate over the checkboxes and append data from selected rows to the list
-        selectedCheckboxes.each(function () {
-          var row = $(this).closest("tr");
-          var listItem = $("<li>").text(
-            "ID: " +
-              row.find("td:eq(1)").text() +
-              ", Name: " +
-              row.find("td:eq(2)").text() +
-              ", Family: " +
-              row.find("td:eq(3)").text() +
-              ", Category: " +
-              row.find("td:eq(4)").text() +
-              ", Description: " +
-              row.find("td:eq(5)").text() +
-              ", Profit Margin: " +
-              row.find("td:eq(6)").text() +
-              ", Barcode: " +
-              row.find("td:eq(7)").text() +
-              ", Reference: " +
-              row.find("td:eq(8)").text()
-          );
-          list.append(listItem);
-        });
-
-        // Append the list to the container
-        selectedRowsContainer.append(list);
-      });
+        },
+      ],
     });
-  </script>
-  {% endblock %}
-</div>
+
+    // Button click event to get selected rows
+    $("#getSelectedRowsBtn").on("click", function () {
+      var selectedRowsContainer = $("#selectedRowsContainer");
+      var selectedCheckboxes = $("#suppliersTable tbody").find(
+        ".select-checkbox:checked"
+      );
+      var selectClient = $("#selectClient");
+
+      // Check if no rows are selected
+      if (selectedCheckboxes.length === 0) {
+        // Show SweetAlert if no rows are selected
+        Swal.fire({
+          icon: "info",
+          title: "Não foi selecionado nenhum Equipamento",
+          text: "Por favor selecione um equipamento antes de efetuar esta operação",
+        });
+        return;
+      }
+
+      // Toggle the display property
+      selectedRowsContainer.toggle();
+      selectClient.toggle();
+
+      // Clear existing content if the container is hidden
+      if (!selectedRowsContainer.is(":visible")) {
+        selectedRowsContainer.empty();
+        return;
+      }
+
+      if (!selectClient.is(":visible")) {
+        selectClient.empty();
+        return;
+      }
+
+      // Create a title for the list
+      var listTitle = $("<div>").addClass("list-title").text("Carrinho:");
+      selectedRowsContainer.append(listTitle);
+
+      // Create a new list and append selected rows to it
+      var list = $("<ul id='carList'>");
+
+      // Iterate over the checkboxes and append data from selected rows to the list
+      selectedCheckboxes.each(function () {
+        var row = $(this).closest("tr");
+        var listItem = $("<li>").text(
+          "ID: " +
+            row.find("td:eq(1)").text() +
+            ", Name: " +
+            row.find("td:eq(2)").text() +
+            ", Family: " +
+            row.find("td:eq(3)").text() +
+            ", Category: " +
+            row.find("td:eq(4)").text() +
+            ", Description: " +
+            row.find("td:eq(5)").text() +
+            ", Profit Margin: " +
+            row.find("td:eq(6)").text() +
+            ", Barcode: " +
+            row.find("td:eq(7)").text() +
+            ", Reference: " +
+            row.find("td:eq(8)").text()
+        );
+
+        // Create a Bootstrap row with two columns
+        var container = $("<div>").addClass("row carStyle");
+
+        // Column for the list item
+        var listItemColumn = $("<div>")
+          .addClass("col-lg-9 col-md-8 col-sm-12")
+          .append(listItem);
+
+        var quantityInputColumn = $(
+          "<div class='carInputStyle col-lg-3 col-md-4 col-sm-12'>"
+        ).append(
+          $("<div>")
+            .addClass("input-title")
+            .append(
+              $("<div>").append($("<label>").text("Add Quantity")),
+              $("<div class='carInputStyle'>").append(
+                $("<i>").addClass("bx bxs-cart-add iconCar"),
+                $("<input>")
+                  .attr({
+                    type: "number",
+                    placeholder: "Quantidade",
+                    name: "quantity[]",
+                    class: "carInputSell",
+                  })
+                  .val(1)
+              )
+            )
+        );
+
+        // Append columns to the container
+        container.append(listItemColumn, quantityInputColumn);
+
+        // Append the container to the list
+        list.append(container);
+      });
+
+      // Append the list to the container
+      selectedRowsContainer.append(list);
+    });
+  });
+  function sendInfo() {
+    // Get the selected client ID
+    var selectedClientId = $("#client").val();
+    var selectedClientObservations = $("#observations").val();
+    console.log(selectedClientId);
+
+    // Create an array to store the selected rows and their quantities
+    var selectedRowsData = [];
+
+    // Iterate over each list item in the carList
+    $("#carList li").each(function () {
+      var listItem = $(this);
+
+      // Extract data from the text content of the list item
+      var data = listItem.text().split(", ");
+
+      // Create an object to store the data
+      var rowData = {
+        id: getValue(data, "ID"),
+        quantity:
+          listItem.find(".carInputSell").val() === "0"
+            ? 1
+            : listItem.find(".carInputSell").val() || 1,
+      };
+
+      // Push the data object to the selectedRowsData array
+      selectedRowsData.push(rowData);
+    });
+
+    console.log(selectedClientId, "e", selectedRowsData);
+    if (selectedClientId && selectedRowsData.length > 0) {
+      // Send the data to the server
+      $.ajax({
+        url: "{% url 'sellOrderCreate' %}",
+        type: "POST",
+        data: {
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+          client: selectedClientId,
+          observations: selectedClientObservations,
+          rows: JSON.stringify(selectedRowsData),
+        },
+        success: function (response) {
+          // Show success message if the request is successful
+          Swal.fire({
+            icon: "success",
+            title: "Venda criada com sucesso",
+            text: "A venda foi criada com sucesso",
+          });
+          // Reload the page
+          //location.reload();
+        },
+        error: function (response) {
+          // Show error message if the request fails
+          Swal.fire({
+            icon: "error",
+            title: "Erro ao criar a venda",
+            text: "Ocorreu um erro ao criar a venda",
+          });
+        },
+      });
+    } else if (selectedClientId == null) {
+      Swal.fire({
+        icon: "error",
+        title: "Erro ao criar a venda",
+        text: "Por favor selecione um cliente",
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Erro ao criar a venda",
+        text: "Por favor selecione um equipamento e quantidade desejada",
+      });
+    }
+  }
+
+  // Helper function to extract values based on a key
+  function getValue(data, key) {
+    var filteredData = data.filter((item) => item.includes(key + ":"));
+    return filteredData.length > 0
+      ? filteredData[0].replace(key + ":", "").trim()
+      : "";
+  }
+</script>
+
+{% endblock %}
