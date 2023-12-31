@@ -184,3 +184,16 @@ class User(models.Model):
     class Meta:
         # Specify the table name
         db_table = 'users'
+
+
+class Sales(models.Model):
+    idorderclient = models.IntegerField()
+    idequipment = models.IntegerField()
+    quantity = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        # Specify the table name
+        db_table = 'sales'

@@ -48,6 +48,7 @@ urlpatterns = [
 
     #Sells
     path("sellOrderCreate", views.sellOrderCreate, name="sellOrderCreate"),
+    path("sellList", views.sellList, name="sellList"),
     
     #documentsSupplier
     path("documentsSupplier", views.documentsSupplier, name="documentsSupplier"),

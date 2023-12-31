@@ -2,7 +2,7 @@ import datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, \
-    Stock
+    Stock,Sales
 from django.views.decorators.csrf import csrf_exempt
 from django.db import connections
 from django.http import JsonResponse
@@ -835,7 +835,6 @@ def sellOrderCreate(request):
             # Create order client
             cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s)", [client_id, observations])
             idorderclient = cursor.fetchone()
-            print("aaaaaaaaaaaaaaaaaaaaa", rows_data)
             if idorderclient:
                 for row in rows_data:                   
                     cursor.execute("CALL sp_sales_create(%s,%s,%s)", [idorderclient[0], row['id'], row['quantity']])
@@ -844,3 +843,16 @@ def sellOrderCreate(request):
 
     context = {'toSell': toSell, 'clients': clients}
     return render(request, 'sellOrderCreate.html', context)
+
+
+def sellList(request):
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("SELECT * FROM view_sales_list", [])
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
+        print(result)
+        sales = [Sales(*row) for row in result]
+        
+        
+    return render(request, 'sellList.html', {'sales': sales})
