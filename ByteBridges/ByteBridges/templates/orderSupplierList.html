@@ -1,5 +1,6 @@
 {% extends 'base_template.html' %} {% block extra_css %} {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}"/>
+
 {% endblock %}{% block content %}
 
     <div class="listContainer">
@@ -19,7 +20,6 @@
             </thead>
             <tbody>
             {% for f in orders %}
-
                 <tr>
                     <td><a href="{{ f.0 }}"> {{ f.1 }}</a></td>
                     <td>{{ f.2 }}</td>
@@ -29,21 +29,9 @@
                     <td>{{ f.6 }}</td>
                     <td>{{ f.7 }}</td>
                     <td>
-                        <a href="" class="button">
-                            <span class="btn-dark">
-                           <i class="fa-solid fa-circle-info"></i>
-                        </span></a>
-                        <a href="">
-                         <span class="btn-dark">
-                         <i class="fa-regular fa-file-lines"></i>
-                        </span>
-                        </a>
-                        <a href="">
-                <span class="btn-dark">
-                            <i class="fa-solid fa-trash"></i>
-                        </span>
-                        </a>
-
+                        <button type="button" class="btn btn-dark open-modal" data-target="exampleModalCenter">
+    <i class="fa-solid fa-circle-info"></i>
+</button>
 
                     </td>
                 </tr>
@@ -51,6 +39,22 @@
             </tbody>
         </table>
     </div>
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Detalhes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Modal content goes here.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
     <script>
         $(document).ready(function () {
@@ -62,7 +66,16 @@
                 },
                 order: [[2, 'desc']]
             });
+
+            $(".open-modal").on("click", function () {
+            var targetModal = $(this).data("target");
+            $("#" + targetModal).modal("show");
         });
+
+        $(".modal").on("hidden.bs.modal", function () {
+            $("body").removeClass("modal-open");
+        });
+    });
     </script>
 
 {% endblock %}

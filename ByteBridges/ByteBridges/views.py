@@ -236,7 +236,6 @@ def orderSupplierList(request):
         # If the stored procedure returns results, you can fetch them
         result = cursor.fetchall()
 
-        suppliers = [Supplier(*row) for row in result]
         return render(request, 'orderSupplierList.html', {'orders': result})
 
 
