@@ -111,37 +111,41 @@ def clientDelete(request):
 def orderClientList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
-        cursor.execute("select  * from view_suppliers_list", [])
+        cursor.execute("SELECT * FROM view_sales_list", [])
         # If the stored procedure returns results, you can fetch them
         result = cursor.fetchall()
         print(result)
-        suppliers = [Supplier(*row) for row in result]
-        return render(request, 'orderClientList.html', {'suppliers': suppliers})
+        sales = [Sales(*row) for row in result]
+
+    return render(request, 'orderClientList.html', {'sales': sales})
 
 
 @login_required
 def orderClientCreate(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        nif = request.POST.get('nif')
-        address = request.POST.get('address')
-        zipcode = request.POST.get('zipcode')
-        city = request.POST.get('city')
-        phone = request.POST.get('phone')
-        email = request.POST.get('email')
-        obs = request.POST.get('obs')
-        with connections['admin'].cursor() as cursor:
-            # Call the stored procedure using the CALL statement
-            cursor.execute("CALL sp_suppliers_create(%s,%s,%s,%s,%s,%s,%s,%s)",
-                           [name, nif, address, zipcode, city, phone, email, obs])
-            # If the stored procedure returns results, you can fetch them
-            # result = cursor.fetchall()
-            # print(result)
-        print(
-            f"Inserted supplier " + name + " " + nif + " " + address + " " + zipcode + " " + city + " " + phone + " " + email + " " + obs)
-        # return render(request, 'your_template.html', {'result': result})
-        return redirect('dashboard')
-    return render(request, template_name='orderClientCreate.html')
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("select * from view_equipments_list2")
+        toSell = cursor.fetchall()
+
+        cursor.execute("SELECT * FROM view_clients_list", [])
+        resultClient = cursor.fetchall()
+        clients = [Client(*row) for row in resultClient]
+
+        if request.method == 'POST':
+            client_id = request.POST.get('client')
+            rows_data = json.loads(request.POST.get('rows'))
+            observations = request.POST.get('observations')
+
+            # Create order client
+            cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s)", [client_id, observations])
+            idorderclient = cursor.fetchone()
+            if idorderclient:
+                for row in rows_data:
+                    cursor.execute("CALL sp_sales_create(%s,%s,%s)", [idorderclient[0], row['id'], row['quantity']])
+
+                return JsonResponse({'status': 'success'})
+
+    context = {'toSell': toSell, 'clients': clients}
+    return render(request, 'orderClientCreate.html', context)
 
 
 @login_required
@@ -858,42 +862,5 @@ def userDelete(request):
         return redirect('userList')
 
 
-@login_required
-def sellOrderCreate(request):
-    with connections['admin'].cursor() as cursor:
-        cursor.execute("select * from view_equipments_list2")
-        toSell = cursor.fetchall()
-
-        cursor.execute("SELECT * FROM view_clients_list", [])
-        resultClient = cursor.fetchall()
-        clients = [Client(*row) for row in resultClient]
-
-        if request.method == 'POST':
-            client_id = request.POST.get('client')
-            rows_data = json.loads(request.POST.get('rows'))
-            observations = request.POST.get('observations')
-
-            # Create order client
-            cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s)", [client_id, observations])
-            idorderclient = cursor.fetchone()
-            if idorderclient:
-                for row in rows_data:
-                    cursor.execute("CALL sp_sales_create(%s,%s,%s)", [idorderclient[0], row['id'], row['quantity']])
-
-                return JsonResponse({'status': 'success'})
-
-    context = {'toSell': toSell, 'clients': clients}
-    return render(request, 'sellOrderCreate.html', context)
 
 
-@login_required
-def sellList(request):
-    with connections['admin'].cursor() as cursor:
-        # Call the stored procedure using the CALL statement
-        cursor.execute("SELECT * FROM view_sales_list", [])
-        # If the stored procedure returns results, you can fetch them
-        result = cursor.fetchall()
-        print(result)
-        sales = [Sales(*row) for row in result]
-
-    return render(request, 'sellList.html', {'sales': sales})
