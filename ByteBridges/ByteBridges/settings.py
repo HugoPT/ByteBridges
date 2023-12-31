@@ -27,6 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = '/'
+
 
 # Application definition
 
@@ -55,11 +59,6 @@ ROOT_URLCONF = 'ByteBridges.urls'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-#LOGIN_URL = '/admin/login/'
-LOGIN_URL = '/login'
-LOGIN_REDIRECT_URL = '/dashboard'
-LOGOUT_REDIRECT_URL = '/'
 
 TEMPLATES = [
     {

@@ -11,30 +11,12 @@ import json
 
 
 def Login(request):
-    return render(request, "Login.html")
+    return render(request, "home.html")
 
 
 def logout(request):
     return render(request, "Logout.html")
 
-
-def loginForm(request):
-    if request.method == 'POST':
-        # Your login form processing logic goes here
-        username = request.POST['username']
-        password = request.POST['password']
-        print(username, password)
-
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-
-            # Redirect to the 'next' parameter if it exists, or a default page
-            next_url = request.GET.get('next', '/dashboard')
-            return redirect(next_url)
-
-    return render(request, "loginForm.html")
 
 
 @login_required
@@ -284,6 +266,69 @@ def orderSupplierLinesFetch(request):
 
 
 @login_required
+def orderSupplierCreate(request):
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("select * from view_suppliers_list")
+        result = cursor.fetchall()
+        docNumber = [Supplier(*row) for row in result]
+
+        cursor.execute("select * from view_suppliers_list")
+        result = cursor.fetchall()
+        suppliers = [Supplier(*row) for row in result]
+
+        cursor.execute("select * from view_warehouses_list")
+        result = cursor.fetchall()
+        warehouses = [Warehouse(*row) for row in result]
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+        families = [Family(*row) for row in result]
+
+        context = {'suppliers': suppliers, 'warehouses': warehouses, 'families': families, 'docNumber': docNumber}
+
+    if request.method == 'POST':
+        data = json.loads(request.POST.get('data'))
+        header = json.loads(request.POST.get('header'))
+        # create a new supplier enc header
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("select fn_orderssupplier_create(%s,%s,%s)",
+                           [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
+            result = cursor.fetchone()
+            if result:
+                for item in data:
+                    with connections['admin'].cursor() as cursor:
+                        cursor.execute("CALL sp_purchases_create(%s,%s,%s)",
+                                       [result[0],
+                                        item['component'],
+                                        item['quantity']])
+                return JsonResponse({'status': 'success'})
+    return render(request, template_name='orderSupplierCreate.html', context=context)
+
+
+@login_required
+def get_articles(request):
+    print(request)
+    if request.method == 'GET':
+        family_id = request.GET.get('family_id')
+
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("SELECT * FROM fn_components_list_family(CAST(%s AS INTEGER))", [family_id])
+            result = cursor.fetchall()
+            print(result)
+            articles = [ComponentListFamily(*row) for row in result]
+
+        # Convert ComponentListFamily objects to dictionaries
+        articles_data = [{'idarticle': article.at_id, 'name': article.at_name} for article in articles]
+        print(articles_data)
+
+        data = {'articles': articles_data}
+        print(data)
+        return JsonResponse(data)
+
+
+
+
+@login_required
 def documentsSupplier(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_suppliers_list")
@@ -409,67 +454,6 @@ def productionEquipmentCreate(request, equipment_id):
                                 item['quantity']])
         return JsonResponse({'status': 'success'})
     return render(request, 'productionEquipmentCreate.html', {'families': families, 'equipment_id': equipment_id})
-
-
-@login_required
-def orderSupplierCreate(request):
-    with connections['admin'].cursor() as cursor:
-        cursor.execute("select * from view_suppliers_list")
-        result = cursor.fetchall()
-        docNumber = [Supplier(*row) for row in result]
-
-        cursor.execute("select * from view_suppliers_list")
-        result = cursor.fetchall()
-        suppliers = [Supplier(*row) for row in result]
-
-        cursor.execute("select * from view_warehouses_list")
-        result = cursor.fetchall()
-        warehouses = [Warehouse(*row) for row in result]
-
-        cursor.execute("select * from view_families_list")
-        result = cursor.fetchall()
-        families = [Family(*row) for row in result]
-
-        context = {'suppliers': suppliers, 'warehouses': warehouses, 'families': families, 'docNumber': docNumber}
-
-    if request.method == 'POST':
-        data = json.loads(request.POST.get('data'))
-        header = json.loads(request.POST.get('header'))
-        # create a new supplier enc header
-        with connections['admin'].cursor() as cursor:
-            cursor.execute("select fn_orderssupplier_create(%s,%s,%s)",
-                           [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
-            result = cursor.fetchone()
-            if result:
-                for item in data:
-                    with connections['admin'].cursor() as cursor:
-                        cursor.execute("CALL sp_buy_create(%s,%s,%s)",
-                                       [result[0],
-                                        item['component'],
-                                        item['quantity']])
-                return JsonResponse({'status': 'success'})
-    return render(request, template_name='orderSupplierCreate.html', context=context)
-
-
-@login_required
-def get_articles(request):
-    print(request)
-    if request.method == 'GET':
-        family_id = request.GET.get('family_id')
-
-        with connections['admin'].cursor() as cursor:
-            cursor.execute("SELECT * FROM fn_components_list_family(CAST(%s AS INTEGER))", [family_id])
-            result = cursor.fetchall()
-            print(result)
-            articles = [ComponentListFamily(*row) for row in result]
-
-        # Convert ComponentListFamily objects to dictionaries
-        articles_data = [{'idarticle': article.at_id, 'name': article.at_name} for article in articles]
-        print(articles_data)
-
-        data = {'articles': articles_data}
-        print(data)
-        return JsonResponse(data)
 
 
 @login_required

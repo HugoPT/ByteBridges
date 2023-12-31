@@ -17,17 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from ByteBridges import views
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("dashboard", views.IndexPage, name="dashboard"),
-    # path("dashboard", views.dashboard, name="dashboard"),
-    path("login", views.loginForm, name="login"),
+    path("login/", auth_views.LoginView.as_view(template_name='Login.html'), name="login"),
     path('logout', views.logout, name='logout'),
 
 
-    path("", views.Login, name="login"),
     path('get_articles/', views.get_articles, name='get_articles'),
     path('productionEquipmentCreate/get_articles/', views.get_articles, name='get_articles'),
     path('productionEquipmentEdit/get_articles/', views.get_articles, name='get_articles'),
@@ -74,8 +72,7 @@ urlpatterns = [
     path("equipmentList", views.equipmentList, name="equipmentList"),
     path('equipmentEdit/<int:equipment_id>/', views.equipmentEdit, name='equipmentEdit'),
     path('equipmentDelete', views.equipmentDelete, name='equipmentDelete'),
-    path('productionEquipmentCreate/<int:equipment_id>/', views.productionEquipmentCreate,
-         name='productionEquipmentCreate'),
+    path('productionEquipmentCreate/<int:equipment_id>/', views.productionEquipmentCreate, name='productionEquipmentCreate'),
     path('productionEquipmentEdit/<int:equipment_id>/', views.productionEquipmentEdit, name='productionEquipmentEdit'),
 
     # Component
