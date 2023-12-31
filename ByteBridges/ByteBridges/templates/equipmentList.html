@@ -29,6 +29,7 @@
             <button type="button" class="btn btn-danger" onclick="alertDelete('{{e.idarticletype}}')">Eliminar</button>
             <a class="btn btn-warning" href="{% url 'equipmentEdit' equipment_id=e.idarticletype %}">Editar</a>
             <a class="btn btn-info" href="{% url 'productionEquipmentCreate' equipment_id=e.idarticletype %}">Produção</a>
+            <a class="btn btn-danger" href="{% url 'productionEquipmentEdit' equipment_id=e.idarticletype %}">Produção</a>
         </td>
       </tr>
       {% endfor %}

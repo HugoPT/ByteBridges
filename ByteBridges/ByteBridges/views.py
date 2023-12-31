@@ -362,6 +362,7 @@ def productionEquipmentCreate(request, equipment_id):
     return render(request, 'productionEquipmentCreate.html',{'families': families, 'equipment_id':equipment_id})
 
 
+
 def orderSupplierCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_suppliers_list")
@@ -513,6 +514,30 @@ def equipmentCreate(request):
             return redirect('dashboard')
 
     return render(request, 'equipmentCreate.html', context=context)
+
+def productionEquipmentEdit(request, equipment_id):
+    with connections['admin'].cursor() as cursor:
+
+        cursor.execute("SELECT * FROM fn_productionitems_get (%s);", [equipment_id])
+        equipment = cursor.fetchall()
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+        families = [Family(*row) for row in result]
+
+
+    if request.method == 'POST':
+        data = json.loads(request.POST.get('data'))
+        for item in data:
+                    with connections['admin'].cursor() as cursor:
+                        cursor.execute("CALL sp_productionitems_update(%s,%s,%s)",
+                                       [equipment_id,
+                                        item['component'],
+                                        item['quantity']])
+        return JsonResponse({'status': 'success'})
+    return render(request, 'productionEquipmentEdit.html',{'families': families, 'equipment_id':equipment_id,
+                                                             'equipment': equipment})
+
 
 
 def equipmentEdit(request, equipment_id):
