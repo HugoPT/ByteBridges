@@ -802,7 +802,7 @@ def userDelete(request):
 
 def sellOrderCreate(request):
     with connections['admin'].cursor() as cursor:
-        cursor.execute("select * from view_equipments_list")
+        cursor.execute("select * from view_equipments_list2")
         toSell = cursor.fetchall()
 
         cursor.execute("SELECT * FROM view_clients_list", [])
