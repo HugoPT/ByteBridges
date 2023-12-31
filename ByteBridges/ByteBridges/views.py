@@ -10,13 +10,8 @@ from django.http import JsonResponse
 import json
 
 
-def Login(request):
-    return render(request, "home.html")
-
-
-def logout(request):
-    return render(request, "Logout.html")
-
+def Homepage(request):
+    return render(request, "Home.html")
 
 
 @login_required

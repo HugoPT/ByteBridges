@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("dashboard", views.IndexPage, name="dashboard"),
     path("login/", auth_views.LoginView.as_view(template_name='Login.html'), name="login"),
-    path('logout', views.logout, name='logout'),
+    path("", views.Homepage, name="Homepage"),
+    path('logout/', auth_views.LogoutView.as_view(), name="logout"),
 
 
     path('get_articles/', views.get_articles, name='get_articles'),
