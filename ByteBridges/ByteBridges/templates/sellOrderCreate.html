@@ -10,10 +10,8 @@
         <th>Select</th>
         <th>ID</th>
         <th>Name</th>
-        <th>Family</th>
         <th>Category</th>
         <th>Description</th>
-        <th>Profit Margin</th>
         <th>Barcode</th>
         <th>Reference</th>
         <th>Quantidade</th>
@@ -31,10 +29,8 @@
         </td>
         <td>{{ row.0 }}</td>
         <td>{{ row.1 }}</td>
-        <td>{{ row.2 }}</td>
         <td>{{ row.3 }}</td>
         <td>{{ row.4 }}</td>
-        <td>{{ row.5 }}</td>
         <td>{{ row.6 }}</td>
         <td>{{ row.7 }}</td>
         <td>{{ row.8 }}</td>
@@ -42,6 +38,7 @@
       {% endfor %}
     </tbody>
   </table>
+
   <button id="getSelectedRowsBtn" class="btn btn-primary">
     Adicionar items selecionados
   </button>
@@ -110,7 +107,7 @@
     // Iterate through each row in the table
     $("#suppliersTable tbody tr").each(function () {
       // Find the quantity column in the current row
-      var quantity = parseInt($(this).find("td:nth-child(10)").text());
+      var quantity = parseInt($(this).find("td:nth-child(8)").text());
 
       // Check if the quantity is 0
       if (quantity === 0) {
@@ -169,18 +166,14 @@
             row.find("td:eq(1)").text() +
             ", Name: " +
             row.find("td:eq(2)").text() +
-            ", Family: " +
-            row.find("td:eq(3)").text() +
             ", Category: " +
             row.find("td:eq(4)").text() +
             ", Description: " +
             row.find("td:eq(5)").text() +
-            ", Profit Margin: " +
-            row.find("td:eq(6)").text() +
             ", Barcode: " +
-            row.find("td:eq(7)").text() +
+            row.find("td:eq(6)").text() +
             ", Reference: " +
-            row.find("td:eq(8)").text()
+            row.find("td:eq(7)").text()
         );
 
         // Create a Bootstrap row with two columns
