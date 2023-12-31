@@ -2,14 +2,10 @@
 <h1 class="title">Criar nova Produção</h1>
 {% endblock %}
 
-<form
-  class="allforms row"
-  action="{% url 'productionEquipmentCreate' equipment_id %}"
-  method="post"
->
+<form class="allforms row" action="{% url 'productionEquipmentCreate' equipment_id %}" method="post">
   {% csrf_token %}
 
-  <!-- Table -->
+
   <div class="ordertable">
     <table class="table" id="dataTable">
       <thead>
@@ -58,7 +54,7 @@
   >
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalTitle">Criar Encomenda</h5>
+        <h5 class="modal-title" id="modalTitle">Criar Produção</h5>
         <button
           type="button"
           class="close"
@@ -171,7 +167,7 @@
   function callComponents(familyId) {
       counter = $(".row.modalContent").length;
       $.ajax({
-          url: "get_articles/",
+          url: "/productionEquipmentCreate/get_articles/",
           type: "GET",
           data: {family_id: familyId},
           success: function (data) {
@@ -345,14 +341,7 @@
   function sendForm() {
       // Initialize an array to store the data
       let data = [];
-      let header = [];
 
-      // Get the value from the textarea
-      let obsValue = $("#obs").val();
-
-      // Get the selected values from the dropdowns
-      let selectedSupplierId = $("#supplier").val();
-      let selectedWarehouse = $("#warehouse").val();
 
       // Get all rows in the table body
       let rows = $("#dataTable tbody tr");
@@ -373,12 +362,6 @@
           data.push(rowData);
       });
 
-      // Add other form data to the array
-      header.push({
-          idsupplier: selectedSupplierId,
-          idwarehouse: selectedWarehouse,
-          obs: obsValue,
-      });
 
       // Log or use the gathered data
       console.log("Table data with textarea and dropdown:", data);
@@ -386,17 +369,16 @@
       // Send data to the server using AJAX
       $.ajax({
           type: "POST",
-          url: "orderSupplierCreate",
+          url: "",
           data: {
               csrfmiddlewaretoken: '{{ csrf_token }}',
               data: JSON.stringify(data),
-              header: JSON.stringify(header),
           },
           success: function (response) {
               console.log("Data successfully sent to the server");
               Swal.fire({
-                  title: "Encomenda criada",
-                  text: "Foi criada a nova encomenda ao fornecedor",
+                  title: "Produção Criada",
+                  text: "Foi Criada uma Produção Associada a este Equipamento",
                   imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
                   imageWidth: 200,
                   imageHeight: 200,

@@ -24,6 +24,7 @@ urlpatterns = [
     path("loginForm", views.loginForm, name="loginForm"),
     path("", views.Login, name="login"),
     path('get_articles/', views.get_articles, name='get_articles'),
+    path('productionEquipmentCreate/get_articles/', views.get_articles, name='get_articles'),
 
     #Clients
     path("clientCreate", views.clientCreate, name="clientCreate"),
