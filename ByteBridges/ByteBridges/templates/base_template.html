@@ -240,7 +240,7 @@
                 </a>
             </div>
         </div>
-        <a class="nav_link nav_hover" href="{% url 'logout' %}">
+        <a class="nav_link nav_hover" onclick="logoutRequest()">
             <i class="bx bx-log-out nav_icon"></i>
             <span class="nav_name">Logout</span>
         </a>
@@ -287,7 +287,7 @@
             denyButtonText: `Não`,
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "/";
+                window.location.href = "{% url 'logout' %}";
             } else if (result.isDenied) {
 
             }
