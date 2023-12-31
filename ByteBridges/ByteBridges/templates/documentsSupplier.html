@@ -37,29 +37,29 @@
                 <label for="invoice_number"><strong>Número de documento fornecedor:</strong></label>
                 <input type="text" class="form-control" id="invoice_number" placeholder="Numero de fatura">
             </div>
-            <div class="form-group">
-                <label for="invoice_value"><strong>Valor do documento:</strong></label>
-                <input type="number" class="form-control" id="invoice_value" name="invoice_value"
-                       placeholder="Valor da fatura">
-            </div>
+            {#            <div class="form-group">#}
+            {#                <label for="invoice_value"><strong>Valor do documento:</strong></label>#}
+            {#                <input type="number" class="form-control" id="invoice_value" name="invoice_value"#}
+            {#                       placeholder="Valor da fatura">#}
+            {#            </div>#}
             <div class="form-group">
                 <label for="invoice_date"><strong>Data de documento:</strong></label>
                 <input type="date" class="form-control" id="invoice_date">
             </div>
 
-            <div class="form-group">
-                <label for="idwarehouse"><strong>Armazém:</strong></label>
-                <select id="warehouse" name="idwarehouse" class="dropstyle">
-                    <option class="dropOptions" value="" disabled selected>
-                        Escolha um Armazém
-                    </option>
-                    {% for w in warehouses %}
-                        <option class="dropOptions" value="{{ w.idwarehouse }}">
-                            {{ w.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
+            {#            <div class="form-group">#}
+            {#                <label for="idwarehouse"><strong>Armazém:</strong></label>#}
+            {#                <select id="warehouse" name="idwarehouse" class="dropstyle">#}
+            {#                    <option class="dropOptions" value="" disabled selected>#}
+            {#                        Escolha um Armazém#}
+            {#                    </option>#}
+            {#                    {% for w in warehouses %}#}
+            {#                        <option class="dropOptions" value="{{ w.idwarehouse }}">#}
+            {#                            {{ w.name }}#}
+            {#                        </option>#}
+            {#                    {% endfor %}#}
+            {#                </select>#}
+            {#            </div>#}
             <div class="form-group">
                 <label for="payment_type"><strong>Modalidade de Pagamento:</strong></label>
                 <select id="payment_type" name="payment_type" class="dropstyle">
@@ -123,7 +123,7 @@
 
         function updateDropdownOptionsDocuments(options) {
             $('#related_documents').empty();
-            $('#related_documents').append('<option value="">Documento referente</option>');
+            $('#related_documents').append('<option value="-1">Documento referente</option>');
             options['list'].forEach(function (option) {
                 $('#related_documents').append('<option value="' + option[0] + '">' + option[1] + '</option>');
             });
@@ -156,108 +156,117 @@
         $(document).ready(function () {
 
 
-            $('#showListDocs').change(function () {
-                if (this.checked) {
-                    $('#relatedDocs').show();
-                } else {
-                    $('#relatedDocs').hide();
-                }
-            });
-
             $('#registerInvoice').click(function () {
 
-                let supplier = $('#supplier').val()
-                let invoice_number = $('#invoice_number').val()
-                let invoice_type = $('input[name="invoice_type"]:checked').val();
-                let invoice_value = $('#invoice_value').val()
-                let invoice_date = $('#invoice_date').val()
-                let warehouse_id = $('#warehouse').val()
-                let payment_type = $('#payment_type').val()
-                let related_document_id = $('#related_documents').val()
-                console.log(supplier)
-                console.log(invoice_type)
-                console.log(invoice_number)
-                console.log(invoice_value)
-                console.log(invoice_date)
-                console.log(payment_type)
-                console.log(warehouse_id)
-                console.log(related_document_id)
+                    let supplier = $('#supplier').val()
+                    let invoice_number = $('#invoice_number').val()
+                    let invoice_type = $('input[name="invoice_type"]:checked').val();
+                    let invoice_value = $('#invoice_value').val()
+                    let invoice_date = $('#invoice_date').val()
+                    let warehouse_id = $('#warehouse').val()
+                    let payment_type = $('#payment_type').val()
+                    let related_document_id = $('#related_documents').val()
+                    console.log(supplier)
+                    console.log(invoice_type)
+                    console.log(invoice_number)
+                    {#console.log(invoice_value)#}
+                    console.log(invoice_date)
+                    console.log(payment_type)
 
-                var documentLines = [];
-                $('#componentsTable tbody tr').each(function () {
-                    var line = [];
+                    console.log(related_document_id)
+                    var documentLines = [];
+                    $('#componentsTable tbody tr').each(function () {
+                        var line = [];
 
-                    // Iterate over each cell in the row
-                    $(this).find('td').each(function () {
-                        line.push($(this).text());
+                        // Iterate over each cell in the row
+                        $(this).find('td').each(function () {
+                            line.push($(this).text());
 
-                        $(this).find('input').each(function () {
-                            line.push($(this).val());
+                            $(this).find('input').each(function () {
+                                line.push($(this).val());
+                            });
                         });
+                        documentLines.push(line);
                     });
-                    documentLines.push(line);
-                });
-
-                $.ajax({
-                    type: "POST",
-                    url: '{% url "documentsSupplierRegisterInvoice" %}',
-                    data: {
-                        "supplier": supplier,
-                        "invoice_type": invoice_type,
-                        "invoice_number": invoice_number,
-                        "invoice_value": invoice_value,
-                        "invoice_date": invoice_date,
-                        "obs": "implementar na view",
-                        "payment_type": payment_type,
-                        "warehouse_id": warehouse_id,
-                        "related_document_id": related_document_id,
-                        "documentLines": JSON.stringify(documentLines)
-                    },
-                    dataType: "json",
-                    success: function (data) {
+                    if (supplier == null || invoice_type == null || invoice_number == null || invoice_date === "" || payment_type == null || related_document_id === "-1" || related_document_id == null || documentLines.length ===0) {
                         Swal.fire({
-                            title: "Documento criado",
-                            text: "Documento de compra criado com sucesso",
-                            imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
-                            imageWidth: 200,
-                            imageHeight: 200,
-                            imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
-                        }).then((result) => {
-                            window.location.replace("/dashboard")
-                        })
-
-                    },
-                    error: function () {
-                        Swal.fire({
-                            title: "Erro!",
-                            text: "Falha na comunicação com o servidor",
+                            position: "top-end",
                             icon: "error",
+                            title: "Necessita de escolher todos as opções disponíveis!",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then((result) => {
+                            return;
                         });
-                    },
-                });
-            });
+                    } else {
+
+
+                        $.ajax({
+                            type: "POST",
+                            url: '{% url "documentsSupplierRegisterInvoice" %}',
+                            data: {
+                                "supplier": supplier,
+                                "invoice_type": invoice_type,
+                                "invoice_number": invoice_number,
+                                "invoice_value": invoice_value,
+                                "invoice_date": invoice_date,
+                                "obs": "implementar na view",
+                                "payment_type": payment_type,
+                                "warehouse_id": warehouse_id,
+                                "related_document_id": related_document_id,
+                                "documentLines": JSON.stringify(documentLines)
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                Swal.fire({
+                                    title: "Documento criado",
+                                    text: "Documento de compra criado com sucesso",
+                                    imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
+                                    imageWidth: 200,
+                                    imageHeight: 200,
+                                    imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
+                                }).then((result) => {
+                                    window.location.replace("/dashboard")
+                                })
+
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    title: "Erro!",
+                                    text: "Falha na comunicação com o servidor",
+                                    icon: "error",
+                                });
+                            },
+                        });
+                    }
+
+                }
+            )
+            ;
 
 
             $('#related_documents').change(function () {
-                console.log(this.value)
-                $.ajax({
-                    type: "POST",
-                    url: '{% url "documentsSupplierLinesFetch" %}',
-                    data: {"id": this.value},
-                    dataType: "json",
-                    success: function (data) {
-                        // Handle the success response
-                        updateDocumentsLines(data)
+                if (this.value != '-1') {
+                    $.ajax({
+                        type: "POST",
+                        url: '{% url "documentsSupplierLinesFetch" %}',
+                        data: {"id": this.value},
+                        dataType: "json",
+                        success: function (data) {
+                            // Handle the success response
+                            updateDocumentsLines(data)
 
-                    },
-                    error: function () {
-                        Swal.fire({
-                            title: "Erro!",
-                            text: "Falha na comunicação com o servidor",
-                            icon: "error",
-                        });
-                    },
-                });
+                        },
+                        error: function () {
+                            Swal.fire({
+                                title: "Erro!",
+                                text: "Falha na comunicação com o servidor",
+                                icon: "error",
+                            });
+                        },
+                    });
+                }
+
             });
             //Handle supplier changed
             $('#supplier').change(function () {

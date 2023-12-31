@@ -2,8 +2,9 @@ import datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, \
-    Stock,Sales
+    Stock, Sales
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.db import connections
 from django.http import JsonResponse
 import json
@@ -13,15 +14,21 @@ def Login(request):
     return render(request, "Login.html")
 
 
+def logout(request):
+    return render(request, "Logout.html")
+
+
 def loginForm(request):
     return render(request, "loginForm.html")
 
 
+@login_required
 def IndexPage(request):
     return render(request, template_name='dashboard.html')
 
 
 # Clients
+@login_required
 def clientList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -33,6 +40,7 @@ def clientList(request):
         return render(request, 'clientList.html', {'clients': clients})
 
 
+@login_required
 def clientCreate(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -59,6 +67,7 @@ def clientCreate(request):
     return render(request, template_name='clientCreate.html')
 
 
+@login_required
 def clientEdit(request, client_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -94,6 +103,7 @@ def clientEdit(request, client_id):
                                                           'city': client[8], 'eletronicinvoice': client[9]}})
 
 
+@login_required
 def clientDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
@@ -105,6 +115,7 @@ def clientDelete(request):
         return redirect('clientList')
 
 
+@login_required
 def orderClientList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -116,6 +127,7 @@ def orderClientList(request):
         return render(request, 'orderClientList.html', {'suppliers': suppliers})
 
 
+@login_required
 def orderClientCreate(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -140,6 +152,7 @@ def orderClientCreate(request):
     return render(request, template_name='orderClientCreate.html')
 
 
+@login_required
 # Suppliers
 def supplierList(request):
     with connections['admin'].cursor() as cursor:
@@ -152,6 +165,7 @@ def supplierList(request):
         return render(request, 'supplierList.html', {'suppliers': suppliers})
 
 
+@login_required
 def supplierCreate(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -176,6 +190,7 @@ def supplierCreate(request):
     return render(request, template_name='supplierCreate.html')
 
 
+@login_required
 def supplierEdit(request, idsupplier):
     # Fetch the supplier information from the database
     with connections['admin'].cursor() as cursor:
@@ -219,6 +234,7 @@ def supplierEdit(request, idsupplier):
                                                               'obs': supplier[8]}})
 
 
+@login_required
 def supplierDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         with connections['admin'].cursor() as cursor:
@@ -229,6 +245,7 @@ def supplierDelete(request):
         return redirect('supplierList')
 
 
+@login_required
 def orderSupplierList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -238,17 +255,20 @@ def orderSupplierList(request):
 
         return render(request, 'orderSupplierList.html', {'orders': result})
 
+
 @csrf_exempt
+@login_required
 def orderSupplierLinesFetch(request):
-        # Fetch the family information from the database
-        with connections['admin'].cursor() as cursor:
-            id = request.POST.get('id')
-            cursor.execute("SELECT * FROM fn_orderssuplier_getlines(%s);", [id])
-            list = cursor.fetchall()
-            print(list)
-            return JsonResponse({'list': list})
+    # Fetch the family information from the database
+    with connections['admin'].cursor() as cursor:
+        id = request.POST.get('id')
+        cursor.execute("SELECT * FROM fn_orderssuplier_getlines(%s);", [id])
+        list = cursor.fetchall()
+        print(list)
+        return JsonResponse({'list': list})
 
 
+@login_required
 def documentsSupplier(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_suppliers_list")
@@ -295,6 +315,7 @@ def documentsSupplier(request):
 
 # todo fix this csrf
 @csrf_exempt
+@login_required
 def documentsSupplierFetch(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -306,6 +327,7 @@ def documentsSupplierFetch(request):
 
 # todo fix this csrf
 @csrf_exempt
+@login_required
 def documentsSupplierLinesFetch(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -317,6 +339,7 @@ def documentsSupplierLinesFetch(request):
 
 
 @csrf_exempt
+@login_required
 def documentsSupplierRegisterInvoice(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -327,20 +350,22 @@ def documentsSupplierRegisterInvoice(request):
         invoice_value = request.POST.get('invoice_value')
         invoice_date = request.POST.get('invoice_date')
         payment_type = request.POST.get('payment_type')
-        warehouse_id = request.POST.get('warehouse_id')
+
         documentLines = json.loads(request.POST.get('documentLines'))
         related_document_id = request.POST.get('related_document_id')
         obs = request.POST.get('obs')
 
-        cursor.execute("select fn_generate_ordersSupplier_invoice(%s,%s,%s,%s);", [payment_type,related_document_id,obs,invoice_type])
+        cursor.execute("select fn_generate_ordersSupplier_invoice(%s,%s,%s,%s,%s,%s);",
+                       [payment_type, related_document_id, obs, invoice_type, invoice_number, invoice_date])
         doc = cursor.fetchone()
 
         for line in documentLines:
-            cursor.execute("CALL  sp_lines_create(%s,%s,%s);", [doc[0],line[0],line[6]])
+            cursor.execute("CALL  sp_lines_create(%s,%s,%s);", [doc[0], line[0], line[6]])
         return JsonResponse({'list': related_document_id})
 
 
 @csrf_exempt
+@login_required
 def documentsSupplierRegisterInvoiceLines(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -351,6 +376,7 @@ def documentsSupplierRegisterInvoiceLines(request):
         return JsonResponse({'list': list})
 
 
+@login_required
 def productionEquipmentCreate(request, equipment_id):
     with connections['admin'].cursor() as cursor:
 
@@ -358,20 +384,19 @@ def productionEquipmentCreate(request, equipment_id):
         result = cursor.fetchall()
         families = [Family(*row) for row in result]
 
-
     if request.method == 'POST':
         data = json.loads(request.POST.get('data'))
         for item in data:
-                    with connections['admin'].cursor() as cursor:
-                        cursor.execute("CALL sp_productionitems_add(%s,%s,%s)",
-                                       [equipment_id,
-                                        item['component'],
-                                        item['quantity']])
+            with connections['admin'].cursor() as cursor:
+                cursor.execute("CALL sp_productionitems_add(%s,%s,%s)",
+                               [equipment_id,
+                                item['component'],
+                                item['quantity']])
         return JsonResponse({'status': 'success'})
-    return render(request, 'productionEquipmentCreate.html',{'families': families, 'equipment_id':equipment_id})
+    return render(request, 'productionEquipmentCreate.html', {'families': families, 'equipment_id': equipment_id})
 
 
-
+@login_required
 def orderSupplierCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_suppliers_list")
@@ -411,6 +436,7 @@ def orderSupplierCreate(request):
     return render(request, template_name='orderSupplierCreate.html', context=context)
 
 
+@login_required
 def get_articles(request):
     print(request)
     if request.method == 'GET':
@@ -431,6 +457,7 @@ def get_articles(request):
         return JsonResponse(data)
 
 
+@login_required
 def familyList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -441,6 +468,7 @@ def familyList(request):
         return render(request, 'familyList.html', {'families': families})
 
 
+@login_required
 def familyCreate(request):
     with connections['admin'].cursor() as cursor:
         if request.method == 'POST':
@@ -456,6 +484,7 @@ def familyCreate(request):
         return render(request, template_name='familyCreate.html')
 
 
+@login_required
 def familyEdit(request, family_id):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -478,6 +507,7 @@ def familyEdit(request, family_id):
                   {'idfamily': family_id, 'family': {'name': family[1], 'description': family[2]}})
 
 
+@login_required
 def familyDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
@@ -489,6 +519,7 @@ def familyDelete(request):
         return redirect('familyList')
 
 
+@login_required
 def equipmentList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -499,6 +530,7 @@ def equipmentList(request):
         return render(request, 'equipmentList.html', {'equipments': equipments})
 
 
+@login_required
 def equipmentCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_categories_list")
@@ -524,6 +556,8 @@ def equipmentCreate(request):
 
     return render(request, 'equipmentCreate.html', context=context)
 
+
+@login_required
 def productionEquipmentEdit(request, equipment_id):
     with connections['admin'].cursor() as cursor:
 
@@ -534,21 +568,20 @@ def productionEquipmentEdit(request, equipment_id):
         result = cursor.fetchall()
         families = [Family(*row) for row in result]
 
-
     if request.method == 'POST':
         data = json.loads(request.POST.get('data'))
         for item in data:
-                    with connections['admin'].cursor() as cursor:
-                        cursor.execute("CALL sp_productionitems_update(%s,%s,%s)",
-                                       [equipment_id,
-                                        item['component'],
-                                        item['quantity']])
+            with connections['admin'].cursor() as cursor:
+                cursor.execute("CALL sp_productionitems_update(%s,%s,%s)",
+                               [equipment_id,
+                                item['component'],
+                                item['quantity']])
         return JsonResponse({'status': 'success'})
-    return render(request, 'productionEquipmentEdit.html',{'families': families, 'equipment_id':equipment_id,
-                                                             'equipment': equipment})
+    return render(request, 'productionEquipmentEdit.html', {'families': families, 'equipment_id': equipment_id,
+                                                            'equipment': equipment})
 
 
-
+@login_required
 def equipmentEdit(request, equipment_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -585,6 +618,7 @@ def equipmentEdit(request, equipment_id):
                                                                 'reference': equipment[7]}})
 
 
+@login_required
 def equipmentDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
@@ -596,6 +630,7 @@ def equipmentDelete(request):
         return redirect('equipmentList')
 
 
+@login_required
 def componentList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -607,6 +642,7 @@ def componentList(request):
         return render(request, 'componentList.html', {'components': components})
 
 
+@login_required
 def componentCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_families_list")
@@ -634,6 +670,7 @@ def componentCreate(request):
     return render(request, 'componentCreate.html', context=context)
 
 
+@login_required
 def componentEdit(request, component_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -672,6 +709,7 @@ def componentEdit(request, component_id):
                                                                 'reference': component[7]}})
 
 
+@login_required
 def componentDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
@@ -683,6 +721,7 @@ def componentDelete(request):
         return redirect('componentList')
 
 
+@login_required
 def stockList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -702,6 +741,7 @@ def stockList(request):
         return render(request, 'stockList.html', context=context)
 
 
+@login_required
 def laborList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -712,6 +752,7 @@ def laborList(request):
         return render(request, 'laborList.html', {'labors': labors})
 
 
+@login_required
 def laborCreate(request):
     if request.method == 'POST':
         # Get the data from the form
@@ -732,6 +773,7 @@ def laborCreate(request):
     return render(request, template_name='laborCreate.html')
 
 
+@login_required
 def laborEdit(request, labor_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -756,6 +798,7 @@ def laborEdit(request, labor_id):
                                               'labor': {'name': labor[1], 'hourrate': labor[2]}})
 
 
+@login_required
 def laborDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
@@ -767,6 +810,7 @@ def laborDelete(request):
         return redirect('laborList')
 
 
+@login_required
 def userList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -778,6 +822,7 @@ def userList(request):
         return render(request, 'userList.html', {'users': users})
 
 
+@login_required
 def userEdit(request, user_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -807,6 +852,7 @@ def userEdit(request, user_id):
                                                       'role': user[4]}})
 
 
+@login_required
 def userDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
@@ -818,6 +864,7 @@ def userDelete(request):
         return redirect('userList')
 
 
+@login_required
 def sellOrderCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_equipments_list2")
@@ -836,7 +883,7 @@ def sellOrderCreate(request):
             cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s)", [client_id, observations])
             idorderclient = cursor.fetchone()
             if idorderclient:
-                for row in rows_data:                   
+                for row in rows_data:
                     cursor.execute("CALL sp_sales_create(%s,%s,%s)", [idorderclient[0], row['id'], row['quantity']])
 
                 return JsonResponse({'status': 'success'})
@@ -845,6 +892,7 @@ def sellOrderCreate(request):
     return render(request, 'sellOrderCreate.html', context)
 
 
+@login_required
 def sellList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -853,6 +901,5 @@ def sellList(request):
         result = cursor.fetchall()
         print(result)
         sales = [Sales(*row) for row in result]
-        
-        
+
     return render(request, 'sellList.html', {'sales': sales})

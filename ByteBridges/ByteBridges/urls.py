@@ -19,75 +19,77 @@ from django.urls import path
 from ByteBridges import views
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path("dashboard", views.IndexPage, name="dashboard"),
-    #path("dashboard", views.dashboard, name="dashboard"),
+    # path("dashboard", views.dashboard, name="dashboard"),
     path("loginForm", views.loginForm, name="loginForm"),
+    path('logout', views.logout, name='logout'),
     path("", views.Login, name="login"),
     path('get_articles/', views.get_articles, name='get_articles'),
     path('productionEquipmentCreate/get_articles/', views.get_articles, name='get_articles'),
     path('productionEquipmentEdit/get_articles/', views.get_articles, name='get_articles'),
 
-    #Clients
+    # Clients
     path("clientCreate", views.clientCreate, name="clientCreate"),
     path("clientList", views.clientList, name="clientList"),
     path('clientEdit/<int:client_id>/', views.clientEdit, name='clientEdit'),
     path('clientDelete', views.clientDelete, name='clientDelete'),
-    
-    #suppliers
+
+    # suppliers
     path("supplierCreate", views.supplierCreate, name="supplierCreate"),
     path("supplierList", views.supplierList, name="supplierList"),
     path('supplierEdit/<int:idsupplier>/', views.supplierEdit, name='supplierEdit'),
     path('supplierDelete', views.supplierDelete, name='supplierDelete'),
 
-    #order
+    # order
     path("orderSupplierCreate", views.orderSupplierCreate, name="orderSupplierCreate"),
     path("orderSupplierList", views.orderSupplierList, name="orderSupplierList"),
     path("orderClientCreate", views.orderClientCreate, name="orderClientCreate"),
     path("orderClientList", views.orderClientList, name="orderClientList"),
     path("orderSupplierLinesFetch", views.orderSupplierLinesFetch, name="orderSupplierLinesFetch"),
 
-    #Sells
+    # Sells
     path("sellOrderCreate", views.sellOrderCreate, name="sellOrderCreate"),
     path("sellList", views.sellList, name="sellList"),
-    
-    #documentsSupplier
+
+    # documentsSupplier
     path("documentsSupplier", views.documentsSupplier, name="documentsSupplier"),
     path("documentsSupplierFetch", views.documentsSupplierFetch, name="documentsSupplierFetch"),
     path("documentsSupplierLinesFetch", views.documentsSupplierLinesFetch, name="documentsSupplierLinesFetch"),
-    path("documentsSupplierRegisterInvoice", views.documentsSupplierRegisterInvoice, name="documentsSupplierRegisterInvoice"),
+    path("documentsSupplierRegisterInvoice", views.documentsSupplierRegisterInvoice,
+         name="documentsSupplierRegisterInvoice"),
     # path("documentsSupplierRegisterInvoiceHeader", views.documentsSupplierRegisterInvoiceHeader, name="documentsSupplierRegisterInvoiceHeader"),
     # path("documentsSupplierRegisterInvoiceLines", views.documentsSupplierRegisterInvoiceLines, name="documentsSupplierRegisterInvoiceLines"),
 
-    #Family
+    # Family
     path("familyCreate", views.familyCreate, name="familyCreate"),
     path("familyList", views.familyList, name="familyList"),
     path('familyEdit/<int:family_id>/', views.familyEdit, name='familyEdit'),
 
-    
-    #Equipment
+    # Equipment
     path("equipmentCreate", views.equipmentCreate, name="equipmentCreate"),
     path("equipmentList", views.equipmentList, name="equipmentList"),
     path('equipmentEdit/<int:equipment_id>/', views.equipmentEdit, name='equipmentEdit'),
     path('equipmentDelete', views.equipmentDelete, name='equipmentDelete'),
-    path('productionEquipmentCreate/<int:equipment_id>/', views.productionEquipmentCreate, name='productionEquipmentCreate'),
+    path('productionEquipmentCreate/<int:equipment_id>/', views.productionEquipmentCreate,
+         name='productionEquipmentCreate'),
     path('productionEquipmentEdit/<int:equipment_id>/', views.productionEquipmentEdit, name='productionEquipmentEdit'),
 
-    #Component
+    # Component
     path("componentCreate", views.componentCreate, name="componentCreate"),
     path("componentList", views.componentList, name="componentList"),
     path('componentEdit/<int:component_id>/', views.componentEdit, name='componentEdit'),
     path('componentDelete', views.componentDelete, name='componentDelete'),
 
-
-    #Stocks
+    # Stocks
     path("stockList", views.stockList, name="stockList"),
 
-    #Users
+    # Users
     path("userList", views.userList, name="userList"),
     path('userEdit/<int:user_id>/', views.userEdit, name='userEdit'),
     path('userDelete', views.userDelete, name='userDelete'),
 
-    #Labor
+    # Labor
     path("laborCreate", views.laborCreate, name="laborCreate"),
     path("laborList", views.laborList, name="laborList"),
     path('laborEdit/<int:labor_id>/', views.laborEdit, name='laborEdit'),
