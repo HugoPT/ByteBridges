@@ -886,3 +886,34 @@ def userDelete(request):
             return JsonResponse({'status': 'success'})
         # Redirect to the client list page after deletion
         return redirect('userList')
+
+
+
+@login_required
+def productionOrderCreate(request):
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("select * from view_equipments_production")
+        production = cursor.fetchall()
+
+        cursor.execute("SELECT * FROM view_clients_list", [])
+        resultClient = cursor.fetchall()
+        clients = [Client(*row) for row in resultClient]
+
+        current_user = request.user
+
+        if request.method == 'POST':
+            client_id = request.POST.get('client')
+            rows_data = json.loads(request.POST.get('rows'))
+            observations = request.POST.get('observations')
+
+            # Create order client
+            cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s)", [client_id, observations])
+            idorderclient = cursor.fetchone()
+            if idorderclient:
+                for row in rows_data:
+                    cursor.execute("CALL sp_sales_create(%s,%s,%s)", [idorderclient[0], row['id'], row['quantity']])
+
+                return JsonResponse({'status': 'success'})
+
+    context = {'production': production, 'clients': clients}
+    return render(request, 'productionOrderCreate.html', context)

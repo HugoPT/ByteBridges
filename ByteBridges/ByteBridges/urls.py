@@ -94,4 +94,8 @@ urlpatterns = [
     path('laborEdit/<int:labor_id>/', views.laborEdit, name='laborEdit'),
     path('laborDelete', views.laborDelete, name='laborDelete'),
 
+
+    #Production
+    path("productionOrderCreate", views.productionOrderCreate, name="productionOrderCreate"),
+
 ]
