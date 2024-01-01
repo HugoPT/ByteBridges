@@ -5,31 +5,49 @@
 <div class="listContainer">
   <h1>Lista de Equipamentos</h1>
 
-  <table id="componentsTable" class="display">
+  <table id="suppliersTable" class="display">
     <thead>
       <tr>
-          <th>Nome</th>
-          <th>Categoria</th>
-          <th>Descrição</th>
-          <th>Código de Barras</th>
-          <th>Referência</th>
-          <th>Actions</th>
-
+        <th>Nome</th>
+        <th>Categoria</th>
+        <th>Descrição</th>
+        <th>Código de Barras</th>
+        <th>Referência</th>
+        <th>Quantidade</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      {% for e in equipments %}
+      {% for e in articletypes %}
       <tr>
-          <td>{{ e.name }}</td>
+        <td>{{ e.name }}</td>
         <td>{{ e.category }}</td>
         <td>{{ e.description }}</td>
         <td>{{ e.barcode }}</td>
         <td>{{ e.reference }}</td>
+        <td>{{ e.quantity }}</td>
         <td>
-            <button type="button" class="btn btn-danger" onclick="alertDelete('{{e.idarticletype}}')">Eliminar</button>
-            <a class="btn btn-warning" href="{% url 'equipmentEdit' equipment_id=e.idarticletype %}">Editar</a>
-            <a class="btn btn-info" href="{% url 'productionEquipmentCreate' equipment_id=e.idarticletype %}">Produção</a>
-            <a class="btn btn-danger" href="{% url 'productionEquipmentEdit' equipment_id=e.idarticletype %}">Produção</a>
+          <div class="tableTripleBtns">
+            <button
+              type="button"
+              class="btn btn-danger deleteSpace"
+              onclick="alertDelete('{{e.idarticletype}}')"
+            >
+              Eliminar
+            </button>
+            <a
+              class="btn btn-warning"
+              href="{% url 'equipmentEdit' equipment_id=e.idarticletype %}"
+              >Editar Equipamento</a
+            >
+            <div class="tableSoloBtn">
+              <a
+                class="btn btn-primary"
+                href="{% url 'productionEquipmentCreate' equipment_id=e.idarticletype %}"
+                >Editar Configuração
+              </a>
+            </div>
+          </div>
         </td>
       </tr>
       {% endfor %}
@@ -38,70 +56,8 @@
 </div>
 
 <script>
-
-function alertDelete(id) {
-
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-              confirmButton: "btn btn-danger",
-              cancelButton: "btn btn-primary"
-            },
-            buttonsStyling: true
-          });
-          swalWithBootstrapButtons.fire({
-            title: "Tem certeza?",
-            text: "Não poderá reverter esta ação!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Sim, Eliminar!",
-            cancelButtonText: "Não, cancelar!",
-
-          }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: "POST",
-                    url: "equipmentDelete",
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                        id: id
-                    },
-                    success: function(response) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Equipamento Eliminado",
-                            showConfirmButton: true,
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              location.reload();
-                            }
-                          });
-
-                    },
-                    error: function(error) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "OOPS...",
-                            text: "Ocorreu algo inesperado",
-                          });
-                    }
-                  });
-            } else if (
-              /* Read more about handling dismissals below */
-              result.dismiss === Swal.DismissReason.cancel
-            ) {
-              swalWithBootstrapButtons.fire({
-                title: "Cancelado",
-                text: "Nenhuma alteração foi feita",
-                icon: "error"
-              });
-            }
-          });
-
-      }
-
-
   $(document).ready(function () {
-    $("#componentsTable").DataTable({
+    $("#suppliersTable").DataTable({
       dom: "Bfrtip",
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
       language: {
@@ -109,6 +65,63 @@ function alertDelete(id) {
       },
     });
   });
+  function alertDelete(id) {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-danger",
+        cancelButton: "btn btn-primary",
+      },
+      buttonsStyling: true,
+    });
+    swalWithBootstrapButtons
+      .fire({
+        title: "Tem certeza?",
+        text: "Não poderá reverter esta ação!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sim, Eliminar!",
+        cancelButtonText: "Não, cancelar!",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            type: "POST",
+            url: "equipmentDelete",
+            data: {
+              csrfmiddlewaretoken: "{{ csrf_token }}",
+              id: id,
+            },
+            success: function (response) {
+              Swal.fire({
+                icon: "success",
+                title: "Equipamento Eliminado",
+                showConfirmButton: true,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  location.reload();
+                }
+              });
+            },
+            error: function (error) {
+              Swal.fire({
+                icon: "error",
+                title: "OOPS...",
+                text: "Ocorreu algo inesperado",
+              });
+            },
+          });
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          swalWithBootstrapButtons.fire({
+            title: "Cancelado",
+            text: "Nenhuma alteração foi feita",
+            icon: "error",
+          });
+        }
+      });
+  }
 </script>
 
 {% endblock %}

@@ -131,3 +131,19 @@ li {
 #showCreateBtn {
   display: none;
 }
+
+.tableSoloBtn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+}
+.tableTripleBtns {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.deleteSpace {
+  margin-right: 10px;
+}

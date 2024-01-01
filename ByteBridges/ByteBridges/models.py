@@ -141,14 +141,15 @@ class Terms(models.Model):
 
 
 class ArticleType(models.Model):
-    idarticletype = models.IntegerField(primary_key=True)
+    idarticletype = models.AutoField(primary_key=True)
     name = models.CharField(max_length=80)
-    family = models.IntegerField()  # Assuming the data type for the family field
-    category = models.IntegerField()  # Assuming the data type for the family field
+    family = models.IntegerField()
+    category = models.IntegerField()
     description = models.CharField(max_length=500)
     profitmargin = models.FloatField()
     barcode = models.CharField(max_length=13)
     reference = models.CharField(max_length=30)
+    quantity = models.IntegerField()
 
     def __str__(self):
         return self.name
@@ -201,3 +202,21 @@ class ClientBuyList(models.Model):
 
     class Meta:
         db_table = 'clientBuyList'
+        
+
+class EquipmentsItems(models.Model):
+    idcomponent = models.AutoField(primary_key=True, unique=True)
+    quantity =  models.IntegerField()
+    name = models.CharField(max_length=70)
+    description = models.CharField(max_length=150)
+    image = models.URLField()
+    profitmargin = models.FloatField()
+    barcode = models.CharField(max_length=70)
+    reference = models.CharField(max_length=70)
+    
+    def __str__(self):
+        return self.name
+
+    class Meta:
+    
+        db_table = 'equipmentsItems'

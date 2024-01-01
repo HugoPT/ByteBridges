@@ -97,5 +97,8 @@ urlpatterns = [
 
     #Production
     path("productionOrderCreate", views.productionOrderCreate, name="productionOrderCreate"),
+    
+    #Items
+    path('get_items/', views.get_items, name='get_items'),
 
 ]

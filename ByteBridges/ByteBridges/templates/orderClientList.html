@@ -24,7 +24,7 @@
         <td>{{ s.name }}</td>
         <td>{{ s.date|date:"Y-m-d" }}</td>
         <td>{{ s.duedate|date:"Y-m-d" }}</td>
-        <td>{% if s.status %} Complete {% else %} Processando {% endif %}</td>
+        <td>{% if s.status %} Completo {% else %} Processando {% endif %}</td>
       </tr>
       {% endfor %}
     </tbody>

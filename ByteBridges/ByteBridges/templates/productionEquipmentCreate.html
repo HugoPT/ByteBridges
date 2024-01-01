@@ -2,19 +2,17 @@
 <h1 class="title">Criar nova Produção</h1>
 {% endblock %}
 
-<form class="allforms row" action="{% url 'productionEquipmentCreate' equipment_id %}" method="post">
+<form class="allforms row">
   {% csrf_token %}
-
 
   <div class="ordertable">
     <table class="table" id="dataTable">
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Familia</th>
           <th scope="col">Componente</th>
           <th scope="col">Quantidade</th>
-            <th scope="col">Actions</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -145,258 +143,302 @@
 </div>
 
 <script>
-  var counter;
+    var counter;
 
-  function updateArticlesAndComponents(selectedValue) {
-      console.log("Selected value:", selectedValue);
-  }
+    $(document).ready(function () {
+      var equipment_id = window.location.pathname.split('/').filter(Boolean).pop();
+      fetchInitialData(equipment_id);
+      console.log(equipment_id);
+  });
 
-  function handleSelectChange(selectElement) {
-      var selectedValue = selectElement.value;
-      callComponents(selectedValue);
 
-      // Find the closest parent row of the select element
-      var parentRow = $(selectElement).closest('.newrow');
+    function updateArticlesAndComponents(selectedValue) {
+        console.log("Selected value:", selectedValue);
+    }
 
-      // Get the ID of the associated input
-      var inputId = parentRow.find('.modalInput').attr('id');
+    function handleSelectChange(selectElement) {
+        var selectedValue = selectElement.value;
+        callComponents(selectedValue);
+        var parentRow = $(selectElement).closest('.newrow');
+        var inputId = parentRow.find('.modalInput').attr('id');
+        $("#" + inputId).css('display', 'block');
+    }
 
-      // Show the associated input by adjusting the style display
-      $("#" + inputId).css('display', 'block');
-  }
-
-  function callComponents(familyId) {
-      counter = $(".row.modalContent").length;
+    function fetchInitialData(equipment_id) {
       $.ajax({
-          url: "/productionEquipmentCreate/get_articles/",
+          url: "/get_items/",
           type: "GET",
-          data: {family_id: familyId},
+          data: { equipment_id: equipment_id },
           success: function (data) {
-              var componentContainer = $("#componentContainer" + counter);
-              componentContainer.empty();
+              // Log the data received from the server
+              console.log("Data received from the server:", data);
 
-              var newSelect = $("<select>", {
-                  id: "compo" + counter,
-                  name: "idcompo" + counter,
-                  class: "dropstyle",
-                  onchange: function () {
-                      updateArticlesAndComponents(this.value);
-                  },
-                  style: "display: none;",
-              });
-
-              newSelect.append("<option class='dropOptions' value='' disabled selected>Escolha um Componente</option>");
-
-              // Append the new options to the new select element with name attribute
-              data.articles.forEach(function (article) {
-                  newSelect.append("<option class='dropOptions' value='" + article.idarticle + "' name='" + article.name + "'>" + article.name + "</option>");
-
-              });
-
-              componentContainer.append(newSelect);
-
-              var newInput = $("<input>", {
-                  type: "text",
-                  id: "quantityInput" + counter,
-                  name: "quantityInput" + counter,
-                  class: "modalInput",
-                  placeholder: "Enter quantity",
-                  style: "display: none;",
-              });
-
-              var quantityinput = $("#quantityinput" + counter);
-              quantityinput.empty().append(newInput);
-
-              newSelect.css('display', 'block');
-              newInput.css('display', 'block');
+              // Check if data is an array and not empty
+              if (Array.isArray(data.items) && data.items.length > 0) {
+                  populateTable(data.items);
+              } else {
+                  console.error("Invalid or empty data received from the server.");
+              }
           },
           error: function (error) {
-              console.error("Error fetching components:", error);
+              console.error("Error fetching initial data:", error);
           },
       });
   }
 
-  function addMoreDropdowns() {
-      // Increment the counter for creating unique IDs
-      counter = $(".row.modalContent").length + 1;
 
-      // Create a new row
-      var newRow = $('<div class="row newrow modalContent"></div>');
+    function populateTable(data) {
+        // Clear the existing content in the table body
+        $("#dataTable tbody").empty();
 
-      // Create a column for the family dropdown
-      var familyColumn = $('<div class="col-md-4"></div>');
-      var familyDropdown = $(
-          '<div class="form-field"><div class="mainbox"><div class="formDrop">' +
-          '<select id="families' +
-          counter +
-          '" name="idfamilies' +
-          counter +
-          '" class="dropstyle" onchange="handleSelectChange(this)">' +
-          '<option class="dropOptions" value="" disabled selected>Escolha uma Família</option>' +
-          '</select></div></div></div>'
-      );
+        // Iterate through the data and append rows to the table
+        for (let i = 0; i < data.length; i++) {
+            let row = data[i];
+            $("#dataTable tbody").append(
+                "<tr>" +
+                "<th scope='row'>" + row.number + "</th>" +
+                "<td data-family-id='" + row.name + "'>" + row.name +
+                "</td>" +
+                "<td data-component-id='" + row.component + "'>" + row.component + "<br>"  + row.componentText +
+                "</td>" +
+                "<td>" + row.quantity + "</td>" +
+                "<td><button type='button' class='btn btn-danger btn-remove' onclick='removeRow(this)'>Remove</button></td>" +
+                "</tr>"
+            );
+        }
+    }
+      function callComponents(familyId) {
+          counter = $(".row.modalContent").length;
+          $.ajax({
+              url: "/productionEquipmentCreate/get_articles/",
+              type: "GET",
+              data: {family_id: familyId},
+              success: function (data) {
+                  var componentContainer = $("#componentContainer" + counter);
+                  componentContainer.empty();
 
-      // Append the options for families
-      {% for f in families %}
-          familyDropdown.find('select').append('<option class="dropOptions" value="{{ f.idfamily }}" name="{{f.name }}">{{ f.name }}</option>');
-      {% endfor %}
+                  var newSelect = $("<select>", {
+                      id: "compo" + counter,
+                      name: "idcompo" + counter,
+                      class: "dropstyle",
+                      onchange: function () {
+                          updateArticlesAndComponents(this.value);
+                      },
+                      style: "display: none;",
+                  });
 
-      familyColumn.append(familyDropdown);
-      newRow.append(familyColumn);
+                  newSelect.append("<option class='dropOptions' value='' disabled selected>Escolha um Componente</option>");
 
-      // Create a column for the component dropdown
-      var componentColumn = $('<div class="col-md-4"></div>');
+                  // Append the new options to the new select element with name attribute
+                  data.articles.forEach(function (article) {
+                      newSelect.append("<option class='dropOptions' value='" + article.idarticle + "' name='" + article.name + "'>" + article.name + "</option>");
 
-      var componentDropdown = $("<div class='form-field'><div class='mainbox'><div class='formDrop'>" +
-          "<div id='componentContainer" + counter + "'><select id='compo" + counter + "' name='idcompo" + counter + "' class='dropstyle' onchange='updateArticlesAndComponents(this.value)' style='display: none;'>" +
-          "<option class='dropOptions' value='' disabled selected>Escolha um Componente</option></select></div></div></div></div>");
+                  });
 
-      // Append the new dropdown to the current column
-      {% for c in components %}
-          componentDropdown.find('select').append('<option class="dropOptions" value="{{ c.idcomponent }}" name="{{ c.name }}">{{ c.name }}</option>');
-      {% endfor %}
+                  componentContainer.append(newSelect);
 
-      componentColumn.append(componentDropdown);
+                  var newInput = $("<input>", {
+                      type: "text",
+                      id: "quantityInput" + counter,
+                      name: "quantityInput" + counter,
+                      class: "modalInput",
+                      placeholder: "Enter quantity",
+                      style: "display: none;",
+                  });
 
-      // Append the new column to the new row
-      newRow.append(componentColumn);
+                  var quantityinput = $("#quantityinput" + counter);
+                  quantityinput.empty().append(newInput);
 
-      // Create a column for the input field
-      var inputColumn = $('<div class="col-md-4"></div>');
-      // Create a new input element
-      var newInput = $("<input>", {
-          type: "text",
-          id: "quantityInput" + counter,
-          name: "quantityInput" + counter,
-          class: "modalInput",
-          placeholder: "Enter quantity",
-          style: "display: none;",
-      });
+                  newSelect.css('display', 'block');
+                  newInput.css('display', 'block');
+              },
+              error: function (error) {
+                  console.error("Error fetching components:", error);
+              },
+          });
+      }
 
-      // Append the new input element to the current column
-      inputColumn.append(newInput);
+      function addMoreDropdowns() {
+          // Increment the counter for creating unique IDs
+          counter = $(".row.modalContent").length + 1;
 
-      // Append the new column to the new row
-      newRow.append(inputColumn);
+          // Create a new row
+          var newRow = $('<div class="row newrow modalContent"></div>');
 
-      // Append the new row to the existing dropdown container
-      $("#dropdown-container").append(newRow);
-  }
+          // Create a column for the family dropdown
+          var familyColumn = $('<div class="col-md-4"></div>');
+          var familyDropdown = $(
+              '<div class="form-field"><div class="mainbox"><div class="formDrop">' +
+              '<select id="families' +
+              counter +
+              '" name="idfamilies' +
+              counter +
+              '" class="dropstyle" onchange="handleSelectChange(this)">' +
+              '<option class="dropOptions" value="" disabled selected>Escolha uma Família</option>' +
+              '</select></div></div></div>'
+          );
 
-  function saveChanges() {
-      // Clear the existing content in the table body
-      $("#dataTable tbody").empty();
+          // Append the options for families
+          {% for f in families %}
+              familyDropdown.find('select').append('<option class="dropOptions" value="{{ f.idfamily }}" name="{{f.name }}">{{ f.name }}</option>');
+          {% endfor %}
 
-      // Iterate through the dropdowns in the modal
-      for (let i = 1; i <= counter; i++) {
-          let familyId = $("#families" + i).val();
-          let familyText = $("#families" + i + " option:selected").text();
-          let componentId = $("#compo" + i).val();
-          let componentText = $("#compo" + i + " option:selected").text();
-          let quantity = $("#quantityInput" + i).val();
+          familyColumn.append(familyDropdown);
+          newRow.append(familyColumn);
 
-          // Check if a family is selected
-          if (familyId !== null && componentId !== null && quantity !== "") {
-              // Append a new row to the table with the selected values
-              $("#dataTable tbody").append(
-                  "<tr>" +
-                  '<th scope="row">' +
-                  i +
-                  "</th>" +
-                  "<td data-family-id='" + familyId + "'>" +
-                  "ID: " + familyId + "<br>" +
-                  "Familia: " + familyText +
-                  "</td>" +
-                  "<td data-component-id='" + componentId + "'>" +
-                  "ID: " + componentId + "<br>" +
-                  "Componente: " + componentText +
-                  "</td>" +
-                  "<td>" +
-                  quantity +
-                  "</td>" +
-                  "<td><button type='button' class='btn btn-danger btn-remove' onclick='removeRow(this)'>Remove</button></td>" +
-                  "</tr>"
-              );
+          // Create a column for the component dropdown
+          var componentColumn = $('<div class="col-md-4"></div>');
+
+          var componentDropdown = $("<div class='form-field'><div class='mainbox'><div class='formDrop'>" +
+              "<div id='componentContainer" + counter + "'><select id='compo" + counter + "' name='idcompo" + counter + "' class='dropstyle' onchange='updateArticlesAndComponents(this.value)' style='display: none;'>" +
+              "<option class='dropOptions' value='' disabled selected>Escolha um Componente</option></select></div></div></div></div>");
+
+          // Append the new dropdown to the current column
+          {% for c in components %}
+              componentDropdown.find('select').append('<option class="dropOptions" value="{{ c.idcomponent }}" name="{{ c.name }}">{{ c.name }}</option>');
+          {% endfor %}
+
+          componentColumn.append(componentDropdown);
+
+          // Append the new column to the new row
+          newRow.append(componentColumn);
+
+          // Create a column for the input field
+          var inputColumn = $('<div class="col-md-4"></div>');
+          // Create a new input element
+          var newInput = $("<input>", {
+              type: "text",
+              id: "quantityInput" + counter,
+              name: "quantityInput" + counter,
+              class: "modalInput",
+              placeholder: "Enter quantity",
+              style: "display: none;",
+          });
+
+          // Append the new input element to the current column
+          inputColumn.append(newInput);
+
+          // Append the new column to the new row
+          newRow.append(inputColumn);
+
+          // Append the new row to the existing dropdown container
+          $("#dropdown-container").append(newRow);
+      }
+
+      function saveChanges() {
+          // Clear the existing content in the table body
+          $("#dataTable tbody").empty();
+
+          // Iterate through the dropdowns in the modal
+          for (let i = 1; i <= counter; i++) {
+              let familyId = $("#families" + i).val();
+              let familyText = $("#families" + i + " option:selected").text();
+              let componentId = $("#compo" + i).val();
+              let componentText = $("#compo" + i + " option:selected").text();
+              let quantity = $("#quantityInput" + i).val();
+
+              // Check if a family is selected
+              if (familyId !== null && componentId !== null && quantity !== "") {
+                  // Append a new row to the table with the selected values
+                  $("#dataTable tbody").append(
+                      "<tr>" +
+                      '<th scope="row">' +
+                      i +
+                      "</th>" +
+                      "<td data-family-id='" + familyId + "'>" +
+                      "ID: " + familyId + "<br>" +
+                      "Familia: " + familyText +
+                      "</td>" +
+                      "<td data-component-id='" + componentId + "'>" +
+                      "ID: " + componentId + "<br>" +
+                      "Componente: " + componentText +
+                      "</td>" +
+                      "<td>" +
+                      quantity +
+                      "</td>" +
+                      "<td><button type='button' class='btn btn-danger btn-remove' onclick='removeRow(this)'>Remove</button></td>" +
+                      "</tr>"
+                  );
+              }
           }
       }
-  }
 
-  function removeRow(button) {
-      // Get the closest table row (tr)
-      var row = $(button).closest('tr');
+      function removeRow(button) {
+          // Get the closest table row (tr)
+          var row = $(button).closest('tr');
 
-      // Find the corresponding row in the modal
-      var rowNumber = row.find('th').text();
-      var modalRow = $("#families" + rowNumber).closest('.newrow');
+          // Find the corresponding row in the modal
+          var rowNumber = row.find('th').text();
+          var modalRow = $("#families" + rowNumber).closest('.newrow');
 
-      // Clear the values in the modal row
-      modalRow.find('select').val('').change(); // Clear dropdown values
-      modalRow.find('select').hide();
-      modalRow.find('input').val(''); // Clear input values
-      modalRow.find('input').hide();
+          // Clear the values in the modal row
+          modalRow.find('select').val('').change(); // Clear dropdown values
+          modalRow.find('select').hide();
+          modalRow.find('input').val(''); // Clear input values
+          modalRow.find('input').hide();
 
-      // Remove the row from the table
-      row.remove();
-  }
+          // Remove the row from the table
+          row.remove();
+      }
 
-  function sendForm() {
-      // Initialize an array to store the data
-      let data = [];
-
-
-      // Get all rows in the table body
-      let rows = $("#dataTable tbody tr");
-
-      // Iterate through each row and extract data
-      rows.each(function (index, row) {
-          let familyId = $(row).find("td:eq(0)").attr("data-family-id");
-          let componentId = $(row).find("td:eq(1)").attr("data-component-id");
-
-          let rowData = {
-              number: $(row).find("th").text(),
-              family: familyId,
-              component: componentId,
-              quantity: $(row).find("td:eq(2)").text(),
-          };
-
-          // Add the row data to the array
-          data.push(rowData);
-      });
+      function sendForm() {
+          // Initialize an array to store the data
+          let data = [];
 
 
-      // Log or use the gathered data
-      console.log("Table data with textarea and dropdown:", data);
+          // Get all rows in the table body
+          let rows = $("#dataTable tbody tr");
 
-      // Send data to the server using AJAX
-      $.ajax({
-          type: "POST",
-          url: "",
-          data: {
-              csrfmiddlewaretoken: '{{ csrf_token }}',
-              data: JSON.stringify(data),
-          },
-          success: function (response) {
-              console.log("Data successfully sent to the server");
-              Swal.fire({
-                  title: "Produção Criada",
-                  text: "Foi Criada uma Produção Associada a este Equipamento",
-                  imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
-                  imageWidth: 200,
-                  imageHeight: 200,
-                  imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
-              }).then((result) => {
-                  window.location.replace("/dashboard")
-              })
+          // Iterate through each row and extract data
+          rows.each(function (index, row) {
+              let familyId = $(row).find("td:eq(0)").attr("data-family-id");
+              let componentId = $(row).find("td:eq(1)").attr("data-component-id");
 
-          },
-          error: function (error) {
-              console.error("Error sending data to the server:", error);
-          },
-      });
-  }
+              let rowData = {
+                  number: $(row).find("th").text(),
+                  family: familyId,
+                  component: componentId,
+                  quantity: $(row).find("td:eq(2)").text(),
+              };
+
+              // Add the row data to the array
+              data.push(rowData);
+          });
 
 
-  //teste
+          // Log or use the gathered data
+          console.log("Table data with textarea and dropdown:", data);
+
+          // Send data to the server using AJAX
+          $.ajax({
+              type: "POST",
+              url: "",
+              data: {
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+                  data: JSON.stringify(data),
+              },
+              success: function (response) {
+                  console.log("Data successfully sent to the server");
+                  Swal.fire({
+                      title: "Produção Criada",
+                      text: "Foi Criada uma Produção Associada a este Equipamento",
+                      imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
+                      imageWidth: 200,
+                      imageHeight: 200,
+                      imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
+                  }).then((result) => {
+                      window.location.replace("/dashboard")
+                  })
+
+              },
+              error: function (error) {
+                  console.error("Error sending data to the server:", error);
+              },
+          });
+      }
+
+
+      //teste
 </script>
 
 {% endblock %}

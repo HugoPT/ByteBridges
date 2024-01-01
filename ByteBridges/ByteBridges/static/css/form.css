@@ -146,3 +146,18 @@
   display: flex;
   align-items: center;
 }
+.selectedRowsContainer {
+  margin-top: 20px;
+  border: 1px solid #dbdbdb;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.subTitle {
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: row;
+}
+#componentsTable {
+  display: none;
+  width: 100%;
+}
