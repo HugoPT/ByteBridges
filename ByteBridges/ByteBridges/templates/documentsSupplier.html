@@ -109,8 +109,8 @@
                     <th scope="col">Custo</th>
                     <th scope="col">IVA</th>
                     <th scope="col">Qtd</th>
-                    <th scope="col">Atualizar PVP</th>
                     <th scope="col">Total</th>
+                    <th scope="col">SN</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -140,21 +140,26 @@
                 console.log(option)
                 const newRow = $('<tr>');
                 newRow.append('<td>' + option[0] + '</td>');
-                newRow.append('<td>' + option[1] + '</td>');
-                newRow.append('<td>' + option[7] + '</td>');
-                newRow.append('<td>' + '<input type="number" value="' + option[4] + '"></td>');
-                newRow.append('<td>' + '23%' + '</td>');
                 newRow.append('<td>' + option[8] + '</td>');
-                newRow.append('<td>' + '<input type="number" value="' + calculatePrice(option[4], option[5]) + '"></td>');
-                newRow.append('<td>' + '<input type="number" value="' + calculatePrice(option[4], option[5]) * option[8] + '" ></td>');
-                // Append the new row to the table body
+                newRow.append('<td>' + option[6] + '</td>');
+                newRow.append('<td class="cost_line">' + '<input onchange="updateCosts()" type="number" placeholder="Indique valor unitario"></td>');
+                newRow.append('<td>' + '23%' + '</td>');
+                newRow.append('<td>' + option[7] + '</td>');
+                newRow.append('<td>' + '<input readonly class="total_line" type="number"></td>');
+                newRow.append('<td>' + '<btn class="btn btn-primary">SN</btn>' + '</td>');
+
                 tableBody.append(newRow);
             });
         }
 
+        function updateCosts() {
+            console.log("aqui")
+            $('.total_line').val("xxxx");
+            $('.total_line').text("xxxx");
+        }
+
         // Add an event listener to the checkbox
         $(document).ready(function () {
-
 
             $('#registerInvoice').click(function () {
 
@@ -188,7 +193,7 @@
                         });
                         documentLines.push(line);
                     });
-                    if (supplier == null || invoice_type == null || invoice_number == null || invoice_date === "" || payment_type == null || related_document_id === "-1" || related_document_id == null || documentLines.length ===0) {
+                    if (supplier == null || invoice_type == null || invoice_number == null || invoice_date === "" || payment_type == null || related_document_id === "-1" || related_document_id == null || documentLines.length === 0) {
                         Swal.fire({
                             position: "top-end",
                             icon: "error",
@@ -291,96 +296,6 @@
         });
 
 
-        {% comment %}        function removeRow(button) {
-                    // Get the closest table row (tr)
-                    var row = $(button).closest('tr');
-
-                    // Find the corresponding row in the modal
-                    var rowNumber = row.find('th').text();
-                    var modalRow = $("#families" + rowNumber).closest('.newrow');
-
-                    // Clear the values in the modal row
-                    modalRow.find('select').val('').change(); // Clear dropdown values
-                    modalRow.find('select').hide();
-                    modalRow.find('input').val(''); // Clear input values
-                    modalRow.find('input').hide();
-
-                    // Remove the row from the table
-                    row.remove();
-                }
-
-                function sendForm() {
-                    // Initialize an array to store the data
-                    let data = [];
-                    let header = [];
-
-                    // Get the value from the textarea
-                    let obsValue = $("#obs").val();
-
-                    // Get the selected values from the dropdowns
-                    let selectedSupplierId = $("#supplier").val();
-                    let selectedWarehouse = $("#warehouse").val();
-
-                    // Get all rows in the table body
-                    let rows = $("#dataTable tbody tr");
-
-                    // Iterate through each row and extract data
-                    rows.each(function (index, row) {
-                        let familyId = $(row).find("td:eq(0)").attr("data-family-id");
-                        let componentId = $(row).find("td:eq(1)").attr("data-component-id");
-
-                        let rowData = {
-                            number: $(row).find("th").text(),
-                            family: familyId,
-                            component: componentId,
-                            quantity: $(row).find("td:eq(2)").text(),
-                        };
-
-                        // Add the row data to the array
-                        data.push(rowData);
-                    });
-
-                    // Add other form data to the array
-                    header.push({
-                        idsupplier: selectedSupplierId,
-                        idwarehouse: selectedWarehouse,
-                        obs: obsValue,
-                    });
-
-                    // Log or use the gathered data
-                    console.log("Table data with textarea and dropdown:", data);
-
-                    // Send data to the server using AJAX
-                    $.ajax({
-                        type: "POST",
-                        url: "orderSupplierCreate",
-                        data: {
-                            csrfmiddlewaretoken: '{{ csrf_token }}',
-                            data: JSON.stringify(data),
-                            header: JSON.stringify(header),
-                        },
-                        success: function (response) {
-                            console.log("Data successfully sent to the server");
-                            Swal.fire({
-                                title: "Encomenda criada",
-                                text: "Foi criada a nova encomenda ao fornecedor",
-                                imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
-                                imageWidth: 200,
-                                imageHeight: 200,
-                                imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
-                            }).then((result) => {
-                                window.location.replace("/dashboard")
-                            })
-
-                        },
-                        error: function (error) {
-                            console.error("Error sending data to the server:", error);
-                        },
-                    });
-                }{% endcomment %}
-
-
-        //teste
     </script>
 
 {% endblock %}

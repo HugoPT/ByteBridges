@@ -386,7 +386,7 @@ def documentsSupplierFetch(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
         id = request.POST.get('id')
-        cursor.execute("select * from fn_pendingSuppliersOrders(%s);", [id[0]])
+        cursor.execute("select * from fn_orderssuplier_get(%s);", [id[0]])
         list = cursor.fetchall()
         return JsonResponse({'list': list})
 
@@ -400,7 +400,6 @@ def documentsSupplierLinesFetch(request):
         id = request.POST.get('id')
         cursor.execute("SELECT * FROM fn_orderssuplier_getlines(%s);", [id])
         list = cursor.fetchall()
-        print(list)
         return JsonResponse({'list': list})
 
 
