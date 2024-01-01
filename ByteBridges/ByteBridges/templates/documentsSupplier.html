@@ -1,265 +1,242 @@
 {% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
-    <h1 class="title">Documento de compra</h1>
+<h1 class="title">Documento de compra</h1>
 {% endblock %}
-    <div class="box-content-title">
-        <div class="row">
-            <h2>Dados da Fatura</h2>
-            <hr>
-        </div>
+<div class="box-content-title">
+  <div class="row">
+    <h2>Dados da Fatura</h2>
+    <hr />
+  </div>
+</div>
+<div class="">
+  <form>
+    <div class="form-group">
+      <label for="supplier"><strong>Fornecedor:</strong></label>
+      <select id="supplier" name="supplier" class="dropstyle">
+        <option class="dropOptions" value="" disabled selected>
+          Escolha o fornecedor
+        </option>
+        {% for s in suppliers %}
+        <option class="dropOptions" value="{{ s.idsupplier }}">
+          {{ s.name }}
+        </option>
+        {% endfor %}
+      </select>
     </div>
-    <div class="">
-        <form>
-            <div class="form-group">
-                <label for="supplier"><strong>Fornecedor:</strong></label>
-                <select id="supplier" name="supplier" class="dropstyle">
-                    <option class="dropOptions" value="" disabled selected>
-                        Escolha o fornecedor
-                    </option>
-                    {% for s in suppliers %}
-                        <option class="dropOptions" value="{{ s.idsupplier }}">
-                            {{ s.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label><strong>Natureza do documento:</strong></label>
-                <div class="form-check">
-                    <input type="radio" class="form-check-input" checked name="invoice_type" value="T">
-                    <label class="form-check-label" for="radioOption1">Fatura</label>
-                </div>
-                <div class="form-check">
-                    <input type="radio" class="form-check-input" name="invoice_type" value="P">
-                    <label class="form-check-label" for="radioOption2">Guia de remessa</label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="invoice_number"><strong>Número de documento fornecedor:</strong></label>
-                <input type="text" class="form-control" id="invoice_number" placeholder="Numero de fatura">
-            </div>
-            {#            <div class="form-group">#}
-            {#                <label for="invoice_value"><strong>Valor do documento:</strong></label>#}
-            {#                <input type="number" class="form-control" id="invoice_value" name="invoice_value"#}
-            {#                       placeholder="Valor da fatura">#}
-            {#            </div>#}
-            <div class="form-group">
-                <label for="invoice_date"><strong>Data de documento:</strong></label>
-                <input type="date" class="form-control" id="invoice_date">
-            </div>
-
-            {#            <div class="form-group">#}
-            {#                <label for="idwarehouse"><strong>Armazém:</strong></label>#}
-            {#                <select id="warehouse" name="idwarehouse" class="dropstyle">#}
-            {#                    <option class="dropOptions" value="" disabled selected>#}
-            {#                        Escolha um Armazém#}
-            {#                    </option>#}
-            {#                    {% for w in warehouses %}#}
-            {#                        <option class="dropOptions" value="{{ w.idwarehouse }}">#}
-            {#                            {{ w.name }}#}
-            {#                        </option>#}
-            {#                    {% endfor %}#}
-            {#                </select>#}
-            {#            </div>#}
-            <div class="form-group">
-                <label for="payment_type"><strong>Modalidade de Pagamento:</strong></label>
-                <select id="payment_type" name="payment_type" class="dropstyle">
-                    <option class="dropOptions" value="" disabled selected>
-                        Escolha a modalidade de pagamento
-                    </option>
-                    {% for t in terms_list %}
-                        <option class="dropOptions" value="{{ t.idterm }}">
-                            {{ t.name }}
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-            {#            <div class="form-group col-lg-12">#}
-            {##}
-            {#                <label class="areaLabel" for="obs">Observações adicionais:</label>#}
-            {#                <div class="form-check"><textarea id="obs" class="input-text js-input" name="obs"></textarea></div>#}
-            {##}
-            {##}
-            {#            </div>#}
-            <div class="form-group ">
-                <label for="relatedDocs"><strong>Documento relacionado:</strong></label>
-                <div class="form-group " id="relatedDocs">
-                    <select id="related_documents" name="related_documents" class="dropstyle">
-                    </select>
-                </div>
-            </div>
-            <hr>
-            <button type="button" id="registerInvoice" class="btn btn-primary col-md-12">Registar documento</button>
-        </form>
+    <div class="form-group">
+      <label><strong>Natureza do documento:</strong></label>
+      <div class="form-check">
+        <input
+          type="radio"
+          class="form-check-input"
+          checked
+          name="invoice_type"
+          value="T"
+        />
+        <label class="form-check-label" for="radioOption1">Fatura</label>
+      </div>
+      <div class="form-check">
+        <input
+          type="radio"
+          class="form-check-input"
+          name="invoice_type"
+          value="P"
+        />
+        <label class="form-check-label" for="radioOption2"
+          >Guia de remessa</label
+        >
+      </div>
     </div>
-    <form
+    <div class="form-group">
+      <label for="invoice_number"
+        ><strong>Número de documento fornecedor:</strong></label
+      >
+      <input
+        type="text"
+        class="form-control"
+        id="invoice_number"
+        placeholder="Numero de fatura"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="invoice_date"><strong>Data de documento:</strong></label>
+      <input type="date" class="form-control" id="invoice_date" />
+    </div>
+
+    <div class="form-group">
+      <label for="payment_type"
+        ><strong>Modalidade de Pagamento:</strong></label
+      >
+      <select id="payment_type" name="payment_type" class="dropstyle">
+        <option class="dropOptions" value="" disabled selected>
+          Escolha a modalidade de pagamento
+        </option>
+        {% for t in terms_list %}
+        <option class="dropOptions" value="{{ t.idterm }}">{{ t.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="relatedDocs"><strong>Documento relacionado:</strong></label>
+      <div class="form-group" id="relatedDocs">
+        <select
+          id="related_documents"
+          name="related_documents"
+          class="dropstyle"
+        ></select>
+      </div>
+    </div>
+    <hr />
+    <button
+      type="button"
+      id="registerInvoice"
+      class="btn btn-primary col-md-12"
+    >
+      Registar documento
+    </button>
+  </form>
+</div>
+<form method="post">
+  {% csrf_token %}
+
+  <!-- Table -->
+  <div class="ordertable">
+    <table class="table" style="width: 800px" id="componentsTable">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Produto</th>
+          <th scope="col">Ref</th>
+          <th scope="col">Custo</th>
+          <th scope="col">IVA</th>
+          <th scope="col">Qtd</th>
+          <th scope="col">Total</th>
+          <th scope="col">SN</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</form>
+<script>
 
 
-            method="post">
-        {% csrf_token %}
+    function updateDropdownOptionsDocuments(options) {
+        $('#related_documents').empty();
+        $('#related_documents').append('<option value="-1">Documento referente</option>');
+        options['list'].forEach(function (option) {
+            $('#related_documents').append('<option value="' + option[0] + '">' + option[1] + '</option>');
+        });
+    }
+
+    function calculatePrice(cost, profit) {
+        return (cost * profit) + cost;
+    }
+
+    function updateDocumentsLines(options) {
+      var tableBody = $('#componentsTable tbody');
+      var i = 0;
+
+      options['list'].forEach(function (option) {
+          const newRow = $('<tr>');
+          newRow.append('<td>' + option[0] + '</td>');
+          newRow.append('<td>' + option[8] + '</td>');
+          newRow.append('<td>' + option[6] + '</td>');
+          newRow.append('<td class="cost_line">' + '<input oninput="updateCosts(' + i + ' , '+ option[7]+')" type="number" placeholder="Indique valor unitario" id="cust' + i + '"></td>');
+          newRow.append('<td>' + '23%' + '</td>');
+          newRow.append('<td>' + option[7] + '</td>');
+          newRow.append('<td>' + '<input readonly class="total_line" type="number" value="0" id="total' + i + '" disabled></td>');
+          newRow.append('<td>' + '<btn class="btn btn-primary">SN</btn>' + '</td>');
+
+          tableBody.append(newRow);
+          i++;
+      });
+  }
+
+  function updateCosts(index,qtd) {
+      var cost = parseFloat($('#cust' + index).val()) || 0;
+      console.log(qtd)
+      $('#total' + index).val((cost * qtd) * 1.23 );
+  }
 
 
-        <!-- Table -->
-        <div class="ordertable">
-            <table class="table" style="width: 800px" id="componentsTable">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Produto</th>
-                    <th scope="col">Ref</th>
-                    <th scope="col">Custo</th>
-                    <th scope="col">IVA</th>
-                    <th scope="col">Qtd</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">SN</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </form>
-    <script>
 
+    // Add an event listener to the checkbox
+    $(document).ready(function () {
 
-        function updateDropdownOptionsDocuments(options) {
-            $('#related_documents').empty();
-            $('#related_documents').append('<option value="-1">Documento referente</option>');
-            options['list'].forEach(function (option) {
-                $('#related_documents').append('<option value="' + option[0] + '">' + option[1] + '</option>');
-            });
-        }
+        $('#registerInvoice').click(function () {
 
-        function calculatePrice(cost, profit) {
-            return (cost * profit) + cost;
-        }
+                let supplier = $('#supplier').val()
+                let invoice_number = $('#invoice_number').val()
+                let invoice_type = $('input[name="invoice_type"]:checked').val();
+                let invoice_value = $('#invoice_value').val()
+                let invoice_date = $('#invoice_date').val()
+                let warehouse_id = $('#warehouse').val()
+                let payment_type = $('#payment_type').val()
+                let related_document_id = $('#related_documents').val()
+                console.log(supplier)
+                console.log(invoice_type)
+                console.log(invoice_number)
+                {#console.log(invoice_value)#}
+                console.log(invoice_date)
+                console.log(payment_type)
 
-        function updateDocumentsLines(options) {
-            // Find the table body
-            var tableBody = $('#componentsTable tbody');
-            options['list'].forEach(function (option) {
-                console.log(option)
-                const newRow = $('<tr>');
-                newRow.append('<td>' + option[0] + '</td>');
-                newRow.append('<td>' + option[8] + '</td>');
-                newRow.append('<td>' + option[6] + '</td>');
-                newRow.append('<td class="cost_line">' + '<input onchange="updateCosts()" type="number" placeholder="Indique valor unitario"></td>');
-                newRow.append('<td>' + '23%' + '</td>');
-                newRow.append('<td>' + option[7] + '</td>');
-                newRow.append('<td>' + '<input readonly class="total_line" type="number"></td>');
-                newRow.append('<td>' + '<btn class="btn btn-primary">SN</btn>' + '</td>');
+                console.log(related_document_id)
+                var documentLines = [];
+                $('#componentsTable tbody tr').each(function () {
+                    var line = [];
 
-                tableBody.append(newRow);
-            });
-        }
+                    // Iterate over each cell in the row
+                    $(this).find('td').each(function () {
+                        line.push($(this).text());
 
-        function updateCosts() {
-            console.log("aqui")
-            $('.total_line').val("xxxx");
-            $('.total_line').text("xxxx");
-        }
-
-        // Add an event listener to the checkbox
-        $(document).ready(function () {
-
-            $('#registerInvoice').click(function () {
-
-                    let supplier = $('#supplier').val()
-                    let invoice_number = $('#invoice_number').val()
-                    let invoice_type = $('input[name="invoice_type"]:checked').val();
-                    let invoice_value = $('#invoice_value').val()
-                    let invoice_date = $('#invoice_date').val()
-                    let warehouse_id = $('#warehouse').val()
-                    let payment_type = $('#payment_type').val()
-                    let related_document_id = $('#related_documents').val()
-                    console.log(supplier)
-                    console.log(invoice_type)
-                    console.log(invoice_number)
-                    {#console.log(invoice_value)#}
-                    console.log(invoice_date)
-                    console.log(payment_type)
-
-                    console.log(related_document_id)
-                    var documentLines = [];
-                    $('#componentsTable tbody tr').each(function () {
-                        var line = [];
-
-                        // Iterate over each cell in the row
-                        $(this).find('td').each(function () {
-                            line.push($(this).text());
-
-                            $(this).find('input').each(function () {
-                                line.push($(this).val());
-                            });
+                        $(this).find('input').each(function () {
+                            line.push($(this).val());
                         });
-                        documentLines.push(line);
                     });
-                    if (supplier == null || invoice_type == null || invoice_number == null || invoice_date === "" || payment_type == null || related_document_id === "-1" || related_document_id == null || documentLines.length === 0) {
-                        Swal.fire({
-                            position: "top-end",
-                            icon: "error",
-                            title: "Necessita de escolher todos as opções disponíveis!",
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then((result) => {
-                            return;
-                        });
-                    } else {
+                    documentLines.push(line);
+                });
+                if (supplier == null || invoice_type == null || invoice_number == null || invoice_date === "" || payment_type == null || related_document_id === "-1" || related_document_id == null || documentLines.length === 0) {
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "error",
+                        title: "Necessita de escolher todos as opções disponíveis!",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then((result) => {
+                        return;
+                    });
+                } else {
 
 
-                        $.ajax({
-                            type: "POST",
-                            url: '{% url "documentsSupplierRegisterInvoice" %}',
-                            data: {
-                                "supplier": supplier,
-                                "invoice_type": invoice_type,
-                                "invoice_number": invoice_number,
-                                "invoice_value": invoice_value,
-                                "invoice_date": invoice_date,
-                                "obs": "implementar na view",
-                                "payment_type": payment_type,
-                                "warehouse_id": warehouse_id,
-                                "related_document_id": related_document_id,
-                                "documentLines": JSON.stringify(documentLines)
-                            },
-                            dataType: "json",
-                            success: function (data) {
-                                Swal.fire({
-                                    title: "Documento criado",
-                                    text: "Documento de compra criado com sucesso",
-                                    imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
-                                    imageWidth: 200,
-                                    imageHeight: 200,
-                                    imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
-                                }).then((result) => {
-                                    window.location.replace("/dashboard")
-                                })
-
-                            },
-                            error: function () {
-                                Swal.fire({
-                                    title: "Erro!",
-                                    text: "Falha na comunicação com o servidor",
-                                    icon: "error",
-                                });
-                            },
-                        });
-                    }
-
-                }
-            )
-            ;
-
-
-            $('#related_documents').change(function () {
-                if (this.value != '-1') {
                     $.ajax({
                         type: "POST",
-                        url: '{% url "documentsSupplierLinesFetch" %}',
-                        data: {"id": this.value},
+                        url: '{% url "documentsSupplierRegisterInvoice" %}',
+                        data: {
+                            "supplier": supplier,
+                            "invoice_type": invoice_type,
+                            "invoice_number": invoice_number,
+                            "invoice_value": invoice_value,
+                            "invoice_date": invoice_date,
+                            "obs": "implementar na view",
+                            "payment_type": payment_type,
+                            "warehouse_id": warehouse_id,
+                            "related_document_id": related_document_id,
+                            "documentLines": JSON.stringify(documentLines)
+                        },
                         dataType: "json",
                         success: function (data) {
-                            // Handle the success response
-                            updateDocumentsLines(data)
+                            Swal.fire({
+                                title: "Documento criado",
+                                text: "Documento de compra criado com sucesso",
+                                imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
+                                imageWidth: 200,
+                                imageHeight: 200,
+                                imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
+                            }).then((result) => {
+                                window.location.replace("/dashboard")
+                            })
 
                         },
                         error: function () {
@@ -272,17 +249,22 @@
                     });
                 }
 
-            });
-            //Handle supplier changed
-            $('#supplier').change(function () {
+            }
+        )
+        ;
+
+
+        $('#related_documents').change(function () {
+            if (this.value != '-1') {
                 $.ajax({
                     type: "POST",
-                    url: '{% url "documentsSupplierFetch" %}',
+                    url: '{% url "documentsSupplierLinesFetch" %}',
                     data: {"id": this.value},
                     dataType: "json",
                     success: function (data) {
                         // Handle the success response
-                        updateDropdownOptionsDocuments(data);
+                        updateDocumentsLines(data)
+
                     },
                     error: function () {
                         Swal.fire({
@@ -292,10 +274,30 @@
                         });
                     },
                 });
+            }
+
+        });
+        //Handle supplier changed
+        $('#supplier').change(function () {
+            $.ajax({
+                type: "POST",
+                url: '{% url "documentsSupplierFetch" %}',
+                data: {"id": this.value},
+                dataType: "json",
+                success: function (data) {
+                    // Handle the success response
+                    updateDropdownOptionsDocuments(data);
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Erro!",
+                        text: "Falha na comunicação com o servidor",
+                        icon: "error",
+                    });
+                },
             });
         });
-
-
-    </script>
+    });
+</script>
 
 {% endblock %}

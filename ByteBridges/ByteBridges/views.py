@@ -520,7 +520,7 @@ def familyDelete(request):
             cursor.execute("CALL sp_families_delete(%s)", [family_id])
             return JsonResponse({'status': 'success'})
         # Redirect to the client list page after deletion
-        return redirect('familyList')
+    return redirect('familyList')
 
 
 @login_required
