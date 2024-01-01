@@ -187,10 +187,15 @@ class User(models.Model):
 
 
 class Sales(models.Model):
-    idorderclient = models.IntegerField()
-    idequipment = models.IntegerField()
+    idarticle = models.IntegerField()
+    name = models.CharField(max_length=80)
+    description = models.CharField(max_length=150)
+    cost = models.FloatField()
+    profitmargin = models.FloatField()
+    barcode = models.CharField(max_length=80)
+    reference = models.CharField(max_length=80)
     quantity = models.IntegerField()
-
+    category = models.CharField(max_length=80)
     def __str__(self):
         return self.name
 

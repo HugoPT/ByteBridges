@@ -5,20 +5,32 @@
 
 <div class="listContainer">
   <h1>Lista de Encomendas de Clientes</h1>
-  <table id="suppliersTable" class="display">
+  <table id="salesTable" class="display">
     <thead>
       <tr>
-        <th>ID Order Client</th>
-        <th>ID Equipment</th>
+        <th>ID Article</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Cost</th>
+        <th>Profit Margin</th>
+        <th>Barcode</th>
+        <th>Reference</th>
         <th>Quantity</th>
+        <th>Category</th>
       </tr>
     </thead>
     <tbody>
       {% for s in sales %}
       <tr>
-        <td>{{ s.idorderclient }}</td>
-        <td>{{ s.idequipment }}</td>
-        <td>{{ s.quantity|default:"N/A" }}</td>
+        <td>{{ s.idarticle }}</td>
+        <td>{{ s.name }}</td>
+        <td>{{ s.description }}</td>
+        <td>{{ s.cost }}</td>
+        <td>{{ s.profitmargin }}</td>
+        <td>{{ s.barcode }}</td>
+        <td>{{ s.reference }}</td>
+        <td>{{ s.quantity }}</td>
+        <td>{{ s.category }}</td>
       </tr>
       {% endfor %}
     </tbody>

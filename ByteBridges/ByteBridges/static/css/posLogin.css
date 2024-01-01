@@ -118,6 +118,12 @@ a {
   border-radius: 0 50px 50px 0;
   cursor: pointer;
 }
+.nav_hover_sub:hover {
+  background-color: var(--hover-color);
+  border-radius: 0 50px 50px 0;
+  cursor: pointer;
+  margin-left: -10px;
+}
 
 /* Estilo do logotipo da barra de navegação */
 .nav_logo {
