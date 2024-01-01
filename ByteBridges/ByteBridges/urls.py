@@ -75,6 +75,7 @@ urlpatterns = [
 
     # Component
     path("componentCreate", views.componentCreate, name="componentCreate"),
+    path("componentCreateViaJSON", views.componentCreateViaJSON, name="componentCreateViaJSON"),
     path("componentList", views.componentList, name="componentList"),
     path('componentEdit/<int:component_id>/', views.componentEdit, name='componentEdit'),
     path('componentDelete', views.componentDelete, name='componentDelete'),

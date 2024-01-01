@@ -14,6 +14,11 @@ def Homepage(request):
     return render(request, "Home.html")
 
 
+@csrf_exempt
+def logout(request):
+    return render(request, "home.html")
+
+
 @login_required
 def IndexPage(request):
     return render(request, template_name='dashboard.html')
@@ -323,8 +328,6 @@ def get_articles(request):
         data = {'articles': articles_data}
         print(data)
         return JsonResponse(data)
-
-
 
 
 @login_required
@@ -669,6 +672,26 @@ def componentCreate(request):
 
 
 @login_required
+@csrf_exempt
+def componentCreateViaJSON(request):
+    if request.method == 'POST':
+        json_file = request.FILES.get('json_file')
+        if json_file:
+            try:
+                json_data = json_file.read().decode('utf-8')
+                parsed_data = json.loads(json_data)
+                insert_counter = 0
+                for component in parsed_data:
+                    insert_counter += 1
+                    with connections['admin'].cursor() as cursor:
+                        cursor.execute("CALL sp_articletypes_create(%s, %s, %s, %s, %s, %s, %s, %s)",
+                                       [component['idfamily'], component['idcategory'],component['name'] ,component['description'] ,component['image'] ,component['profit_margin'] ,component['barcode'],component['reference']])
+                return JsonResponse({'message': 'Foram importados ' + str(insert_counter) + ' componentes novos'})
+            except json.JSONDecodeError:
+                return JsonResponse({'message': 'Invalid JSON file. Please upload a valid JSON file.'}, status=400)
+
+
+@login_required
 def componentEdit(request, component_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -860,7 +883,3 @@ def userDelete(request):
             return JsonResponse({'status': 'success'})
         # Redirect to the client list page after deletion
         return redirect('userList')
-
-
-
-

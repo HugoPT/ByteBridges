@@ -15,17 +15,17 @@
             <label class="label" for="name">Nome</label>
         </div>
 
-    <div class="form-field col-lg-6">
-        <select id="dropdown" name="family" class="input-text js-input" required>
-        <option value="" style="display: none;" selected></option>{% for c in family   %}
-      <option value="{{ c.idfamily }}">{{ c.name }}</option>
-      {% endfor %}
-        </select>
-        <label class="label" for="family">Familia</label>
+        <div class="form-field col-lg-6">
+            <select id="dropdown" name="family" class="input-text js-input" required>
+                <option value="" style="display: none;" selected></option>{% for c in family %}
+                <option value="{{ c.idfamily }}">{{ c.name }}</option>
+            {% endfor %}
+            </select>
+            <label class="label" for="family">Familia</label>
         </div>
 
 
-    <div class="form-field col-lg-6">
+        <div class="form-field col-lg-6">
             <input
                     id="profitmargin"
                     name="profitmargin"
@@ -59,19 +59,118 @@
             <label class="label" for="reference">Referência</label>
         </div>
 
-    <div class="form-field col-lg-12">
-      <label class="areaLabel" for="description">Descrição:</label>
+        <div class="form-field col-lg-12">
+            <label class="areaLabel" for="description">Descrição:</label>
             <textarea
                     id="description"
                     name="description"
                     rows="4"
                     cols="97"
                     style="border: 2px solid black;"
-                    required></textarea><br />
+                    required></textarea><br/>
         </div>
 
         <div class="form-field col-lg-12 submitBtn">
             <input class="submit-btn" type="submit" value="Criar Componente"/>
         </div>
     </form>
+    <hr>
+    <h2>Ferramenta de importação de componentes</h2>
+    <form enctype="multipart/form-data" action="{% url 'componentCreateViaJSON' %}">
+        {% csrf_token %}
+
+        <div class="form-field col-lg-6">
+            <label class="areaLabel" for="json_file">Escolha o ficheiro de produtos:</label>
+            <input name="json_file" type="file" id="json_file" accept=".json">
+        </div>
+
+
+        <div class="col-md-12">
+            <button class="btn btn-primary col-lg-12" id="uploadButton" type="button">Importar produtos</button>
+        </div>
+
+    </form>
+    <script>
+        $(document).ready(function () {
+            $('#uploadButton').click(function () {
+                var formData = new FormData();
+                var fileInput = $('#json_file')[0].files[0];
+                if (!fileInput) {
+                    alert('Insira um ficheiro em formato JSON!');
+                    return;
+                }
+                formData.append('json_file', fileInput);
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'componentCreateViaJSON',  // Replace with your actual upload URL
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        console.log(response);
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: response['message'],
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then((result) => {
+                            window.location.replace("/componentList")
+                        })
+                        // Handle success response
+                    },
+                    error: function (error) {
+                        console.log("xxxx")
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: "Ficheiro de importação não conforme",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                });
+            });
+        });
+
+        {#function send_json_file() {#}
+        {#    console.log("click")#}
+        {##}
+        {##}
+        {#    var formData = new FormData();#}
+        {#    console.log()#}
+        {#    var fileInput = $('#json_file')[0].files[0];#}
+        {##}
+        {#    formData.append('json_file', fileInput);#}
+        {##}
+        {##}
+        {#    $.ajax({#}
+        {#        type: "POST",#}
+        {#        url: "componentCreateViaJSON",#}
+        {#        data: {#}
+        {#            csrfmiddlewaretoken: '{{ csrf_token }}',#}
+        {#            data: formData,#}
+        {#        },#}
+        {#        success: function (response) {#}
+        {#            console.log("Data successfully sent to the server");#}
+        {#            Swal.fire({#}
+        {#                title: "Encomenda criada",#}
+        {#                text: "Foi criada a nova encomenda ao fornecedor",#}
+        {#                imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",#}
+        {#                imageWidth: 200,#}
+        {#                imageHeight: 200,#}
+        {#                imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"#}
+        {#            }).then((result) => {#}
+        {#                window.location.replace("/dashboard")#}
+        {#            })#}
+        {##}
+        {#        },#}
+        {#        error: function (error) {#}
+        {#            console.error("Error sending data to the server:", error);#}
+        {#        },#}
+        {#    });#}
+
+
+    </script>
 {% endblock %}
