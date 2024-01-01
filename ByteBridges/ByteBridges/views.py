@@ -886,6 +886,17 @@ def userDelete(request):
         return redirect('userList')
 
 
+@login_required
+def productionTaskList(request):
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("select  * from view_productions_list", [])
+        # If the stored procedure returns results, you can fetch them
+        tarefas = cursor.fetchall()
+
+        return render(request, 'productionTaskList.html', {'tarefas': tarefas})
+
+
 
 @login_required
 def productionOrderCreate(request):

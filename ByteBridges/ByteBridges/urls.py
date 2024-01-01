@@ -97,5 +97,5 @@ urlpatterns = [
 
     #Production
     path("productionOrderCreate", views.productionOrderCreate, name="productionOrderCreate"),
-
+    path("productionTaskList", views.productionTaskList, name="productionTaskList"),
 ]
