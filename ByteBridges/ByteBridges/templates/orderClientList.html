@@ -8,28 +8,64 @@
   <table id="suppliersTable" class="display">
     <thead>
       <tr>
-        <th>ID</th>
-        <th>Nº Documento</th>
-        <th>Nome Cliente</th>
+        <th>Documento</th>
+        <th>Cliente</th>
         <th>Data de encomenda</th>
         <th>Data de vencimento</th>
         <th>Estado encomenda</th>
+          <th>Operações</th>
       </tr>
     </thead>
     <tbody>
       {% for s in sales %}
       <tr>
-        <td>{{ s.iddocument }}</td>
-        <td>{{ s.documentnumber }}</td>
+      <td><a href="{{ s.iddocument }}"> {{ s.documentnumber }}</a></td>
         <td>{{ s.name }}</td>
         <td>{{ s.date|date:"Y-m-d" }}</td>
         <td>{{ s.duedate|date:"Y-m-d" }}</td>
-        <td>{% if s.status %} Complete {% else %} Processando {% endif %}</td>
+        <td>{% if s.status %} Pago {% else %} Pagamento Pendente {% endif %}</td>
+        <td>
+          <button type="button" class="btn btn-dark open-modal" data-target="exampleModalCenter" data-order-id="{{ s.iddocument }}">
+              <i class="fa-solid fa-circle-info"></i>
+          </button>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
+
+
+     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Detalhes</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" >&times;</span>
+                </button>
+            </div>
+            <form method="post">{% csrf_token %}
+            <div class="modal-body">
+                <table class="table" style="width: 800px; margin: 0 auto;" id="componentsTable">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Equipamento</th>
+                    <th scope="col">Ref</th>
+                    <th scope="col">Custo</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <script>
   $(document).ready(function () {
     $("#suppliersTable").DataTable({
@@ -39,7 +75,56 @@
         url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
       },
     });
-  });
+  $(".open-modal").on("click", function () {
+            var orderId = $(this).data("order-id");
+            var targetModal = $(this).data("target");
+
+            // Pass the orderId to the function that updates the modal content
+            updateModalContent(orderId);
+
+            $("#" + targetModal).modal("show");
+        });
+
+
+        function updateModalContent(orderId) {
+            $.ajax({
+                type: "POST",
+                url: '{% url "orderClientLinesFetch" %}',
+                data: { "id": orderId },
+                dataType: "json",
+                success: function (data) {
+                    // Handle the success response
+                    updateDocumentsLines(data);
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Erro!",
+                        text: "Falha na comunicação com o servidor",
+                        icon: "error",
+                    });
+                },
+            });
+        }
+
+        function updateDocumentsLines(options) {
+            // Find the table body
+            var tableBody = $('#componentsTable tbody');
+            tableBody.empty(); // Clear existing rows
+
+            options['list'].forEach(function (option) {
+                const newRow = $('<tr>');
+                newRow.append('<td>' + option[0] + '</td>');
+                newRow.append('<td>' + option[1] + '</td>');
+                newRow.append('<td>' + option[7] + '</td>');
+                newRow.append('<td>' + option[4] + '</td>');
+                tableBody.append(newRow);
+            });
+        }
+    });
+
+
+
+
 </script>
 
 {% endblock %}

@@ -49,6 +49,7 @@ urlpatterns = [
     path("orderClientCreate", views.orderClientCreate, name="orderClientCreate"),
     path("orderClientList", views.orderClientList, name="orderClientList"),
     path("orderSupplierLinesFetch", views.orderSupplierLinesFetch, name="orderSupplierLinesFetch"),
+    path("orderClientLinesFetch", views.orderClientLinesFetch, name="orderClientLinesFetch"),
 
 
     # documentsSupplier

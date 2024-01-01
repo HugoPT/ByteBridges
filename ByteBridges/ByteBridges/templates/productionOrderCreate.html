@@ -51,8 +51,8 @@
         <label for="client">Cliente:</label>
         <select name="client" id="client" class="dropstyleClient">
           <option value="" disabled selected>Selecione um Tecnico</option>
-          {% for c in clients %}
-          <option value="{{ c.idclient }}">{{ c.name }}</option>
+          {% for t in technicians %}
+          <option value="{{ t.id}}">{{ t.name }}</option>
           {% endfor %}
         </select>
         <br />
@@ -187,6 +187,7 @@
                 $("<input>")
                   .attr({
                     type: "number",
+                      id:"qtd",
                     placeholder: "Quantidade",
                     name: "quantity[]",
                     class: "carInputSell",
@@ -210,7 +211,6 @@
   function sendInfo() {
     // Get the selected client ID
     var selectedClientId = $("#client").val();
-    var selectedClientObservations = $("#observations").val();
     console.log(selectedClientId);
 
     // Create an array to store the selected rows and their quantities
@@ -226,11 +226,9 @@
       // Create an object to store the data
       var rowData = {
         id: getValue(data, "ID"),
-        quantity:
-          listItem.find(".carInputSell").val() === "0"
-            ? 1
-            : listItem.find(".carInputSell").val() || 1,
+        quantity: $("#qtd").val(),
       };
+      console.log(rowData);
 
       // Push the data object to the selectedRowsData array
       selectedRowsData.push(rowData);
@@ -251,8 +249,8 @@
           // Show success message if the request is successful
           Swal.fire({
             icon: "success",
-            title: "Venda criada com sucesso",
-            text: "A venda foi criada com sucesso",
+            title: "Ordem criada com sucesso",
+            text: "A ordem de produção foi criada com sucesso",
           });
           // Reload the page
           location.reload();
@@ -261,21 +259,21 @@
           // Show error message if the request fails
           Swal.fire({
             icon: "error",
-            title: "Erro ao criar a venda",
-            text: "Ocorreu um erro ao criar a venda",
+            title: "Erro ao criar a ordem",
+            text: "Ocorreu um erro ao criar a ordem de produção",
           });
         },
       });
     } else if (selectedClientId == null) {
       Swal.fire({
         icon: "error",
-        title: "Erro ao criar a venda",
-        text: "Por favor selecione um cliente",
+        title: "Erro ao criar a ordem",
+        text: "Por favor selecione um tecnico",
       });
     } else {
       Swal.fire({
         icon: "error",
-        title: "Erro ao criar a venda",
+        title: "Erro ao criar a ordem",
         text: "Por favor selecione um equipamento e quantidade desejada",
       });
     }

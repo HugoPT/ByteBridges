@@ -186,6 +186,20 @@ class User(models.Model):
         db_table = 'users'
 
 
+class Tecnician(models.Model):
+    id = models.AutoField(primary_key=True, unique=True)
+    name = models.CharField(max_length=80)
+    role = models.IntegerField()
+    labor = models.IntegerField()
+    hourrate = models.FloatField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'tecnicians'
+
+
 
 class ClientBuyList(models.Model):
     iddocument = models.AutoField(primary_key=True, unique=True)

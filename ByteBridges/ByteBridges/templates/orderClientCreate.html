@@ -198,6 +198,7 @@
                 $("<input>")
                   .attr({
                     type: "number",
+                      id:"qtd",
                     placeholder: "Quantidade",
                     name: "quantity[]",
                     class: "carInputSell",
@@ -237,10 +238,7 @@
       // Create an object to store the data
       var rowData = {
         id: getValue(data, "ID"),
-        quantity:
-          listItem.find(".carInputSell").val() === "0"
-            ? 1
-            : listItem.find(".carInputSell").val() || 1,
+        quantity:$("#qtd").val(),
       };
 
       // Push the data object to the selectedRowsData array

@@ -1,6 +1,6 @@
 import datetime
 from django.shortcuts import render, redirect
-from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, Stock, ClientBuyList
+from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, Stock, ClientBuyList, Tecnician
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db import connections
@@ -126,6 +126,20 @@ def orderClientList(request):
         print("aaaaaaaaaaa", sales)
 
     return render(request, 'orderClientList.html', {'sales': sales})
+
+
+@csrf_exempt
+@login_required
+def orderClientLinesFetch(request):
+    # Fetch the family information from the database
+    with connections['admin'].cursor() as cursor:
+        id = request.POST.get('id')
+        cursor.execute("SELECT * FROM fn_ordersClient_getLines(%s);", [id])
+        list = cursor.fetchall()
+        print(list)
+        return JsonResponse({'list': list})
+
+
 
 @login_required
 def orderClientCreate(request):
@@ -906,17 +920,18 @@ def productionOrderCreate(request):
         cursor.execute("select * from view_equipments_production")
         production = cursor.fetchall()
 
-        cursor.execute("SELECT * FROM view_clients_list", [])
-        resultClient = cursor.fetchall()
-        clients = [Client(*row) for row in resultClient]
+        cursor.execute("SELECT * FROM view_technicians", [])
+        result = cursor.fetchall()
+        technicians = [Tecnician(*row) for row in result]
 
-        tecnico = 5
 
         if request.method == 'POST':
+            tecnico = request.POST.get('client')
             rows_data = json.loads(request.POST.get('rows'))
             for row in rows_data:
+                print("Quantity:", row['quantity'])
                 cursor.execute("CALL sp_production_create(%s,%s,%s,%s)", [current_user, tecnico, row['id'], row['quantity']])
             return JsonResponse({'status': 'success'})
 
-        context = {'production': production, 'clients': clients}
+        context = {'production': production, 'technicians': technicians}
         return render(request, 'productionOrderCreate.html', context)
