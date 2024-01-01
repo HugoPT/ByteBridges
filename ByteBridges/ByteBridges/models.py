@@ -182,23 +182,22 @@ class User(models.Model):
         return self.name
 
     class Meta:
-        # Specify the table name
+    
         db_table = 'users'
 
 
-class Sales(models.Model):
-    idarticle = models.IntegerField()
+
+class ClientBuyList(models.Model):
+    iddocument = models.AutoField(primary_key=True, unique=True)
+    documentnumber = models.CharField(max_length=20)
     name = models.CharField(max_length=80)
-    description = models.CharField(max_length=150)
-    cost = models.FloatField()
-    profitmargin = models.FloatField()
-    barcode = models.CharField(max_length=80)
-    reference = models.CharField(max_length=80)
-    quantity = models.IntegerField()
-    category = models.CharField(max_length=80)
+    date = models.DateField()
+    duedate = models.DateField()
+    status = models.BooleanField()
+
     def __str__(self):
-        return self.name
+        return f"{self.iddocument} - {self.documentnumber} - {self.name} - {self.date} - {self.duedate} - {self.status}"
+
 
     class Meta:
-        # Specify the table name
-        db_table = 'sales'
+        db_table = 'clientBuyList'

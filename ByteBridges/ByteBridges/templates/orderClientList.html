@@ -5,32 +5,26 @@
 
 <div class="listContainer">
   <h1>Lista de Encomendas de Clientes</h1>
-  <table id="salesTable" class="display">
+  <table id="suppliersTable" class="display">
     <thead>
       <tr>
-        <th>ID Article</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Cost</th>
-        <th>Profit Margin</th>
-        <th>Barcode</th>
-        <th>Reference</th>
-        <th>Quantity</th>
-        <th>Category</th>
+        <th>ID</th>
+        <th>Nº Documento</th>
+        <th>Nome Cliente</th>
+        <th>Data de encomenda</th>
+        <th>Data de vencimento</th>
+        <th>Estado encomenda</th>
       </tr>
     </thead>
     <tbody>
       {% for s in sales %}
       <tr>
-        <td>{{ s.idarticle }}</td>
+        <td>{{ s.iddocument }}</td>
+        <td>{{ s.documentnumber }}</td>
         <td>{{ s.name }}</td>
-        <td>{{ s.description }}</td>
-        <td>{{ s.cost }}</td>
-        <td>{{ s.profitmargin }}</td>
-        <td>{{ s.barcode }}</td>
-        <td>{{ s.reference }}</td>
-        <td>{{ s.quantity }}</td>
-        <td>{{ s.category }}</td>
+        <td>{{ s.date|date:"Y-m-d" }}</td>
+        <td>{{ s.duedate|date:"Y-m-d" }}</td>
+        <td>{% if s.status %} Complete {% else %} Processando {% endif %}</td>
       </tr>
       {% endfor %}
     </tbody>

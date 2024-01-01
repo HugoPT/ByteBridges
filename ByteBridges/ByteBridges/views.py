@@ -2,12 +2,13 @@ import datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, \
-    Stock, Sales
+    Stock, ClientBuyList
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db import connections
 from django.http import JsonResponse
 import json
+from django.core.serializers import serialize
 
 
 def Homepage(request):
@@ -111,19 +112,22 @@ def clientDelete(request):
         # Redirect to the client list page after deletion
         return redirect('clientList')
 
-
 @login_required
 def orderClientList(request):
     with connections['admin'].cursor() as cursor:
-        # Call the stored procedure using the CALL statement
-        cursor.execute("SELECT * FROM view_sales_list", [])
-        # If the stored procedure returns results, you can fetch them
+        cursor.execute("SELECT * FROM view_buy_list_clients", [])
         result = cursor.fetchall()
-        print(result)
-        sales = [Sales(*row) for row in result]
+
+        sales = []
+        for row in result:
+            iddocument, documentnumber, name, date_str, duedate_str, status = row
+            date = datetime.datetime.strptime(date_str, '%d-%m-%Y').date()
+            duedate = datetime.datetime.strptime(duedate_str, '%d-%m-%Y').date()
+            sales.append(ClientBuyList(iddocument, documentnumber, name, date, duedate, status))
+
+        print("aaaaaaaaaaa", sales)
 
     return render(request, 'orderClientList.html', {'sales': sales})
-
 
 @login_required
 def orderClientCreate(request):
