@@ -49,6 +49,7 @@ urlpatterns = [
     path("orderClientCreate", views.orderClientCreate, name="orderClientCreate"),
     path("orderClientList", views.orderClientList, name="orderClientList"),
     path("orderSupplierLinesFetch", views.orderSupplierLinesFetch, name="orderSupplierLinesFetch"),
+    path("orderClientLinesFetch", views.orderClientLinesFetch, name="orderClientLinesFetch"),
 
 
     # documentsSupplier
@@ -98,6 +99,8 @@ urlpatterns = [
     #Production
     path("productionOrderCreate", views.productionOrderCreate, name="productionOrderCreate"),
     
+    #TaskList
+    path("productionTaskList", views.productionTaskList, name="productionTaskList"),
     #Items
     path('get_items/', views.get_items, name='get_items'),
 

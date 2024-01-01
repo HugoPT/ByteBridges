@@ -1,8 +1,6 @@
 import datetime
-
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, \
-    Stock, ClientBuyList,EquipmentsItems
+from django.shortcuts import render, redirect
+from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, Stock, ClientBuyList,EquipmentsItems, Tecnician
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db import connections
@@ -112,6 +110,7 @@ def clientDelete(request):
         # Redirect to the client list page after deletion
         return redirect('clientList')
 
+
 @login_required
 def orderClientList(request):
     with connections['admin'].cursor() as cursor:
@@ -125,6 +124,21 @@ def orderClientList(request):
             duedate = datetime.datetime.strptime(duedate_str, '%d-%m-%Y').date()
             sales.append(ClientBuyList(iddocument, documentnumber, name, date, duedate, status))
     return render(request, 'orderClientList.html', {'sales': sales})
+
+
+@csrf_exempt
+@login_required
+def orderClientLinesFetch(request):
+    # Fetch the family information from the database
+    with connections['admin'].cursor() as cursor:
+        id = request.POST.get('id')
+        cursor.execute("SELECT * FROM fn_ordersClient_getLines(%s);", [id])
+        list = cursor.fetchall()
+        print(list)
+        return JsonResponse({'list': list})
+
+
+
 
 @login_required
 def orderClientCreate(request):
@@ -329,10 +343,6 @@ def get_articles(request):
         print(data)
         return JsonResponse(data)
     
-    
-from django.http import JsonResponse
-from django.db import connections
-
 @login_required
 def get_items(request):
     if request.method == 'GET':
@@ -395,10 +405,12 @@ def documentsSupplier(request):
     if request.method == 'POST':
         data = json.loads(request.POST.get('data'))
         header = json.loads(request.POST.get('header'))
+        print(data)
+        print(header)
         # create a new supplier enc header
         with connections['admin'].cursor() as cursor:
             cursor.execute("select fn_orderssupplier_create(%s,%s,%s)",
-                           [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
+                           [ header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse'] ])
             result = cursor.fetchone()
             if result:
                 for item in data:
@@ -447,17 +459,23 @@ def documentsSupplierRegisterInvoice(request):
         invoice_value = request.POST.get('invoice_value')
         invoice_date = request.POST.get('invoice_date')
         payment_type = request.POST.get('payment_type')
-
         documentLines = json.loads(request.POST.get('documentLines'))
         related_document_id = request.POST.get('related_document_id')
+        serialNumbers = json.loads(request.POST.get('serialNumbers'))
         obs = request.POST.get('obs')
 
         cursor.execute("select fn_generate_ordersSupplier_invoice(%s,%s,%s,%s,%s,%s);",
                        [payment_type, related_document_id, obs, invoice_type, invoice_number, invoice_date])
         doc = cursor.fetchone()
-
+        print(doc)
         for line in documentLines:
-            cursor.execute("CALL  sp_lines_create(%s,%s,%s);", [doc[0], line[0], line[6]])
+            cursor.execute("call sp_linesInvoice_create (%s,%s,%s,%s);", [doc[0], line[0], line[6], line[4]])
+            for x in serialNumbers:
+                for key, value in x.items():
+                    if key==line[0]:
+                        for sn in value:
+                            print("serial " + sn)
+                            cursor.execute("CALL sp_serialGive(%s,%s)", [key, sn])
         return JsonResponse({'list': related_document_id})
 
 
@@ -750,7 +768,9 @@ def componentCreateViaJSON(request):
                     insert_counter += 1
                     with connections['admin'].cursor() as cursor:
                         cursor.execute("CALL sp_articletypes_create(%s, %s, %s, %s, %s, %s, %s, %s)",
-                                       [component['idfamily'], component['idcategory'],component['name'] ,component['description'] ,component['image'] ,component['profit_margin'] ,component['barcode'],component['reference']])
+                                       [component['idfamily'], component['idcategory'], component['name'],
+                                        component['description'], component['image'], component['profit_margin'],
+                                        component['barcode'], component['reference']])
                 return JsonResponse({'message': 'Foram importados ' + str(insert_counter) + ' componentes novos'})
             except json.JSONDecodeError:
                 return JsonResponse({'message': 'Invalid JSON file. Please upload a valid JSON file.'}, status=400)
@@ -950,32 +970,37 @@ def userDelete(request):
         return redirect('userList')
 
 
+@login_required
+def productionTaskList(request):
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("select  * from view_productions_list", [])
+        # If the stored procedure returns results, you can fetch them
+        tarefas = cursor.fetchall()
+
+        return render(request, 'productionTaskList.html', {'tarefas': tarefas})
+
 
 @login_required
 def productionOrderCreate(request):
+    current_user = request.user.id
+    print("Current User ID:", current_user)
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_equipments_production")
         production = cursor.fetchall()
 
-        cursor.execute("SELECT * FROM view_clients_list", [])
-        resultClient = cursor.fetchall()
-        clients = [Client(*row) for row in resultClient]
+        cursor.execute("SELECT * FROM view_technicians", [])
+        result = cursor.fetchall()
+        technicians = [Tecnician(*row) for row in result]
 
-        current_user = request.user
 
         if request.method == 'POST':
-            client_id = request.POST.get('client')
+            tecnico = request.POST.get('client')
             rows_data = json.loads(request.POST.get('rows'))
-            observations = request.POST.get('observations')
+            for row in rows_data:
+                print("Quantity:", row['quantity'])
+                cursor.execute("CALL sp_production_create(%s,%s,%s,%s)", [current_user, tecnico, row['id'], row['quantity']])
+            return JsonResponse({'status': 'success'})
 
-            # Create order client
-            cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s)", [client_id, observations])
-            idorderclient = cursor.fetchone()
-            if idorderclient:
-                for row in rows_data:
-                    cursor.execute("CALL sp_sales_create(%s,%s,%s)", [idorderclient[0], row['id'], row['quantity']])
-
-                return JsonResponse({'status': 'success'})
-
-    context = {'production': production, 'clients': clients}
-    return render(request, 'productionOrderCreate.html', context)
+        context = {'production': production, 'technicians': technicians}
+        return render(request, 'productionOrderCreate.html', context)

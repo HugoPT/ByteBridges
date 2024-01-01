@@ -1,0 +1,53 @@
+{% extends 'base_template.html' %} {%block extra_css%} {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
+{%endblock%}{% block content %}
+
+<div class="listContainer">
+  <h1>Lista de Tarefas de Produção</h1>
+
+  <table id="componentsTable" class="display">
+    <thead>
+      <tr>
+          <th>Ordem</th>
+          <th>Nome</th>
+          <th>Categoria</th>
+          <th>Data</th>
+          <th>Responsavel</th>
+          <th>Tecnico</th>
+          <th>Actions</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in tarefas %}
+      <tr>
+          <td>{{ c.3 }}</td>
+        <td>{{ c.6 }}</td>
+        <td>{{ c.8 }}</td>
+        <td>{{ c.2 }}</td>
+        <td>{{ c.4 }}</td>
+        <td>{{ c.5 }}</td>
+        <td>
+            <a class="btn btn-warning" href="{% url 'componentEdit' component_id=c.0 %}">Editar</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+
+
+  $(document).ready(function () {
+    $("#componentsTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+      },
+    });
+  });
+</script>
+
+{% endblock %}
