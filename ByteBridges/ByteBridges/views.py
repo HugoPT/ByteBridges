@@ -1,8 +1,6 @@
 import datetime
-
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, \
-    Stock, ClientBuyList
+from django.shortcuts import render, redirect
+from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, Stock, ClientBuyList
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db import connections
@@ -891,6 +889,8 @@ def userDelete(request):
 
 @login_required
 def productionOrderCreate(request):
+    current_user = request.user.id
+    print("Current User ID:", current_user)
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_equipments_production")
         production = cursor.fetchall()
@@ -899,21 +899,13 @@ def productionOrderCreate(request):
         resultClient = cursor.fetchall()
         clients = [Client(*row) for row in resultClient]
 
-        current_user = request.user
+        tecnico = 5
 
         if request.method == 'POST':
-            client_id = request.POST.get('client')
             rows_data = json.loads(request.POST.get('rows'))
-            observations = request.POST.get('observations')
+            for row in rows_data:
+                cursor.execute("CALL sp_production_create(%s,%s,%s,%s)", [current_user, tecnico, row['id'], row['quantity']])
+            return JsonResponse({'status': 'success'})
 
-            # Create order client
-            cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s)", [client_id, observations])
-            idorderclient = cursor.fetchone()
-            if idorderclient:
-                for row in rows_data:
-                    cursor.execute("CALL sp_sales_create(%s,%s,%s)", [idorderclient[0], row['id'], row['quantity']])
-
-                return JsonResponse({'status': 'success'})
-
-    context = {'production': production, 'clients': clients}
-    return render(request, 'productionOrderCreate.html', context)
+        context = {'production': production, 'clients': clients}
+        return render(request, 'productionOrderCreate.html', context)

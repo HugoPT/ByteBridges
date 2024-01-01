@@ -3,7 +3,7 @@
 
 {% endblock %} {% block content %}
 <div class="listContainer">
-  <h1>Criar Nova Encomenda</h1>
+  <h1>Criar Nova Produção</h1>
   <table id="suppliersTable" class="display">
     <thead>
       <tr>
@@ -38,33 +38,24 @@
   </table>
 
   <button id="getSelectedRowsBtn" class="btn btn-primary">
-    Adicionar items selecionados
+    Adicionar item selecionado
   </button>
 
   <div id="selectedRowsContainer" class="display"></div>
   <div id="selectClient" class="display">
     <div class="clientBox">
-      <h5>Selecionar Cliente</h5>
+      <h5>Selecionar Tecnico</h5>
 
       <form action="#" method="POST">
         {% csrf_token %}
         <label for="client">Cliente:</label>
         <select name="client" id="client" class="dropstyleClient">
-          <option value="" disabled selected>Selecione um Cliente</option>
+          <option value="" disabled selected>Selecione um Tecnico</option>
           {% for c in clients %}
           <option value="{{ c.idclient }}">{{ c.name }}</option>
           {% endfor %}
         </select>
         <br />
-        <div class="obsSell">
-          <label for="clientDescription">Observações:</label>
-          <textarea
-            id="observations"
-            name="clientDescription"
-            rows="4"
-            cols="50"
-          ></textarea>
-        </div>
       </form>
     </div>
   </div>
@@ -75,7 +66,7 @@
       onclick="sendInfo()"
       id="showCreateBtn"
     >
-      Criar Encomenda
+      Criar Ordem de Produção
     </button>
   </div>
 </div>
@@ -152,7 +143,7 @@
       }
 
       // Create a title for the list
-      var listTitle = $("<div>").addClass("list-title").text("Carrinho:");
+      var listTitle = $("<div>").addClass("list-title").text("Ordem de Produção:");
       selectedRowsContainer.append(listTitle);
 
       // Create a new list and append selected rows to it
@@ -190,7 +181,7 @@
           $("<div>")
             .addClass("input-title")
             .append(
-              $("<div>").append($("<label>").text("Add Quantity")),
+              $("<div>").append($("<label>").text("Quantidade")),
               $("<div class='carInputStyle'>").append(
                 $("<i>").addClass("bx bxs-cart-add iconCar"),
                 $("<input>")
@@ -249,12 +240,11 @@
     if (selectedClientId && selectedRowsData.length > 0) {
       // Send the data to the server
       $.ajax({
-        url: "{% url 'orderClientCreate' %}",
+        url: "{% url 'productionOrderCreate' %}",
         type: "POST",
         data: {
           csrfmiddlewaretoken: "{{ csrf_token }}",
           client: selectedClientId,
-          observations: selectedClientObservations,
           rows: JSON.stringify(selectedRowsData),
         },
         success: function (response) {
