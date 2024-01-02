@@ -143,6 +143,17 @@ def orderClientLinesFetch(request):
         return JsonResponse({'list': list})
 
 
+
+@csrf_exempt
+@login_required
+def orderClientLinesFetchInvoice(request, idorder):
+    # Fetch the supplier information from the database
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("SELECT * FROM fn_ordersClient_getLines(%s);", [idorder])
+        order = cursor.fetchall()
+
+    return render(request, 'orderClientInvoiceDetails.html', {'idorder': idorder,'order': order})
+
 @login_required
 def orderClientCreate(request):
     with connections['admin'].cursor() as cursor:
