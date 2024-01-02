@@ -981,27 +981,61 @@ def userEdit(request, user_id):
         cursor.execute("SELECT * FROM view_users_list WHERE iduser = %s", [user_id])
         user = cursor.fetchone()
 
+        cursor.execute("select * from view_labors_list")
+        result = cursor.fetchall()
+        labor = [Labor(*row) for row in result]
+
     if request.method == 'POST':
-        # Get the data from the form
-        idrole = request.POST.get('role')
         idlabor = request.POST.get('labor')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        name = request.POST.get('name')
 
         # Call the stored procedure to update the client
         with connections['admin'].cursor() as cursor:
-            cursor.execute("CALL sp_users_update(%s, %s, %s, %s, %s, %s)",
-                           [user_id, idrole, idlabor, email, password, name])
+            cursor.execute("CALL sp_user_setLabor(%s, %s)",
+                           [user_id, idlabor])
             # Commit the changes to the database
 
         # Redirect to the client list page after update
         return redirect('userList')
 
-    return render(request, 'userEdit.html', {'user_id': user_id,
-                                             'user': {'name': user[1], 'password': user[3],
-                                                      'email': user[2], 'labor': user[5],
-                                                      'role': user[4]}})
+    return render(request, 'userEdit.html', {'user_id': user_id,'labor':labor,
+                                             'user': {'name': user[1] }})
+
+def componentEdit(request, component_id):
+    # Fetch the client information from the database
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("SELECT * FROM view_components_list WHERE idarticletype = %s", [component_id])
+        component = cursor.fetchone()
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+        family = [Family(*row) for row in result]
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        idfamily = request.POST.get('idfamily')
+        idcategory = None
+        description = request.POST.get('description')
+        image = ""
+        profit_margin = int(request.POST.get('profitmargin')) / 100
+        barcode = request.POST.get('barcode')
+        reference = request.POST.get('reference')
+
+        # Call the stored procedure to update the client
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("CALL sp_articletypes_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                           [component_id, idfamily, idcategory, name, description, image, profit_margin, barcode,
+                            reference])
+            # Commit the changes to the database
+
+        # Redirect to the client list page after update
+        return redirect('componentList')
+
+    return render(request, 'componentEdit.html', {'component_id': component_id, 'family': family,
+                                                  'component': {'name': component[1], 'family': component[2],
+                                                                'description': component[4],
+                                                                'profitmargin': int(component[5] * 100),
+                                                                'barcode': component[6],
+                                                                'reference': component[7]}})
 
 
 @login_required

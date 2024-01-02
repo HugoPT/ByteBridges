@@ -9,64 +9,15 @@
   {% csrf_token %}
 
   <div class="form-field col-lg-6">
-    <input
-      id="name"
-      name="name"
-      class="input-text js-input"
-      type="text"
-      value="{{ user.name }}"
-      required
-    />
-    <label class="label" for="name">Nome</label>
+    <select id="dropdown" name="iduser" class="input-text js-input" required>
+        {% for l in labor %}
+            <option value="{{ l.idlabor }}" {% if u.name == user.labor %}selected{% endif %}>
+                {{ u.name }}
+            </option>
+        {% endfor %}
+    </select>
+      <label class="label" for="iduser">Tipo de Função</label>
   </div>
-  <div class="form-field col-lg-6">
-    <input
-      id="password"
-      name="password"
-      class="input-text js-input"
-      type="text"
-      value="{{ user.password }}"
-      required
-    />
-    <label class="label" for="nif">Password</label>
-  </div>
-
-  <div class="form-field col-lg-12">
-    <input
-      id="email"
-      name="email"
-      class="input-text js-input"
-      type="text"
-      value="{{ user.email }}"
-      required
-    />
-    <label class="label" for="address">Email</label>
-  </div>
-
-    <div class="form-field col-lg-6">
-    <input
-      id="role"
-      name="role"
-      class="input-text js-input"
-      type="text"
-      value="{{ user.role }}"
-      required
-    />
-    <label class="label" for="city">Função</label>
-  </div>
-
-  <div class="form-field col-lg-6">
-    <input
-      id="labor"
-      name="labor"
-      class="input-text js-input"
-      type="text"
-      value="{{ user.labor }}"
-      required
-    />
-    <label class="label" for="zipcode">Tipo de Função</label>
-  </div>
-  <br />
 
   <div class="form-field col-lg-12 submitBtn">
     <input class="submit-btn" type="submit" value="Atualizar Utilizador" />

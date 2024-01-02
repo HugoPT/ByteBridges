@@ -175,7 +175,6 @@ class User(models.Model):
     iduser = models.AutoField(primary_key=True, unique=True)
     name = models.CharField(max_length=80)
     email = models.CharField(max_length=70)
-    password = models.CharField(max_length=100)
     role = models.IntegerField()
     labor = models.IntegerField()
 
