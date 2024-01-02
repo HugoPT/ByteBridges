@@ -372,7 +372,7 @@ def get_articles(request):
 @login_required
 def get_items(request):
     if request.method == 'GET':
-        equipment_id = request.GET.get('equipment_id')
+        equipment_id = request.GET.get('equipment_id')   
         print("aaaaaaaaaaaaaaaaaaa", equipment_id)
         if equipment_id and equipment_id.isdigit():
             with connections['admin'].cursor() as cursor:
@@ -380,7 +380,7 @@ def get_items(request):
                 result = cursor.fetchall()
                 print("bbbbbbbbbbbbbb", result)
                 items = [EquipmentsItems(*row) for row in result]
-
+                
             # Convert ComponentListFamily objects to dictionaries
             items_data = [
                 {
@@ -616,23 +616,63 @@ def equipmentCreate(request):
         cursor.execute("select * from view_categories_list")
         result = cursor.fetchall()
         category = [Category(*row) for row in result]
-        context = {'category': category}
 
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        idfamily = None
-        idcategory = request.POST.get('category')
-        description = request.POST.get('description')
-        image = ""
-        profit_margin = 0
-        barcode = request.POST.get('barcode')
-        reference = request.POST.get('reference')
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+        families = [Family(*row) for row in result]
 
-        with connections['admin'].cursor() as cursor:
-            # Call the stored procedure using the CALL statement
-            cursor.execute("CALL sp_articletypes_create(%s, %s, %s, %s, %s, %s, %s, %s)",
-                           [idfamily, idcategory, name, description, image, profit_margin, barcode, reference])
-            return redirect('dashboard')
+        context = {'category': category, 'families': families}
+
+        if request.method == 'POST':
+            equipment_data = request.POST.get('equipment')
+            print("CHEGUEI CRLH TOU AKI AAAAAAAAAAAAA", equipment_data)
+
+            # Convert the JSON string to a Python list containing a dictionary
+            equipment_list = json.loads(equipment_data)
+
+            # Ensure the list is not empty and extract the dictionary
+            if equipment_list and isinstance(equipment_list, list):
+                equipment_dict = equipment_list[0]
+                # Extract values from the dictionary
+                name = equipment_dict.get('name', '')
+                idcategory = equipment_dict.get('idcategory', '')
+                description = equipment_dict.get('description', '')
+                image = ""
+                profit_margin = 0
+                barcode = equipment_dict.get('barcode', '')
+                reference = equipment_dict.get('reference', '')
+                idfamily = None
+
+                # Components
+                components_data = request.POST.get('components')
+                components = json.loads(components_data)
+            
+                try:
+                    # Call the stored procedure using the CALL statement
+                    cursor.execute("SELECT fn_articletypes_create(%s, %s, %s, %s, %s, %s, %s, %s)",
+                                [idfamily, idcategory, name, description, image, profit_margin, barcode, reference])
+                    idequipment = cursor.fetchone()[0] 
+
+                 
+                    if idequipment:
+                        # Process Components and call Components create
+                        for component in components:
+                            component_id = component['component']
+                            quantity = component['quantity']
+
+                            # Call the stored procedure for components (Modify this according to your stored procedure)
+                            cursor.execute("CALL sp_productionitems_add(%s, %s, %s)", [idequipment, component_id, quantity])
+
+                        # Commit the transaction explicitly
+                        connections['admin'].commit()
+
+                        return JsonResponse({'status': 'success'})
+
+                except Exception as e:
+                    print(f"Error executing query: {e}")
+
+                finally:
+                    cursor.close()
 
     return render(request, 'equipmentCreate.html', context=context)
 
