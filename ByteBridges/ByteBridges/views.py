@@ -163,12 +163,15 @@ def orderClientCreate(request):
             idorderclient = cursor.fetchone()
             if idorderclient:
                 for row in rows_data:
+                    print("Row:", row)
                     cursor.execute("CALL sp_sales_create(%s,%s,%s)", [idorderclient[0], row['id'], row['quantity']])
 
                 return JsonResponse({'status': 'success'})
 
     context = {'toSell': toSell, 'clients': clients}
     return render(request, 'orderClientCreate.html', context)
+
+
 
 
 @login_required
