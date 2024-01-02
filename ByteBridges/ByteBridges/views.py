@@ -357,7 +357,7 @@ def get_articles(request):
         print(data)
         return JsonResponse(data)
 
-
+#get Components for lines table
 @login_required
 def get_items(request):
     if request.method == 'GET':
