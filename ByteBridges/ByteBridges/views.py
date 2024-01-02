@@ -986,7 +986,7 @@ def userEdit(request, user_id):
         labor = [Labor(*row) for row in result]
 
     if request.method == 'POST':
-        idlabor = request.POST.get('labor')
+        idlabor = request.POST.get('idlabor')
 
         # Call the stored procedure to update the client
         with connections['admin'].cursor() as cursor:
@@ -998,44 +998,8 @@ def userEdit(request, user_id):
         return redirect('userList')
 
     return render(request, 'userEdit.html', {'user_id': user_id,'labor':labor,
-                                             'user': {'name': user[1] }})
+                                             'user': {'labor': user[4] }})
 
-def componentEdit(request, component_id):
-    # Fetch the client information from the database
-    with connections['admin'].cursor() as cursor:
-        cursor.execute("SELECT * FROM view_components_list WHERE idarticletype = %s", [component_id])
-        component = cursor.fetchone()
-
-        cursor.execute("select * from view_families_list")
-        result = cursor.fetchall()
-        family = [Family(*row) for row in result]
-
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        idfamily = request.POST.get('idfamily')
-        idcategory = None
-        description = request.POST.get('description')
-        image = ""
-        profit_margin = int(request.POST.get('profitmargin')) / 100
-        barcode = request.POST.get('barcode')
-        reference = request.POST.get('reference')
-
-        # Call the stored procedure to update the client
-        with connections['admin'].cursor() as cursor:
-            cursor.execute("CALL sp_articletypes_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                           [component_id, idfamily, idcategory, name, description, image, profit_margin, barcode,
-                            reference])
-            # Commit the changes to the database
-
-        # Redirect to the client list page after update
-        return redirect('componentList')
-
-    return render(request, 'componentEdit.html', {'component_id': component_id, 'family': family,
-                                                  'component': {'name': component[1], 'family': component[2],
-                                                                'description': component[4],
-                                                                'profitmargin': int(component[5] * 100),
-                                                                'barcode': component[6],
-                                                                'reference': component[7]}})
 
 
 @login_required
