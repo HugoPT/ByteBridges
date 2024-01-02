@@ -154,8 +154,11 @@ def orderClientFetchInvoice(request, idorder):
         cursor.execute("SELECT * FROM fn_ordersClient_getLines(%s);", [idorder])
         order = cursor.fetchall()
 
+        cursor.execute("SELECT * FROM fn_invoice_getTotal(%s);", [idorder])
+        total = cursor.fetchone()
+
     if invoice is not None:
-        return render(request, 'orderClientInvoiceDetails.html', {'idorder': idorder, 'order': order,
+        return render(request, 'orderClientInvoiceDetails.html', {'idorder': idorder, 'order': order, 'total' : {'total': total[0]},
                                                                   'invoice': {'document': invoice[0],
                                                                               'date': invoice[1],
                                                                               'client': invoice[4]}})
