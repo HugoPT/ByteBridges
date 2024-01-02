@@ -5,7 +5,7 @@ from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentL
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db import connections
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import json
 from django.core.serializers import serialize
 from django.conf import settings
@@ -145,13 +145,24 @@ def orderClientLinesFetch(request):
 
 @csrf_exempt
 @login_required
-def orderClientLinesFetchInvoice(request, idorder):
+def orderClientFetchInvoice(request, idorder):
     # Fetch the supplier information from the database
     with connections['admin'].cursor() as cursor:
+        cursor.execute("SELECT * FROM fn_ordersClient_getinvoice(%s);", [idorder])
+        invoice = cursor.fetchone()
+
         cursor.execute("SELECT * FROM fn_ordersClient_getLines(%s);", [idorder])
         order = cursor.fetchall()
 
-    return render(request, 'orderClientInvoiceDetails.html', {'idorder': idorder,'order': order})
+    if invoice is not None:
+        return render(request, 'orderClientInvoiceDetails.html', {'idorder': idorder, 'order': order,
+                                                                  'invoice': {'document': invoice[0],
+                                                                              'date': invoice[1],
+                                                                              'client': invoice[4]}})
+    else:
+        # Handle the case where the invoice is not found
+        # You might want to redirect to an error page or handle it differently based on your application's logic.
+        return HttpResponse("Invoice not found for idorder: {}".format(idorder))
 
 @login_required
 def orderClientCreate(request):

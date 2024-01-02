@@ -126,35 +126,29 @@ aside {
 
 
 </style>
-
 <div class="invoice-container">
       <header>
-    <h1>Invoice</h1>
+    <h1>Fatura</h1>
     <address>
-      <p>Jonathan Neal</p>
-      <p>101 E. Chapman Ave<br>Orange, CA 92866</p>
-      <p>(800) 555-1234</p>
+      <p>ByteBridges</p>
+      <p>Av. Cidade Politécnica<br>Portugal, Viseu </p>
     </address>
     <span><img alt="" src="http://www.jonathantneal.com/examples/invoice/logo.png"></span>
   </header>
 
   <article>
-    <h1>Recipient</h1>
+    <h1>Cliente</h1>
     <address>
-      <p>Some Company<br>c/o Some Guy</p>
+      <p>{{ invoice.client }}</p>
     </address>
     <table class="meta">
       <tr>
-        <th><span>Invoice #</span></th>
-        <td><span>101138</span></td>
+        <th><span>Fatura #</span></th>
+        <td><span>{{ invoice.document }}</span></td>
       </tr>
       <tr>
-        <th><span>Date</span></th>
-        <td><span>January 1, 2012</span></td>
-      </tr>
-      <tr>
-        <th><span>Amount Due</span></th>
-        <td><span id="prefix">$</span><span>600.00</span></td>
+        <th><span>Data</span></th>
+        <td><span>{{ invoice.date }}</span></td>
       </tr>
     </table>
 
@@ -162,21 +156,22 @@ aside {
       <thead>
         <tr>
           <th><span>Item</span></th>
-          <th><span>Description</span></th>
-          <th><span>Rate</span></th>
-          <th><span>Quantity</span></th>
-          <th><span>Price</span></th>
+          <th><span>Descrição</span></th>
+          <th><span>Referencia</span></th>
+          <th><span>Quantidade</span></th>
+          <th><span>Preço</span></th>
         </tr>
       </thead>
       <tbody>
+      {% for f in order %}
         <tr>
-          <td><span>Front End Consultation</span></td>
-          <td><span>Experience Review</span></td>
-          <td><span data-prefix>$</span><span>150.00</span></td>
-          <td><span>4</span></td>
-          <td><span data-prefix>$</span><span>600.00</span></td>
+          <td><span>{{ f.1 }}</span></td>
+          <td><span>{{ f.2 }}</span></td>
+          <td><span>{{ f.7 }}</span></td>
+          <td><span>{{ f.8 }}</span></td>
+          <td><span>{{ f.4 }}</span></td>
         </tr>
-        <!-- Add more rows as needed -->
+        {% endfor %}
       </tbody>
     </table>
 
@@ -185,19 +180,11 @@ aside {
         <th><span>Total</span></th>
         <td><span data-prefix>$</span><span>600.00</span></td>
       </tr>
-      <tr>
-        <th><span>Amount Paid</span></th>
-        <td><span data-prefix>$</span><span>0.00</span></td>
-      </tr>
-      <tr>
-        <th><span>Balance Due</span></th>
-        <td><span data-prefix>$</span><span>600.00</span></td>
-      </tr>
     </table>
   </article>
 
   <aside>
-    <h1><span>Additional Notes</span></h1>
+    <h1><span>Observações</span></h1>
     <div>
       <p>A finance charge of 1.5% will be made on unpaid balances after 30 days.</p>
     </div>
@@ -205,69 +192,9 @@ aside {
 </div>
 <script>
 
-function alertDelete(id) {
-
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-              confirmButton: "btn btn-danger",
-              cancelButton: "btn btn-primary"
-            },
-            buttonsStyling: true
-          });
-          swalWithBootstrapButtons.fire({
-            title: "Tem certeza?",
-            text: "Não poderá reverter esta ação!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Sim, Eliminar!",
-            cancelButtonText: "Não, cancelar!",
-
-          }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: "POST",
-                    url: "clientDelete",
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}',
-                        id: id
-                    },
-                    success: function(response) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "Cliente Eliminado",
-                            showConfirmButton: true,
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              location.reload();
-                            }
-                          });
-
-                    },
-                    error: function(error) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "OOPS...",
-                            text: "Ocorreu algo inesperado",
-                          });
-                    }
-                  });
-            } else if (
-              /* Read more about handling dismissals below */
-              result.dismiss === Swal.DismissReason.cancel
-            ) {
-              swalWithBootstrapButtons.fire({
-                title: "Cancelado",
-                text: "Nenhuma alteração foi feita",
-                icon: "error"
-              });
-            }
-          });
-
-      }
-
 
   $(document).ready(function () {
-    $("#clientsTable").DataTable({
+    $("#invoicesTable").DataTable({
       dom: "Bfrtip",
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
       language: {

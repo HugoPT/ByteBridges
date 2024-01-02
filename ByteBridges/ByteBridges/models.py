@@ -234,3 +234,5 @@ class EquipmentsItems(models.Model):
     class Meta:
     
         db_table = 'equipmentsItems'
+
+
