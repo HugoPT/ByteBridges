@@ -133,7 +133,7 @@ class Terms(models.Model):
     numberdays = models.IntegerField()
 
     def __str__(self):
-        return self.at_name
+        return self.name
 
     class Meta:
         # Specify the table name

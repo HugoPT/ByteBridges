@@ -44,31 +44,38 @@
   </button>
 
   <div id="selectedRowsContainer" class="display"></div>
-  <div id="selectClient" class="display">
-    <div class="clientBox">
-      <h5>Selecionar Cliente</h5>
-
-      <form action="#" method="POST">
+  <div id="selectClient" >
+      <form class="allforms row" action="#" method="POST">
         {% csrf_token %}
-        <label for="client">Cliente:</label>
-        <select name="client" id="client" class="dropstyleClient">
-          <option value="" disabled selected>Selecione um Cliente</option>
+      <div class="form-field col-lg-4">
+        <select name="client" id="client" class="input-text js-input" required>
+          <option value="" style="display: none;" selected></option>
           {% for c in clients %}
           <option value="{{ c.idclient }}">{{ c.name }}</option>
           {% endfor %}
         </select>
+        <label class="label" for="client">Cliente</label>
+      </div>
+      <div class="form-field col-lg-4">
+        <select name="term" id="term" class="input-text js-input" required>
+          <option value="" style="display: none;" selected></option>
+          {% for t in terms %}
+          <option value="{{ t.idterm }}">{{ t.name }}</option>
+          {% endfor %}
+        </select>
+      <label class="label" for="term">Tipo Pagamento</label>
+      </div>
         <br />
-        <div class="obsSell">
-          <label for="clientDescription">Observações:</label>
-          <textarea
+        <div class="form-field col-lg-12">
+            <label  class="areaLabel" for="clientDescription">Observações:</label><br/>
+            <textarea
             id="observations"
             name="clientDescription"
             rows="4"
-            cols="50"
-          ></textarea>
+            cols="97"
+            style="border: 2px solid black;"></textarea><br/>
         </div>
       </form>
-    </div>
   </div>
   <div id="createSell">
     <button
@@ -222,6 +229,7 @@
   function sendInfo() {
     // Get the selected client ID
     var selectedClientId = $("#client").val();
+    var selectedTermId = $("#term").val();
     var selectedClientObservations = $("#observations").val();
     console.log(selectedClientId);
 
@@ -245,8 +253,8 @@
       selectedRowsData.push(rowData);
     });
 
-    console.log(selectedClientId, "e", selectedRowsData);
-    if (selectedClientId && selectedRowsData.length > 0) {
+    console.log(selectedClientId, "e", selectedRowsData, "e", selectedTermId);
+    if (selectedClientId && selectedRowsData.length > 0 && selectedTermId) {
       // Send the data to the server
       $.ajax({
         url: "{% url 'orderClientCreate' %}",
@@ -254,6 +262,7 @@
         data: {
           csrfmiddlewaretoken: "{{ csrf_token }}",
           client: selectedClientId,
+            term: selectedTermId,
           observations: selectedClientObservations,
           rows: JSON.stringify(selectedRowsData),
         },
@@ -277,6 +286,12 @@
         },
       });
     } else if (selectedClientId == null) {
+        Swal.fire({
+            icon: "error",
+            title: "Erro ao criar a venda",
+            text: "Por favor selecione um tipo de pagamento",
+        });
+    }else if (selectedTermId == null) {
       Swal.fire({
         icon: "error",
         title: "Erro ao criar a venda",

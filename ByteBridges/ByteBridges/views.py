@@ -1,7 +1,7 @@
 import datetime
 from django.shortcuts import render, redirect
 from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, \
-    Stock, ClientBuyList, Tecnician
+    Stock, ClientBuyList, Tecnician, EquipmentsItems
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db import connections
@@ -153,13 +153,20 @@ def orderClientCreate(request):
         resultClient = cursor.fetchall()
         clients = [Client(*row) for row in resultClient]
 
+        cursor.execute("SELECT * FROM view_terms_list", [])
+        resultTerms = cursor.fetchall()
+        terms = [Terms(*row) for row in resultTerms]
+
         if request.method == 'POST':
             client_id = request.POST.get('client')
+            term_id = request.POST.get('term')
             rows_data = json.loads(request.POST.get('rows'))
             observations = request.POST.get('observations')
+            print("client_id:", client_id)
+            print("term_id:", term_id)
 
             # Create order client
-            cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s)", [client_id, observations])
+            cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s, CAST(%s AS INTEGER))", [client_id, observations, term_id])
             idorderclient = cursor.fetchone()
             if idorderclient:
                 for row in rows_data:
@@ -168,7 +175,7 @@ def orderClientCreate(request):
 
                 return JsonResponse({'status': 'success'})
 
-    context = {'toSell': toSell, 'clients': clients}
+    context = {'toSell': toSell, 'clients': clients, 'terms':terms}
     return render(request, 'orderClientCreate.html', context)
 
 
