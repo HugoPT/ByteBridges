@@ -50,7 +50,7 @@
             </div>
             <form method="post">{% csrf_token %}
             <div class="modal-body">
-                <table class="table" style="width: 800px; margin: 0 auto;" id="componentsTable">
+                <table class="table" style="width: 800px; margin: 0 auto;" id="itemsTable">
                 <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -112,7 +112,7 @@
 
         function updateDocumentsLines(options) {
             // Find the table body
-            var tableBody = $('#componentsTable tbody');
+            var tableBody = $('#itemsTable tbody');
             tableBody.empty(); // Clear existing rows
 
             options['list'].forEach(function (option) {

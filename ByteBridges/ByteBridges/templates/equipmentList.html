@@ -5,7 +5,7 @@
 <div class="listContainer">
   <h1>Lista de Equipamentos</h1>
 
-  <table id="suppliersTable" class="display">
+  <table id="equipmentListTable" class="display">
     <thead>
       <tr>
         <th>Nome</th>
@@ -18,7 +18,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for e in articletypes %}
+      {% for e in equipments %}
       <tr>
         <td>{{ e.name }}</td>
         <td>{{ e.category }}</td>
@@ -57,7 +57,7 @@
 
 <script>
   $(document).ready(function () {
-    $("#suppliersTable").DataTable({
+    $("#equipmentListTable").DataTable({
       dom: "Bfrtip",
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
       language: {

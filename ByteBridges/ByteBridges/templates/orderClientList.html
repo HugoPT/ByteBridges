@@ -69,7 +69,7 @@
           <table
             class="table"
             style="width: 800px; margin: 0 auto"
-            id="componentsTable"
+            id="itemsTable"
           >
             <thead>
               <tr>
@@ -129,7 +129,7 @@
 
     function updateDocumentsLines(options) {
       // Find the table body
-      var tableBody = $("#componentsTable tbody");
+      var tableBody = $("#itemsTable tbody");
       tableBody.empty(); // Clear existing rows
 
       options["list"].forEach(function (option) {

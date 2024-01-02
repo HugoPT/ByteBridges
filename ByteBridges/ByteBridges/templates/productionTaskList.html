@@ -5,7 +5,7 @@
 <div class="listContainer">
   <h1>Lista de Tarefas de Produção</h1>
 
-  <table id="componentsTable" class="display">
+  <table id="productionTaskTable" class="display">
     <thead>
       <tr>
           <th>Ordem</th>
@@ -40,7 +40,7 @@
 
 
   $(document).ready(function () {
-    $("#componentsTable").DataTable({
+    $("#productionTaskTable").DataTable({
       dom: "Bfrtip",
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
       language: {

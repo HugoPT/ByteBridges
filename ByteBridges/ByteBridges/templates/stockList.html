@@ -14,7 +14,7 @@
   <div id="equipmentsList" class="list">
     <h2>Lista de Equipamentos</h2>
 
-    <table id="componentsTable" class="display">
+    <table id="equipmentsStockTable" class="display">
       <thead>
         <tr>
           <th>Nome</th>
@@ -35,7 +35,7 @@
   <div id="componentsList" class="list" style="display: none;">
     <h2>Lista de Componentes</h2>
 
-    <table id="equipmentsTable" class="display">
+    <table id="componentsStockTable" class="display">
       <thead>
         <tr>
           <th>Nome</th>
@@ -57,8 +57,8 @@
 <script>
 
 
-  $(document).ready(function () {
-    $("#componentsTable").DataTable({
+ $(document).ready(function () {
+    $("#equipmentsStockTable").DataTable({
       dom: "Bfrtip",
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
       language: {
@@ -67,8 +67,9 @@
     });
   });
 
+
   $(document).ready(function () {
-    $("#equipmentsTable").DataTable({
+    $("#componentsStockTable").DataTable({
       dom: "Bfrtip",
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
       language: {
@@ -76,6 +77,7 @@
       },
     });
   });
+
 
 
   document.addEventListener('DOMContentLoaded', function () {

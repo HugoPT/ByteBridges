@@ -5,7 +5,7 @@
 <div class="listContainer">
   <h1>Lista de Componentes</h1>
 
-  <table id="componentsTable" class="display">
+  <table id="componentsListTable" class="display">
     <thead>
       <tr>
           <th>Nome</th>
@@ -102,7 +102,7 @@ function alertDelete(id) {
 
 
   $(document).ready(function () {
-    $("#componentsTable").DataTable({
+    $("#componentsListTable").DataTable({
       dom: "Bfrtip",
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
       language: {

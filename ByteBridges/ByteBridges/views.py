@@ -270,9 +270,9 @@ def orderSupplierList(request):
         # Call the stored procedure using the CALL statement
         cursor.execute("select  * from view_buy_list_supplier", [])
         # If the stored procedure returns results, you can fetch them
-        result = cursor.fetchall()
+        orders = cursor.fetchall()
 
-        return render(request, 'orderSupplierList.html', {'orders': result})
+        return render(request, 'orderSupplierList.html', {'orders': orders})
 
 
 @csrf_exempt
