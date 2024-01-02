@@ -10,7 +10,6 @@ import json
 from django.core.serializers import serialize
 from django.conf import settings
 
-
 def Homepage(request):
     return render(request, "Home.html")
 
