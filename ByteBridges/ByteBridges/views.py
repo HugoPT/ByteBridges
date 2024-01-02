@@ -1,12 +1,14 @@
 import datetime
 from django.shortcuts import render, redirect
-from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, Stock, ClientBuyList,EquipmentsItems, Tecnician
+from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, \
+    Stock, ClientBuyList, Tecnician
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db import connections
 from django.http import JsonResponse
 import json
 from django.core.serializers import serialize
+from django.conf import settings
 
 
 def Homepage(request):
@@ -123,6 +125,9 @@ def orderClientList(request):
             date = datetime.datetime.strptime(date_str, '%d-%m-%Y').date()
             duedate = datetime.datetime.strptime(duedate_str, '%d-%m-%Y').date()
             sales.append(ClientBuyList(iddocument, documentnumber, name, date, duedate, status))
+
+        print("aaaaaaaaaaa", sales)
+
     return render(request, 'orderClientList.html', {'sales': sales})
 
 
@@ -136,8 +141,6 @@ def orderClientLinesFetch(request):
         list = cursor.fetchall()
         print(list)
         return JsonResponse({'list': list})
-
-
 
 
 @login_required
@@ -326,6 +329,7 @@ def orderSupplierCreate(request):
 
 @login_required
 def get_articles(request):
+    print(request)
     if request.method == 'GET':
         family_id = request.GET.get('family_id')
 
@@ -342,11 +346,12 @@ def get_articles(request):
         data = {'articles': articles_data}
         print(data)
         return JsonResponse(data)
-    
+
+
 @login_required
 def get_items(request):
     if request.method == 'GET':
-        equipment_id = request.GET.get('equipment_id')   
+        equipment_id = request.GET.get('equipment_id')
         print("aaaaaaaaaaaaaaaaaaa", equipment_id)
         if equipment_id and equipment_id.isdigit():
             with connections['admin'].cursor() as cursor:
@@ -354,7 +359,7 @@ def get_items(request):
                 result = cursor.fetchall()
                 print("bbbbbbbbbbbbbb", result)
                 items = [EquipmentsItems(*row) for row in result]
-                
+
             # Convert ComponentListFamily objects to dictionaries
             items_data = [
                 {
@@ -375,7 +380,7 @@ def get_items(request):
             print(data)
             return JsonResponse(data)
 
-      
+
 @login_required
 def documentsSupplier(request):
     with connections['admin'].cursor() as cursor:
@@ -410,7 +415,7 @@ def documentsSupplier(request):
         # create a new supplier enc header
         with connections['admin'].cursor() as cursor:
             cursor.execute("select fn_orderssupplier_create(%s,%s,%s)",
-                           [ header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse'] ])
+                           [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
             result = cursor.fetchone()
             if result:
                 for item in data:
@@ -472,7 +477,7 @@ def documentsSupplierRegisterInvoice(request):
             cursor.execute("call sp_linesInvoice_create (%s,%s,%s,%s);", [doc[0], line[0], line[6], line[4]])
             for x in serialNumbers:
                 for key, value in x.items():
-                    if key==line[0]:
+                    if key == line[0]:
                         for sn in value:
                             print("serial " + sn)
                             cursor.execute("CALL sp_serialGive(%s,%s)", [key, sn])
@@ -492,12 +497,34 @@ def documentsSupplierRegisterInvoiceLines(request):
 
 
 @login_required
-def productionEquipmentCreate(request,equipment_id):
-    
-   
+def productionEquipmentCreate(request, equipment_id):
+    with connections['admin'].cursor() as cursor:
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+        families = [Family(*row) for row in result]
+
+    if request.method == 'POST':
+        data = json.loads(request.POST.get('data'))
+        for item in data:
+            with connections['admin'].cursor() as cursor:
+                cursor.execute("CALL sp_productionitems_add(%s,%s,%s)",
+                               [equipment_id,
+                                item['component'],
+                                item['quantity']])
+        return JsonResponse({'status': 'success'})
+    return render(request, 'productionEquipmentCreate.html', {'families': families, 'equipment_id': equipment_id})
 
 
-    return render(request, 'productionEquipmentCreate.html')
+@login_required
+def familyList(request):
+    with connections['admin'].cursor() as cursor:
+        # Call the stored procedure using the CALL statement
+        cursor.execute("select  * from view_families_list", [])
+        # If the stored procedure returns results, you can fetch them
+        result = cursor.fetchall()
+        families = [Family(*row) for row in result]
+        return render(request, 'familyList.html', {'families': families})
 
 
 @login_required
@@ -555,24 +582,12 @@ def familyDelete(request):
 def equipmentList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
-        cursor.execute("select  * from view_equipments_list2", [])
+        cursor.execute("select  * from view_equipments_list", [])
         # If the stored procedure returns results, you can fetch them
         result = cursor.fetchall()
-        print(result)
-        articletypes = [ArticleType(*row) for row in result]
-        return render(request, 'equipmentList.html', {'articletypes': articletypes})
-    
-    
-    
-@login_required
-def familyList(request):
-    with connections['admin'].cursor() as cursor:
-        # Call the stored procedure using the CALL statement
-        cursor.execute("select  * from view_families_list", [])
-        # If the stored procedure returns results, you can fetch them
-        result = cursor.fetchall()
-        families = [Family(*row) for row in result]
-        return render(request, 'familyList.html', {'families': families})
+        equipments = [ArticleType(*row) for row in result]
+        return render(request, 'equipmentList.html', {'equipments': equipments})
+
 
 @login_required
 def equipmentCreate(request):
@@ -580,63 +595,23 @@ def equipmentCreate(request):
         cursor.execute("select * from view_categories_list")
         result = cursor.fetchall()
         category = [Category(*row) for row in result]
+        context = {'category': category}
 
-        cursor.execute("select * from view_families_list")
-        result = cursor.fetchall()
-        families = [Family(*row) for row in result]
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        idfamily = None
+        idcategory = request.POST.get('category')
+        description = request.POST.get('description')
+        image = ""
+        profit_margin = 0
+        barcode = request.POST.get('barcode')
+        reference = request.POST.get('reference')
 
-        context = {'category': category, 'families': families}
-
-        if request.method == 'POST':
-            equipment_data = request.POST.get('equipment')
-            print("CHEGUEI CRLH TOU AKI AAAAAAAAAAAAA", equipment_data)
-
-            # Convert the JSON string to a Python list containing a dictionary
-            equipment_list = json.loads(equipment_data)
-
-            # Ensure the list is not empty and extract the dictionary
-            if equipment_list and isinstance(equipment_list, list):
-                equipment_dict = equipment_list[0]
-                # Extract values from the dictionary
-                name = equipment_dict.get('name', '')
-                idcategory = equipment_dict.get('idcategory', '')
-                description = equipment_dict.get('description', '')
-                image = ""
-                profit_margin = 0
-                barcode = equipment_dict.get('barcode', '')
-                reference = equipment_dict.get('reference', '')
-                idfamily = None
-
-                # Components
-                components_data = request.POST.get('components')
-                components = json.loads(components_data)
-            
-                try:
-                    # Call the stored procedure using the CALL statement
-                    cursor.execute("SELECT fn_articletypes_create(%s, %s, %s, %s, %s, %s, %s, %s)",
-                                [idfamily, idcategory, name, description, image, profit_margin, barcode, reference])
-                    idequipment = cursor.fetchone()[0] 
-
-                 
-                    if idequipment:
-                        # Process Components and call Components create
-                        for component in components:
-                            component_id = component['component']
-                            quantity = component['quantity']
-
-                            # Call the stored procedure for components (Modify this according to your stored procedure)
-                            cursor.execute("CALL sp_productionitems_add(%s, %s, %s)", [idequipment, component_id, quantity])
-
-                        # Commit the transaction explicitly
-                        connections['admin'].commit()
-
-                        return JsonResponse({'status': 'success'})
-
-                except Exception as e:
-                    print(f"Error executing query: {e}")
-
-                finally:
-                    cursor.close()
+        with connections['admin'].cursor() as cursor:
+            # Call the stored procedure using the CALL statement
+            cursor.execute("CALL sp_articletypes_create(%s, %s, %s, %s, %s, %s, %s, %s)",
+                           [idfamily, idcategory, name, description, image, profit_margin, barcode, reference])
+            return redirect('dashboard')
 
     return render(request, 'equipmentCreate.html', context=context)
 
@@ -711,7 +686,7 @@ def equipmentDelete(request):
             cursor.execute("CALL sp_articletypes_delete(%s)", [equipment_id])
             return JsonResponse({'status': 'success'})
         # Redirect to the client list page after deletion
-    return redirect('equipmentList')
+        return redirect('equipmentList')
 
 
 @login_required
@@ -993,14 +968,30 @@ def productionOrderCreate(request):
         result = cursor.fetchall()
         technicians = [Tecnician(*row) for row in result]
 
-
         if request.method == 'POST':
             tecnico = request.POST.get('client')
             rows_data = json.loads(request.POST.get('rows'))
             for row in rows_data:
                 print("Quantity:", row['quantity'])
-                cursor.execute("CALL sp_production_create(%s,%s,%s,%s)", [current_user, tecnico, row['id'], row['quantity']])
+                cursor.execute("CALL sp_production_create(%s,%s,%s,%s)",
+                               [current_user, tecnico, row['id'], row['quantity']])
             return JsonResponse({'status': 'success'})
 
         context = {'production': production, 'technicians': technicians}
         return render(request, 'productionOrderCreate.html', context)
+
+
+@login_required
+@csrf_exempt
+def getNIF(request):
+    if request.method == 'POST':
+        import http.client
+        nif = request.POST.get('nif')
+        conn = http.client.HTTPSConnection("www.nif.pt")
+        payload = ''
+        headers = {}
+        conn.request("GET", "/?json=1&q=" + nif + "&key=" + settings.NIF_PT_TOKEN + "", payload, headers)
+        res = conn.getresponse()
+        data = res.read()
+        print(data.decode("utf-8"))
+        return JsonResponse({'response': data.decode("utf-8")})

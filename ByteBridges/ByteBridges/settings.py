@@ -175,3 +175,6 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#API KEYS
+NIF_PT_TOKEN = '9753df22de14c1e7e397c5d27b3ec9a4'
