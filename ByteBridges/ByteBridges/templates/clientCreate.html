@@ -32,7 +32,6 @@
                 success: function (data) {
                     const embeddedJsonString = data.response;
                     const nif_pt_data = JSON.parse(embeddedJsonString);
-                    console.log(nif_pt_data.records[nif].title)
                     document.getElementById("name").value = nif_pt_data.records[nif].title;
                     document.getElementById("nif").value = nif_pt_data.records[nif].nif;
                     document.getElementById("address").value = nif_pt_data.records[nif].address;

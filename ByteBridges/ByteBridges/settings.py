@@ -178,3 +178,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #API KEYS
 NIF_PT_TOKEN = '9753df22de14c1e7e397c5d27b3ec9a4'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'bytebridgessite@gmail.com'
+EMAIL_HOST_PASSWORD = 'qaga xlte iskl eisc '
+EMAIL_USE_TLS = True

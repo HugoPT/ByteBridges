@@ -105,4 +105,5 @@ urlpatterns = [
     path('get_items/', views.get_items, name='get_items'),
     # utils
     path("getNIF", views.getNIF, name="getNIF"),
+    path("sendMail", views.sendMail, name="sendMail"),
 ]

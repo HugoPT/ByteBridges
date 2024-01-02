@@ -995,3 +995,18 @@ def getNIF(request):
         data = res.read()
         print(data.decode("utf-8"))
         return JsonResponse({'response': data.decode("utf-8")})
+
+
+@login_required
+def sendMail(request):
+    from django.core.mail import send_mail
+    send_mail(
+        "Nova Fatura",
+        "Aqui tem a sua dolorosa ... pague rápida por favor",
+
+        "bytebridgessite@gmail.com",
+        ["hugo.santos@me.com"],
+        fail_silently=False,
+        html_message="<h3>Pague ja</h3"
+    )
+    return JsonResponse({'response': "sent"})
