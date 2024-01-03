@@ -10,6 +10,7 @@ import json
 from django.core.serializers import serialize
 from django.conf import settings
 
+
 def Homepage(request):
     return render(request, "Home.html")
 
@@ -142,7 +143,6 @@ def orderClientLinesFetch(request):
         return JsonResponse({'list': list})
 
 
-
 @csrf_exempt
 @login_required
 def orderClientFetchInvoice(request, idorder):
@@ -158,14 +158,21 @@ def orderClientFetchInvoice(request, idorder):
         total = cursor.fetchone()
 
     if invoice is not None:
-        return render(request, 'orderClientInvoiceDetails.html', {'idorder': idorder, 'order': order, 'total' : {'total': total[0]},
-                                                                  'invoice': {'document': invoice[0],
-                                                                              'date': invoice[1],
-                                                                              'client': invoice[4]}})
+        return render(request, 'orderClientInvoiceDetails.html', {'idorder': idorder,
+                                                                  'order': order,
+                                                                  'total': {'total': total[0]},
+                                                                  'invoice':
+                                                                      {'document': invoice[0],
+                                                                       'date': invoice[1],
+                                                                       'client': invoice[3],
+                                                                       'email': invoice[4],
+                                                                       'obs': invoice[5],
+                                                                       }})
     else:
         # Handle the case where the invoice is not found
         # You might want to redirect to an error page or handle it differently based on your application's logic.
         return HttpResponse("Invoice not found for idorder: {}".format(idorder))
+
 
 @login_required
 def orderClientCreate(request):
@@ -190,7 +197,8 @@ def orderClientCreate(request):
             print("term_id:", term_id)
 
             # Create order client
-            cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s, CAST(%s AS INTEGER))", [client_id, observations, term_id])
+            cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s, CAST(%s AS INTEGER))",
+                           [client_id, observations, term_id])
             idorderclient = cursor.fetchone()
             if idorderclient:
                 for row in rows_data:
@@ -199,10 +207,8 @@ def orderClientCreate(request):
 
                 return JsonResponse({'status': 'success'})
 
-    context = {'toSell': toSell, 'clients': clients, 'terms':terms}
+    context = {'toSell': toSell, 'clients': clients, 'terms': terms}
     return render(request, 'orderClientCreate.html', context)
-
-
 
 
 @login_required
@@ -381,11 +387,12 @@ def get_articles(request):
         print(data)
         return JsonResponse(data)
 
-#get Components for lines table
+
+# get Components for lines table
 @login_required
 def get_items(request):
     if request.method == 'GET':
-        equipment_id = request.GET.get('equipment_id')   
+        equipment_id = request.GET.get('equipment_id')
         print("aaaaaaaaaaaaaaaaaaa", equipment_id)
         if equipment_id and equipment_id.isdigit():
             with connections['admin'].cursor() as cursor:
@@ -393,7 +400,7 @@ def get_items(request):
                 result = cursor.fetchall()
                 print("bbbbbbbbbbbbbb", result)
                 items = [EquipmentsItems(*row) for row in result]
-                
+
             # Convert ComponentListFamily objects to dictionaries
             items_data = [
                 {
@@ -659,14 +666,13 @@ def equipmentCreate(request):
                 # Components
                 components_data = request.POST.get('components')
                 components = json.loads(components_data)
-            
+
                 try:
                     # Call the stored procedure using the CALL statement
                     cursor.execute("SELECT fn_articletypes_create(%s, %s, %s, %s, %s, %s, %s, %s)",
-                                [idfamily, idcategory, name, description, image, profit_margin, barcode, reference])
-                    idequipment = cursor.fetchone()[0] 
+                                   [idfamily, idcategory, name, description, image, profit_margin, barcode, reference])
+                    idequipment = cursor.fetchone()[0]
 
-                 
                     if idequipment:
                         # Process Components and call Components create
                         for component in components:
@@ -674,7 +680,8 @@ def equipmentCreate(request):
                             quantity = component['quantity']
 
                             # Call the stored procedure for components (Modify this according to your stored procedure)
-                            cursor.execute("CALL sp_productionitems_add(%s, %s, %s)", [idequipment, component_id, quantity])
+                            cursor.execute("CALL sp_productionitems_add(%s, %s, %s)",
+                                           [idequipment, component_id, quantity])
 
                         # Commit the transaction explicitly
                         connections['admin'].commit()
@@ -1000,9 +1007,8 @@ def userEdit(request, user_id):
         # Redirect to the client list page after update
         return redirect('userList')
 
-    return render(request, 'userEdit.html', {'user_id': user_id,'labor':labor,
-                                             'user': {'labor': user[4] }})
-
+    return render(request, 'userEdit.html', {'user_id': user_id, 'labor': labor,
+                                             'user': {'labor': user[4]}})
 
 
 @login_required
@@ -1070,15 +1076,19 @@ def getNIF(request):
 
 
 @login_required
+@csrf_exempt
 def sendMail(request):
     from django.core.mail import send_mail
-    send_mail(
-        "Nova Fatura",
-        "Aqui tem a sua dolorosa ... pague rápida por favor",
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        body_html = request.POST.get('body_html')
+        send_mail(
+            "Nova Fatura",
+            "Aqui tem a sua dolorosa ... pague rápida por favor",
 
-        "bytebridgessite@gmail.com",
-        ["hugo.santos@me.com"],
-        fail_silently=False,
-        html_message="<h3>Pague ja</h3"
-    )
-    return JsonResponse({'response': "sent"})
+            "bytebridgessite@gmail.com",
+            [email],
+            fail_silently=False,
+            html_message=body_html
+        )
+        return JsonResponse({'response': "sent"})

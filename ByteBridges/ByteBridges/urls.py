@@ -105,4 +105,5 @@ urlpatterns = [
     # utils
     path("getNIF", views.getNIF, name="getNIF"),
     path("sendMail", views.sendMail, name="sendMail"),
+
 ]

@@ -1,208 +1,262 @@
-{% extends 'base_template.html' %} {%block extra_css%} {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
-{%endblock%}{% block content %}
-<style>
+{% extends 'base_template.html' %} {% block extra_css %} {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}"/>
+{% endblock %}{% block content %}
+    <style>
 
-.invoice-container {
-    margin: 200px;
-    background-color: white;
-    padding: 20px;
-    }
+        .invoice-container {
+            margin: 200px;
+            background-color: white;
+            padding: 20px;
+        }
 
-body{
-    margin: 0;
-    padding: 0;
-    background-color: grey}
-h1,
-h2,
-h3,
-p,
-table {
-  margin: 0;
-  padding: 0;
-}
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: grey
+        }
 
-/* Basic styling for the page */
-body {
-  font-family: 'Arial', sans-serif;
-  line-height: 1.6;
-}
+        h1,
+        h2,
+        h3,
+        p,
+        table {
+            margin: 0;
+            padding: 0;
+        }
 
-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
+        /* Basic styling for the page */
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
 
-h1 {
-  font-size: 2em;
-  margin-bottom: 5px;
-}
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-address {
-  font-style: normal;
-}
+        h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
 
-article {
-  margin-bottom: 30px;
-}
+        address {
+            font-style: normal;
+        }
 
-/* Styles for the recipient section */
-article h1 {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-}
+        article {
+            margin-bottom: 30px;
+        }
 
-/* Styles for tables */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
+        /* Styles for the recipient section */
+        article h1 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
 
-th, td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-}
+        /* Styles for tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
 
-th {
-  background-color: #f2f2f2;
-}
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
 
-/* Styles for the balance table */
-.balance {
-  margin-top: 20px;
-}
+        th {
+            background-color: #f2f2f2;
+        }
 
-.balance th, .balance td {
-  text-align: right;
-}
+        /* Styles for the balance table */
+        .balance {
+            margin-top: 20px;
+        }
 
-/* Styles for the additional notes section */
-aside {
-  border-top: 1px solid #ddd;
-  padding-top: 20px;
-}
+        .balance th, .balance td {
+            text-align: right;
+        }
 
-/* Styles for buttons in the alert */
-.btn {
-  cursor: pointer;
-  border-radius: 4px;
-  padding: 8px 12px;
-  margin-right: 10px;
-}
+        /* Styles for the additional notes section */
+        aside {
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
 
-.btn-danger {
-  background-color: #d9534f;
-  border: 1px solid #d9534f;
-  color: #fff;
-}
+        /* Styles for buttons in the alert */
+        .btn {
+            cursor: pointer;
+            border-radius: 4px;
+            padding: 8px 12px;
+            margin-right: 10px;
+        }
 
-.btn-primary {
-  background-color: #337ab7;
-  border: 1px solid #337ab7;
-  color: #fff;
-}
+        .btn-danger {
+            background-color: #d9534f;
+            border: 1px solid #d9534f;
+            color: #fff;
+        }
 
-/* Additional styling for the DataTables */
-#clientsTable_wrapper {
-  margin-top: 20px;
-}
+        .btn-primary {
+            background-color: #337ab7;
+            border: 1px solid #337ab7;
+            color: #fff;
+        }
 
-/* Media query for responsiveness */
-@media only screen and (max-width: 600px) {
-  table, th, td {
-    font-size: 12px;
-  }
+        /* Additional styling for the DataTables */
+        #clientsTable_wrapper {
+            margin-top: 20px;
+        }
 
-  h1 {
-    font-size: 1.5em;
-  }
+        /* Media query for responsiveness */
+        @media only screen and (max-width: 600px) {
+            table, th, td {
+                font-size: 12px;
+            }
 
-  aside {
-    padding-top: 10px;
-  }
-}
+            h1 {
+                font-size: 1.5em;
+            }
+
+            aside {
+                padding-top: 10px;
+            }
+        }
 
 
-</style>
-<div class="invoice-container">
-      <header>
-    <h1>Fatura</h1>
-    <address>
-      <p>ByteBridges</p>
-      <p>Av. Cidade Politécnica<br>Portugal, Viseu </p>
-    </address>
-    <span><img alt="" src="http://www.jonathantneal.com/examples/invoice/logo.png"></span>
-  </header>
+    </style>
+    <div class="invoice-container">
+        <div class="col-md-12">
+            <div class="col-lg-6">
+                <button class="btn btn-primary" id="export_pdf"><i class="fa-solid fa-file-pdf"></i>
+                </button>
+                <button class="btn btn-primary" id="send_email"><i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+            <script>
+                var doc = new jsPDF();
+                var specialElementHandlers = {
+                    '#editor': function (element, renderer) {
+                        return true;
+                    }
+                };
 
-  <article>
-    <h1>Cliente</h1>
-    <address>
-      <p>{{ invoice.client }}</p>
-    </address>
-    <table class="meta">
-      <tr>
-        <th><span>Fatura #</span></th>
-        <td><span>{{ invoice.document }}</span></td>
-      </tr>
-      <tr>
-        <th><span>Data</span></th>
-        <td><span>{{ invoice.date }}</span></td>
-      </tr>
-    </table>
 
-    <table class="inventory">
-      <thead>
-        <tr>
-          <th><span>Item</span></th>
-          <th><span>Descrição</span></th>
-          <th><span>Referencia</span></th>
-          <th><span>Quantidade</span></th>
-          <th><span>Preço</span></th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for f in order %}
-        <tr>
-          <td><span>{{ f.1 }}</span></td>
-          <td><span>{{ f.2 }}</span></td>
-          <td><span>{{ f.7 }}</span></td>
-          <td><span>{{ f.8 }}</span></td>
-          <td><span>{{ f.4 }}</span></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+                $('#export_pdf').click(function () {
+                    doc.fromHTML($('#invoice_content').html(), 15, 15, {
+                        'elementHandlers': specialElementHandlers
+                    });
+                    doc.save('fatura_{{ invoice.document }}.pdf');
+                });
 
-    <table class="balance">
-      <tr>
-        <th><span>Total</span></th>
-        <td><span> {{ total.total }} € </span></td>
-      </tr>
-    </table>
-  </article>
 
-  <aside>
-    <h1><span>Observações</span></h1>
-    <div>
-      <p>A finance charge of 1.5% will be made on unpaid balances after 30 days.</p>
+                $('#send_email').click(function () {
+                    doc.fromHTML($('#invoice_content').html(), 15, 15, {
+                        'elementHandlers': specialElementHandlers
+                    });
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Email enviado com sucesso",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then((result) => {
+                        $.ajax({
+                            type: "POST",
+                            url: '{% url "sendMail" %}',
+                            data: {
+                                "email": '{{ invoice.email }}',
+                                "body_html": $('#invoice_content').html(),
+                            },
+                            dataType: "json",
+                            success: function (data) {
+
+
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    title: "Erro!",
+                                    text: "Falha na comunicação com o servidor",
+                                    icon: "error",
+                                });
+                            },
+                        });
+                    });
+                });
+
+            </script>
+        </div>
+        <div id="invoice_content">
+            <header>
+                <h1>Fatura</h1>
+                <address>
+                    <p>ByteBridges</p>
+                    <p>Av. Cidade Politécnica<br>Portugal, Viseu </p>
+                </address>
+
+            </header>
+
+            <article>
+                <h1>Cliente</h1>
+                <address>
+                    <p>{{ invoice.client }}</p>
+                </address>
+                <table class="meta">
+                    <tr>
+                        <th><span>Fatura #</span></th>
+                        <td><span>{{ invoice.document }}</span></td>
+                    </tr>
+                    <tr>
+                        <th><span>Data</span></th>
+                        <td><span>{{ invoice.date }}</span></td>
+                    </tr>
+                </table>
+
+                <table class="inventory">
+                    <thead>
+                    <tr>
+                        <th><span>Item</span></th>
+                        <th><span>Descrição</span></th>
+                        <th><span>Referencia</span></th>
+                        <th><span>Quantidade</span></th>
+                        <th><span>Preço</span></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for f in order %}
+                        <tr>
+                            <td><span>{{ f.1 }}</span></td>
+                            <td><span>{{ f.2 }}</span></td>
+                            <td><span>{{ f.7 }}</span></td>
+                            <td><span>{{ f.8 }}</span></td>
+                            <td><span>{{ f.4 }}</span></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <table class="balance">
+                    <tr>
+                        <th><span>Total</span></th>
+                        <td><span> {{ total.total }} € </span></td>
+                    </tr>
+                </table>
+            </article>
+
+            <aside>
+                <h1><span>Observações</span></h1>
+                <div>
+                    <p>{{ invoice.date }}</p><br>
+
+                    <p><i class="fa-solid fa-circle-info"></i> O não pagamento no prazo de 30 dias, incorre no acréscimo
+                        de juros à taxa de 1.5%</p>
+                </div>
+            </aside>
+        </div>
+
     </div>
-  </aside>
-</div>
-<script>
-
-
-  $(document).ready(function () {
-    $("#invoicesTable").DataTable({
-      dom: "Bfrtip",
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
-      language: {
-        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
-      },
-    });
-  });
-
-</script>
 
 {% endblock %}
