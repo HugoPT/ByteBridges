@@ -100,6 +100,8 @@ urlpatterns = [
     
     #TaskList
     path("productionTaskList", views.productionTaskList, name="productionTaskList"),
+    path('productionTaskCreate/<int:idproduction>/', views.productionTaskCreate, name='productionTaskCreate'),
+
     #Items
     path('get_items/', views.get_items, name='get_items'),
     # utils

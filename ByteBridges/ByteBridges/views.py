@@ -1029,6 +1029,41 @@ def userEdit(request, user_id):
 
 
 @login_required
+def productionEquipmentEdit(request, equipment_id):
+    with connections['admin'].cursor() as cursor:
+
+        cursor.execute("SELECT * FROM fn_productionitems_get (%s);", [equipment_id])
+        equipment = cursor.fetchall()
+
+        cursor.execute("select * from view_families_list")
+        result = cursor.fetchall()
+        families = [Family(*row) for row in result]
+
+    if request.method == 'POST':
+        data = json.loads(request.POST.get('data'))
+        for item in data:
+            with connections['admin'].cursor() as cursor:
+                cursor.execute("CALL sp_productionitems_update(%s,%s,%s)",
+                               [equipment_id,
+                                item['component'],
+                                item['quantity']])
+        return JsonResponse({'status': 'success'})
+    return render(request, 'productionEquipmentEdit.html', {'families': families, 'equipment_id': equipment_id,
+                                                            'equipment': equipment})
+
+
+@login_required
+def productionTaskCreate(request,idproduction):
+    with connections['admin'].cursor() as cursor:
+        cursor.execute("SELECT * FROM fn_productions_getLines (%s);", [idproduction])
+        tarefas = cursor.fetchall()
+
+
+        return render(request, 'productionTaskCreate.html', {'tarefas': tarefas})
+
+
+
+@login_required
 def productionTaskList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement

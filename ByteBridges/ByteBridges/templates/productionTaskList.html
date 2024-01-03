@@ -19,16 +19,16 @@
       </tr>
     </thead>
     <tbody>
-      {% for c in tarefas %}
+      {% for t in tarefas %}
       <tr>
-          <td>{{ c.3 }}</td>
-        <td>{{ c.6 }}</td>
-        <td>{{ c.8 }}</td>
-        <td>{{ c.2 }}</td>
-        <td>{{ c.4 }}</td>
-        <td>{{ c.5 }}</td>
+          <td>{{ t.3 }}</td>
+        <td>{{ t.6 }}</td>
+        <td>{{ t.8 }}</td>
+        <td>{{ t.2 }}</td>
+        <td>{{ t.4 }}</td>
+        <td>{{ t.5 }}</td>
         <td>
-            <a class="btn btn-warning" href="{% url 'componentEdit' component_id=c.0 %}">Editar</a>
+            <a class="btn btn-warning" href="{% url 'productionTaskCreate' idproduction=t.0 %}">Montar</a>
         </td>
       </tr>
       {% endfor %}

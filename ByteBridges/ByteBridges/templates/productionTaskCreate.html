@@ -1,0 +1,74 @@
+{% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
+    <h1 class="title">Documento de compra</h1>
+{% endblock %}
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Table -->
+        <div class="ordertable">
+
+            <table class="table" style="width: 800px" id="componentsTables">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Componente</th>
+                    <th scope="col">Referencia</th>
+                    <th scope="col">Quantidade</th>
+                    <th scope="col">SN</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for t in tarefas %}
+                      <tr>
+                        <td>{{ t.2 }}</td>
+                          <td>{{ t.3 }}</td>
+                        <td>{{ t.4 }}</td>
+                        <td>{{ t.5 }}</td>
+                        <td>
+                            <button class="btn btn-primary" type="button" onclick="collectSerialNumbers({{ t.2 }}, {{ t.5 }})"  ><i class="fa-solid fa-barcode"></i></button>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    <script>
+
+        var serialNumbers = []
+
+        async function collectSerialNumbers(index, qtd) {
+            let html = '';
+            for (let i = 1; i <= qtd; i++) {
+                html += '<div class="form-row"><label class="form-check-label" for="swal-input' + i + '">' + i + 'º componente:</label></br><input id="swal-input' + i + '" class="swal-input' + i + '"></div>';
+            }
+
+            const { value: formValues, isConfirmed } = await Swal.fire({
+                title: "Números de série",
+                html: html,
+                focusConfirm: false,
+                preConfirm: () => {
+                    let data = [];
+                    for (let i = 1; i <= qtd; i++) {
+                        const inputValue = document.getElementById("swal-input" + i).value;
+                        if (!inputValue) {
+                            Swal.showValidationMessage('Por favor, preencha todos os campos.');
+                            return false; // Prevent Swal from closing
+                        }
+                        data.push(inputValue);
+                    }
+                    return data;
+                },
+                confirmButtonText: 'Adicionar números de série',
+            });
+
+            if (isConfirmed && formValues) {
+                let obj = {};
+                obj[index] = formValues;
+                serialNumbers.push(obj);
+            }
+        }
+    </script>
+
+{% endblock %}
