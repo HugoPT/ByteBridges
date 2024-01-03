@@ -35,12 +35,9 @@
                         });
 
                         $('#send_email').click(function () {
-                            html2canvas(document.getElementById('invoice_content'), {
-                                useCORS: true,
-                            }).then(function (canvas) {
-                                var imgData = canvas.toDataURL('image/png');
-                                doc.addImage(imgData, 'PNG', 15, 15, 180, 240); // Adjust the dimensions as needed
-
+                                doc.fromHTML($('#invoice_content').html(), 15, 15, {
+                                    'elementHandlers': specialElementHandlers
+                                });
                                 Swal.fire({
                                     position: "top-end",
                                     icon: "success",
@@ -57,7 +54,8 @@
                                         },
                                         dataType: "json",
                                         success: function (data) {
-                                            // Handle success...
+
+
                                         },
                                         error: function () {
                                             Swal.fire({
@@ -71,7 +69,6 @@
                             });
                         });
                     }, 1000); // Adjust the delay time as needed
-                });
             </script>
         </div>
         <div id="invoice_content">
