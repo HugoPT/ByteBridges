@@ -549,20 +549,16 @@ def documentsSupplierRegisterInvoiceLines(request):
 @login_required
 def productionEquipmentCreate(request, equipment_id):
     with connections['admin'].cursor() as cursor:
-
         cursor.execute("select * from view_families_list")
         result = cursor.fetchall()
         families = [Family(*row) for row in result]
 
         if request.method == 'POST':
             data = json.loads(request.POST.get('data'))
-            print("zzzzzzzzzzzzzzzzzzzzzzzzz",data)
             equipment_id = request.POST.get('equipment_id')
-            print("bbbbbbbbbbbbbbbbbbbbbbbbbb",equipment_id)
         
             cursor.execute("SELECT fn_productionitems_delete(CAST(%s AS INTEGER));", [equipment_id])
             nice = cursor.fetchone()
-            print("xxxxxxxxxxxxxxxxxxx",nice)
             if nice[0]:
                 for item in data:
                     with connections['admin'].cursor() as cursor:
