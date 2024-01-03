@@ -50,7 +50,7 @@ urlpatterns = [
     path("orderClientList", views.orderClientList, name="orderClientList"),
     path("orderSupplierLinesFetch", views.orderSupplierLinesFetch, name="orderSupplierLinesFetch"),
     path("orderClientLinesFetch", views.orderClientLinesFetch, name="orderClientLinesFetch"),
-    path('orderClientLinesFetchInvoice/<int:idorder>/', views.orderClientFetchInvoice, name='orderClientFetchInvoice'),
+    path('orderClientFetchInvoice/<int:idorder>/', views.orderClientFetchInvoice, name='orderClientFetchInvoice'),
 
     # documentsSupplier
     path("documentsSupplier", views.documentsSupplier, name="documentsSupplier"),
@@ -105,4 +105,5 @@ urlpatterns = [
     # utils
     path("getNIF", views.getNIF, name="getNIF"),
     path("sendMail", views.sendMail, name="sendMail"),
+
 ]

@@ -97,12 +97,14 @@
             </button>
         </form>
     </div>
+
     <form method="post">
         {% csrf_token %}
 
         <!-- Table -->
         <div class="ordertable">
-            <table class="table" style="width: 800px" id="componentsTable">
+
+            <table class="table" style="width: 800px" id="componentsTables">
                 <thead>
                 <tr>
                     <th scope="col">ID</th>
@@ -119,6 +121,7 @@
             </table>
         </div>
     </form>
+
     <script>
 
         var serialNumbers = []
@@ -136,7 +139,7 @@
         }
 
         function updateDocumentsLines(options) {
-            const tableBody = $('#componentsTable tbody');
+            const tableBody = $('#componentsTables tbody');
             let i = 0;
             options['list'].forEach(function (option) {
                 const newRow = $('<tr>');
@@ -206,7 +209,7 @@
                     console.log(payment_type)
                     console.log(related_document_id)
                     var documentLines = [];
-                    $('#componentsTable tbody tr').each(function () {
+                    $('#componentsTables tbody tr').each(function () {
                         var line = [];
                         $(this).find('td').each(function () {
                             line.push($(this).text());
@@ -270,9 +273,7 @@
                         });
                     }
 
-                }
-            )
-            ;
+                });
 
 
             $('#related_documents').change(function () {
@@ -283,6 +284,7 @@
                         data: {"id": this.value},
                         dataType: "json",
                         success: function (data) {
+                            console.log(data)
                             // Handle the success response
                             updateDocumentsLines(data)
 

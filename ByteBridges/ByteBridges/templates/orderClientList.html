@@ -12,7 +12,6 @@
         <th>Cliente</th>
         <th>Data de encomenda</th>
         <th>Data de vencimento</th>
-        <th>Estado encomenda</th>
         <th>Operações</th>
       </tr>
     </thead>
@@ -23,9 +22,6 @@
         <td>{{ s.name }}</td>
         <td>{{ s.date|date:"Y-m-d" }}</td>
         <td>{{ s.duedate|date:"Y-m-d" }}</td>
-        <td>
-          {% if s.status %} Pago {% else %} Pagamento Pendente {% endif %}
-        </td>
         <td>
           <button
             type="button"
@@ -38,7 +34,7 @@
             <a
             href="{% url 'orderClientFetchInvoice' idorder=s.iddocument %}"
             class="btn btn-dark"
-            ><i class="fa-solid bi bi-receipt"></i></a>
+            ><i class="fa-solid fa fa-receipt"></i></a>
         </td>
       </tr>
       {% endfor %}

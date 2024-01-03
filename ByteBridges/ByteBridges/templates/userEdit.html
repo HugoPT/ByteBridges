@@ -9,14 +9,14 @@
   {% csrf_token %}
 
   <div class="form-field col-lg-6">
-    <select id="dropdown" name="iduser" class="input-text js-input" required>
+    <select id="dropdown" name="idlabor" class="input-text js-input" required>
         {% for l in labor %}
-            <option value="{{ l.idlabor }}" {% if u.name == user.labor %}selected{% endif %}>
-                {{ u.name }}
+            <option value="{{ l.idlabor }}" {% if l.name == user.labor %}selected{% endif %}>
+                {{ l.name }}
             </option>
         {% endfor %}
     </select>
-      <label class="label" for="iduser">Tipo de Função</label>
+      <label class="label" for="idlabor">Familia</label>
   </div>
 
   <div class="form-field col-lg-12 submitBtn">

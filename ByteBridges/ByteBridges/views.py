@@ -10,6 +10,7 @@ import json
 from django.core.serializers import serialize
 from django.conf import settings
 
+
 def Homepage(request):
     return render(request, "Home.html")
 
@@ -142,7 +143,6 @@ def orderClientLinesFetch(request):
         return JsonResponse({'list': list})
 
 
-
 @csrf_exempt
 @login_required
 def orderClientFetchInvoice(request, idorder):
@@ -154,15 +154,25 @@ def orderClientFetchInvoice(request, idorder):
         cursor.execute("SELECT * FROM fn_ordersClient_getLines(%s);", [idorder])
         order = cursor.fetchall()
 
+        cursor.execute("SELECT * FROM fn_invoice_getTotal(%s);", [idorder])
+        total = cursor.fetchone()
+
     if invoice is not None:
-        return render(request, 'orderClientInvoiceDetails.html', {'idorder': idorder, 'order': order,
-                                                                  'invoice': {'document': invoice[0],
-                                                                              'date': invoice[1],
-                                                                              'client': invoice[4]}})
+        return render(request, 'orderClientInvoiceDetails.html', {'idorder': idorder,
+                                                                  'order': order,
+                                                                  'total': {'total': total[0]},
+                                                                  'invoice':
+                                                                      {'document': invoice[0],
+                                                                       'date': invoice[1],
+                                                                       'client': invoice[3],
+                                                                       'email': invoice[4],
+                                                                       'obs': invoice[5],
+                                                                       }})
     else:
         # Handle the case where the invoice is not found
         # You might want to redirect to an error page or handle it differently based on your application's logic.
         return HttpResponse("Invoice not found for idorder: {}".format(idorder))
+
 
 @login_required
 def orderClientCreate(request):
@@ -187,7 +197,8 @@ def orderClientCreate(request):
             print("term_id:", term_id)
 
             # Create order client
-            cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s, CAST(%s AS INTEGER))", [client_id, observations, term_id])
+            cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s, CAST(%s AS INTEGER))",
+                           [client_id, observations, term_id])
             idorderclient = cursor.fetchone()
             if idorderclient:
                 for row in rows_data:
@@ -196,10 +207,8 @@ def orderClientCreate(request):
 
                 return JsonResponse({'status': 'success'})
 
-    context = {'toSell': toSell, 'clients': clients, 'terms':terms}
+    context = {'toSell': toSell, 'clients': clients, 'terms': terms}
     return render(request, 'orderClientCreate.html', context)
-
-
 
 
 @login_required
@@ -378,7 +387,8 @@ def get_articles(request):
         print(data)
         return JsonResponse(data)
 
-#get Components for lines table
+
+# get Components for lines table
 @login_required
 def get_items(request):
     if request.method == 'GET':
@@ -388,7 +398,7 @@ def get_items(request):
                 cursor.execute("SELECT * FROM fn_productionitems_get(CAST(%s AS INTEGER))", [equipment_id])
                 result = cursor.fetchall()
                 items = [EquipmentsItems(*row) for row in result]
-                
+
             # Convert ComponentListFamily objects to dictionaries
             items_data = [
                 {
@@ -662,14 +672,13 @@ def equipmentCreate(request):
                 # Components
                 components_data = request.POST.get('components')
                 components = json.loads(components_data)
-            
+
                 try:
                     # Call the stored procedure using the CALL statement
                     cursor.execute("SELECT fn_articletypes_create(%s, %s, %s, %s, %s, %s, %s, %s)",
-                                [idfamily, idcategory, name, description, image, profit_margin, barcode, reference])
-                    idequipment = cursor.fetchone()[0] 
+                                   [idfamily, idcategory, name, description, image, profit_margin, barcode, reference])
+                    idequipment = cursor.fetchone()[0]
 
-                 
                     if idequipment:
                         # Process Components and call Components create
                         for component in components:
@@ -677,7 +686,8 @@ def equipmentCreate(request):
                             quantity = component['quantity']
 
                             # Call the stored procedure for components (Modify this according to your stored procedure)
-                            cursor.execute("CALL sp_productionitems_add(%s, %s, %s)", [idequipment, component_id, quantity])
+                            cursor.execute("CALL sp_productionitems_add(%s, %s, %s)",
+                                           [idequipment, component_id, quantity])
 
                         # Commit the transaction explicitly
                         connections['admin'].commit()
@@ -992,7 +1002,7 @@ def userEdit(request, user_id):
         labor = [Labor(*row) for row in result]
 
     if request.method == 'POST':
-        idlabor = request.POST.get('labor')
+        idlabor = request.POST.get('idlabor')
 
         # Call the stored procedure to update the client
         with connections['admin'].cursor() as cursor:
@@ -1003,45 +1013,8 @@ def userEdit(request, user_id):
         # Redirect to the client list page after update
         return redirect('userList')
 
-    return render(request, 'userEdit.html', {'user_id': user_id,'labor':labor,
-                                             'user': {'name': user[1] }})
-
-def componentEdit(request, component_id):
-    # Fetch the client information from the database
-    with connections['admin'].cursor() as cursor:
-        cursor.execute("SELECT * FROM view_components_list WHERE idarticletype = %s", [component_id])
-        component = cursor.fetchone()
-
-        cursor.execute("select * from view_families_list")
-        result = cursor.fetchall()
-        family = [Family(*row) for row in result]
-
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        idfamily = request.POST.get('idfamily')
-        idcategory = None
-        description = request.POST.get('description')
-        image = ""
-        profit_margin = int(request.POST.get('profitmargin')) / 100
-        barcode = request.POST.get('barcode')
-        reference = request.POST.get('reference')
-
-        # Call the stored procedure to update the client
-        with connections['admin'].cursor() as cursor:
-            cursor.execute("CALL sp_articletypes_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                           [component_id, idfamily, idcategory, name, description, image, profit_margin, barcode,
-                            reference])
-            # Commit the changes to the database
-
-        # Redirect to the client list page after update
-        return redirect('componentList')
-
-    return render(request, 'componentEdit.html', {'component_id': component_id, 'family': family,
-                                                  'component': {'name': component[1], 'family': component[2],
-                                                                'description': component[4],
-                                                                'profitmargin': int(component[5] * 100),
-                                                                'barcode': component[6],
-                                                                'reference': component[7]}})
+    return render(request, 'userEdit.html', {'user_id': user_id, 'labor': labor,
+                                             'user': {'labor': user[4]}})
 
 
 @login_required
@@ -1109,15 +1082,19 @@ def getNIF(request):
 
 
 @login_required
+@csrf_exempt
 def sendMail(request):
     from django.core.mail import send_mail
-    send_mail(
-        "Nova Fatura",
-        "Aqui tem a sua dolorosa ... pague rápida por favor",
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        body_html = request.POST.get('body_html')
+        send_mail(
+            "Nova Fatura",
+            "Aqui tem a sua dolorosa ... pague rápida por favor",
 
-        "bytebridgessite@gmail.com",
-        ["hugo.santos@me.com"],
-        fail_silently=False,
-        html_message="<h3>Pague ja</h3"
-    )
-    return JsonResponse({'response': "sent"})
+            "bytebridgessite@gmail.com",
+            [email],
+            fail_silently=False,
+            html_message=body_html
+        )
+        return JsonResponse({'response': "sent"})
