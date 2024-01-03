@@ -1,7 +1,9 @@
 {% extends 'base_template.html' %} {% block extra_css %} {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}"/>
-
-{% endblock %}{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dropdown.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}"/>
+{% endblock %}
+{% block content %}
 
     <div class="listContainer">
         <h1>Lista de Encomendas Fornecedor</h1>
@@ -39,7 +41,10 @@
         </table>
     </div>
 
-    <div class="form-field col-lg-6">
+<form class="allforms row">
+        {% csrf_token %}
+
+        <div class="form-field col-lg-3">
 
             <select id="supplier" name="idsupplier" class="input-text js-input">
                 <option value="" style="display: none;" selected></option>
@@ -51,10 +56,10 @@
             </select>
             <label class="label" for="idsupplier">Fornecedor</label>
         </div>
-
-        <button type="button" onclick="exportjson(document.getElementById('supplier').value)">
-            <i class="fa-solid fa-circle-info"></i>
-        </button>
+        <div class=" form-field col-lg-3">
+        <button class="btn btn-primary col-lg-12" type="button" onclick="exportjson(document.getElementById('supplier').value)">Exportar JSON</button>
+        </div>
+</form>
 
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
