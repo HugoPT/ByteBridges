@@ -51,6 +51,7 @@ urlpatterns = [
     path("orderSupplierLinesFetch", views.orderSupplierLinesFetch, name="orderSupplierLinesFetch"),
     path("orderClientLinesFetch", views.orderClientLinesFetch, name="orderClientLinesFetch"),
     path('orderClientFetchInvoice/<int:idorder>/', views.orderClientFetchInvoice, name='orderClientFetchInvoice'),
+    path('orderSupplierExportJson', views.orderSupplierExportJson, name='orderSupplierExportJson'),
 
     # documentsSupplier
     path("documentsSupplier", views.documentsSupplier, name="documentsSupplier"),
@@ -86,7 +87,6 @@ urlpatterns = [
     # Users
     path("userList", views.userList, name="userList"),
     path('userEdit/<int:user_id>/', views.userEdit, name='userEdit'),
-    path('userDelete', views.userDelete, name='userDelete'),
 
     # Labor
     path("laborCreate", views.laborCreate, name="laborCreate"),

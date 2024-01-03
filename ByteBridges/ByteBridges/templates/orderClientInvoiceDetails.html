@@ -1,133 +1,6 @@
 {% extends 'base_template.html' %} {% block extra_css %} {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/invoice.css' %}"/>
 {% endblock %}{% block content %}
-    <style>
-
-        .invoice-container {
-            margin: 200px;
-            background-color: white;
-            padding: 20px;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: grey
-        }
-
-        h1,
-        h2,
-        h3,
-        p,
-        table {
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Basic styling for the page */
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            font-size: 2em;
-            margin-bottom: 5px;
-        }
-
-        address {
-            font-style: normal;
-        }
-
-        article {
-            margin-bottom: 30px;
-        }
-
-        /* Styles for the recipient section */
-        article h1 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        /* Styles for tables */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        /* Styles for the balance table */
-        .balance {
-            margin-top: 20px;
-        }
-
-        .balance th, .balance td {
-            text-align: right;
-        }
-
-        /* Styles for the additional notes section */
-        aside {
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
-        }
-
-        /* Styles for buttons in the alert */
-        .btn {
-            cursor: pointer;
-            border-radius: 4px;
-            padding: 8px 12px;
-            margin-right: 10px;
-        }
-
-        .btn-danger {
-            background-color: #d9534f;
-            border: 1px solid #d9534f;
-            color: #fff;
-        }
-
-        .btn-primary {
-            background-color: #337ab7;
-            border: 1px solid #337ab7;
-            color: #fff;
-        }
-
-        /* Additional styling for the DataTables */
-        #clientsTable_wrapper {
-            margin-top: 20px;
-        }
-
-        /* Media query for responsiveness */
-        @media only screen and (max-width: 600px) {
-            table, th, td {
-                font-size: 12px;
-            }
-
-            h1 {
-                font-size: 1.5em;
-            }
-
-            aside {
-                padding-top: 10px;
-            }
-        }
-
-
-    </style>
     <div class="invoice-container">
         <div class="col-md-12">
             <div class="col-lg-6">
@@ -137,56 +10,68 @@
                 </button>
             </div>
             <script>
-                var doc = new jsPDF();
+                var doc = new jsPDF({
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                });
+
                 var specialElementHandlers = {
                     '#editor': function (element, renderer) {
                         return true;
                     }
                 };
 
-
-                $('#export_pdf').click(function () {
-                    doc.fromHTML($('#invoice_content').html(), 15, 15, {
-                        'elementHandlers': specialElementHandlers
-                    });
-                    doc.save('fatura_{{ invoice.document }}.pdf');
-                });
-
-
-                $('#send_email').click(function () {
-                    doc.fromHTML($('#invoice_content').html(), 15, 15, {
-                        'elementHandlers': specialElementHandlers
-                    });
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "Email enviado com sucesso",
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then((result) => {
-                        $.ajax({
-                            type: "POST",
-                            url: '{% url "sendMail" %}',
-                            data: {
-                                "email": '{{ invoice.email }}',
-                                "body_html": $('#invoice_content').html(),
-                            },
-                            dataType: "json",
-                            success: function (data) {
-
-
-                            },
-                            error: function () {
-                                Swal.fire({
-                                    title: "Erro!",
-                                    text: "Falha na comunicação com o servidor",
-                                    icon: "error",
-                                });
-                            },
+                $(document).ready(function () {
+                    setTimeout(function () {
+                        $('#export_pdf').click(function () {
+                            html2canvas(document.getElementById('invoice_content'), {
+                                useCORS: true,
+                            }).then(function (canvas) {
+                                var imgData = canvas.toDataURL('image/png');
+                                doc.addImage(imgData, 'PNG', 15, 15, 180, 240); // Adjust the dimensions as needed
+                                doc.save('fatura_{{ invoice.document }}.pdf');
+                            });
                         });
-                    });
-                });
 
+                        $('#send_email').click(function () {
+                            html2canvas(document.getElementById('invoice_content'), {
+                                useCORS: true,
+                            }).then(function (canvas) {
+                                var imgData = canvas.toDataURL('image/png');
+                                doc.addImage(imgData, 'PNG', 15, 15, 180, 240); // Adjust the dimensions as needed
+
+                                Swal.fire({
+                                    position: "top-end",
+                                    icon: "success",
+                                    title: "Email enviado com sucesso",
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then((result) => {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: '{% url "sendMail" %}',
+                                        data: {
+                                            "email": '{{ invoice.email }}',
+                                            "body_html": $('#invoice_content').html(),
+                                        },
+                                        dataType: "json",
+                                        success: function (data) {
+                                            // Handle success...
+                                        },
+                                        error: function () {
+                                            Swal.fire({
+                                                title: "Erro!",
+                                                text: "Falha na comunicação com o servidor",
+                                                icon: "error",
+                                            });
+                                        },
+                                    });
+                                });
+                            });
+                        });
+                    }, 1000); // Adjust the delay time as needed
+                });
             </script>
         </div>
         <div id="invoice_content">
@@ -250,7 +135,7 @@
                 <h1><span>Observações</span></h1>
                 <div>
                     <p>{{ invoice.date }}</p><br>
-
+                    <p>{{ invoice.obs }}</p><br>
                     <p><i class="fa-solid fa-circle-info"></i> O não pagamento no prazo de 30 dias, incorre no acréscimo
                         de juros à taxa de 1.5%</p>
                 </div>

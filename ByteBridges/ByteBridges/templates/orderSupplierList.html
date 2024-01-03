@@ -32,6 +32,9 @@
                         <button type="button" class="btn btn-dark open-modal" data-target="exampleModalCenter" data-order-id="{{ f.0 }}">
                         <i class="fa-solid fa-circle-info"></i>
                         </button>
+                        <button type="button" onclick="exportjson({{ f.0 }}")>
+                        <i class="fa-solid fa-circle-info"></i>
+                        </button>
                     </td>
                 </tr>
             {% endfor %}
@@ -69,6 +72,7 @@
 </div>
 
     <script>
+
     $(document).ready(function () {
         $("#suppliersTable").DataTable({
             dom: "Bfrtip",
@@ -125,6 +129,25 @@
             });
         }
     });
+    function exportjson(orderId) {
+            $.ajax({
+                type: "POST",
+                url: '{% url "orderSupplierExportJson" %}',
+                data: { "id": orderId },
+                dataType: "json",
+                success: function (data) {
+                    // Handle the success response
+                    //updateDocumentsLines(data);
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Erro!",
+                        text: "Falha na comunicação com o servidor",
+                        icon: "error",
+                    });
+                },
+            });
+        }
 </script>
 
 {% endblock %}

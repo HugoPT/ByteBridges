@@ -157,7 +157,7 @@ def orderClientFetchInvoice(request, idorder):
         cursor.execute("SELECT * FROM fn_invoice_getTotal(%s);", [idorder])
         total = cursor.fetchone()
 
-    if invoice is not None:
+
         return render(request, 'orderClientInvoiceDetails.html', {'idorder': idorder,
                                                                   'order': order,
                                                                   'total': {'total': total[0]},
@@ -168,10 +168,6 @@ def orderClientFetchInvoice(request, idorder):
                                                                        'email': invoice[4],
                                                                        'obs': invoice[5],
                                                                        }})
-    else:
-        # Handle the case where the invoice is not found
-        # You might want to redirect to an error page or handle it differently based on your application's logic.
-        return HttpResponse("Invoice not found for idorder: {}".format(idorder))
 
 
 @login_required
@@ -325,6 +321,17 @@ def orderSupplierLinesFetch(request):
         list = cursor.fetchall()
         print(list)
         return JsonResponse({'list': list})
+
+@csrf_exempt
+@login_required
+def orderSupplierExportJson(request):
+    # Fetch the family information from the database
+    with connections['admin'].cursor() as cursor:
+        id = request.POST.get('id')
+        cursor.execute("SELECT * FROM fn_export_orderssupplier_and_lines(%s);", [id])
+        jsonexport = cursor.fetchall()
+        print(jsonexport)
+        return JsonResponse({'jsonexport': jsonexport})
 
 
 @login_required
@@ -1015,18 +1022,6 @@ def userEdit(request, user_id):
 
     return render(request, 'userEdit.html', {'user_id': user_id, 'labor': labor,
                                              'user': {'labor': user[4]}})
-
-
-@login_required
-def userDelete(request):
-    if request.method == 'POST' and 'id' in request.POST:
-        # Call the stored procedure to delete the client
-        with connections['admin'].cursor() as cursor:
-            user_id = request.POST['id']
-            cursor.execute("CALL sp_users_delete(%s)", [user_id])
-            return JsonResponse({'status': 'success'})
-        # Redirect to the client list page after deletion
-        return redirect('userList')
 
 
 @login_required
