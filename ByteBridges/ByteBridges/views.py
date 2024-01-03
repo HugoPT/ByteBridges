@@ -383,12 +383,10 @@ def get_articles(request):
 def get_items(request):
     if request.method == 'GET':
         equipment_id = request.GET.get('equipment_id')   
-        print("aaaaaaaaaaaaaaaaaaa", equipment_id)
         if equipment_id and equipment_id.isdigit():
             with connections['admin'].cursor() as cursor:
                 cursor.execute("SELECT * FROM fn_productionitems_get(CAST(%s AS INTEGER))", [equipment_id])
                 result = cursor.fetchall()
-                print("bbbbbbbbbbbbbb", result)
                 items = [EquipmentsItems(*row) for row in result]
                 
             # Convert ComponentListFamily objects to dictionaries
@@ -535,15 +533,23 @@ def productionEquipmentCreate(request, equipment_id):
         result = cursor.fetchall()
         families = [Family(*row) for row in result]
 
-    if request.method == 'POST':
-        data = json.loads(request.POST.get('data'))
-        for item in data:
-            with connections['admin'].cursor() as cursor:
-                cursor.execute("CALL sp_productionitems_add(%s,%s,%s)",
-                               [equipment_id,
-                                item['component'],
-                                item['quantity']])
-        return JsonResponse({'status': 'success'})
+        if request.method == 'POST':
+            data = json.loads(request.POST.get('data'))
+            print("zzzzzzzzzzzzzzzzzzzzzzzzz",data)
+            equipment_id = request.POST.get('equipment_id')
+            print("bbbbbbbbbbbbbbbbbbbbbbbbbb",equipment_id)
+        
+            cursor.execute("SELECT fn_productionitems_delete(CAST(%s AS INTEGER));", [equipment_id])
+            nice = cursor.fetchone()
+            print("xxxxxxxxxxxxxxxxxxx",nice)
+            if nice[0]:
+                for item in data:
+                    with connections['admin'].cursor() as cursor:
+                        cursor.execute("CALL sp_productionitems_add(%s,%s,%s)",
+                                    [equipment_id,
+                                        item['componentId'],
+                                        item['quantity']])
+                return JsonResponse({'status': 'success'})
     return render(request, 'productionEquipmentCreate.html', {'families': families, 'equipment_id': equipment_id})
 
 
