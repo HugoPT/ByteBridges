@@ -41,7 +41,9 @@
   font-size: 18px;
   line-height: 26px;
   font-weight: 400;
+  cursor: pointer;
 }
+
 .allforms .input-text:focus {
   outline: none;
 }
@@ -54,7 +56,7 @@
   line-height: 26px;
   font-weight: 400;
   color: #000000;
-  cursor: text;
+  cursor: pointer;
   transition: transform 0.2s ease-in-out;
 }
 
@@ -67,7 +69,6 @@
   padding: 8px 16px;
   border: none;
   width: 150px;
-  cursor: pointer;
 }
 .submitBtn {
   text-align: center;
@@ -110,6 +111,10 @@
 .modal-dialog {
   max-width: 1000px !important;
 }
+.label.active {
+  transform: translateY(-24px);
+}
+
 .addMoreBtn {
   display: flex;
   align-items: center;
@@ -161,4 +166,8 @@
 #componentsTable {
   display: none;
   width: 100%;
+}
+
+.beforeSelect {
+  color: #dbdbdb;
 }

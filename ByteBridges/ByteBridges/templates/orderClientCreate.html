@@ -44,12 +44,12 @@
   </button>
 
   <div id="selectedRowsContainer" class="display"></div>
-  <div id="selectClient" >
-      <form class="allforms row" action="#" method="POST">
-        {% csrf_token %}
+  <div id="selectClient">
+    <form class="allforms row" action="#" method="POST">
+      {% csrf_token %}
       <div class="form-field col-lg-4">
         <select name="client" id="client" class="input-text js-input" required>
-          <option value="" style="display: none;" selected></option>
+          <option value="" style="display: none" selected></option>
           {% for c in clients %}
           <option value="{{ c.idclient }}">{{ c.name }}</option>
           {% endfor %}
@@ -57,25 +57,29 @@
         <label class="label" for="client">Cliente</label>
       </div>
       <div class="form-field col-lg-4">
+        <label class="label" for="term">Tipo Pagamento</label>
         <select name="term" id="term" class="input-text js-input" required>
-          <option value="" style="display: none;" selected></option>
+          <option value="" style="display: none" selected></option>
           {% for t in terms %}
           <option value="{{ t.idterm }}">{{ t.name }}</option>
           {% endfor %}
         </select>
-      <label class="label" for="term">Tipo Pagamento</label>
       </div>
-        <br />
-        <div class="form-field col-lg-12">
-            <label  class="areaLabel" for="clientDescription">Observações:</label><br/>
-            <textarea
-            id="observations"
-            name="clientDescription"
-            rows="4"
-            cols="97"
-            style="border: 2px solid black;"></textarea><br/>
-        </div>
-      </form>
+
+      <br />
+      <div class="form-field col-lg-12">
+        <label class="areaLabel" for="clientDescription">Observações:</label
+        ><br />
+        <textarea
+          id="observations"
+          name="clientDescription"
+          rows="4"
+          cols="97"
+          style="border: 2px solid black"
+        ></textarea
+        ><br />
+      </div>
+    </form>
   </div>
   <div id="createSell">
     <button
@@ -89,7 +93,45 @@
   </div>
 </div>
 <script>
+  var i = 0;
   $(document).ready(function () {
+    var clientLabel = $(".label[for='client']");
+    var termLabel = $(".label[for='term']");
+    var clientSelect = $("#client");
+    var termSelect = $("#term");
+
+    clientSelect.on("focus", function () {
+      clientLabel.addClass("active");
+      $(".select-dropdown").addClass("active");
+    });
+
+    clientSelect.on("blur", function () {
+      if ($(this).val() === "") {
+        clientLabel.removeClass("active");
+      }
+    });
+
+    termSelect.on("focus", function () {
+      termLabel.addClass("active");
+      $(".select-dropdown").addClass("active");
+    });
+
+    termSelect.on("blur", function () {
+      if ($(this).val() === "") {
+        termLabel.removeClass("active");
+      }
+    });
+
+    function handleSelectChange(selectElement) {
+      var selectedValue = selectElement.value;
+      callComponents(selectedValue);
+
+      var parentRow = $(selectElement).closest(".form-field");
+      var inputId = parentRow.find(".input-text").attr("id");
+
+      $("#" + inputId).addClass("active");
+    }
+
     var table = $("#suppliersTable").DataTable({
       dom: "Bfrtip",
       buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
@@ -205,7 +247,7 @@
                 $("<input>")
                   .attr({
                     type: "number",
-                    id: "qtd",
+                    id: "qtd" + i,
                     placeholder: "Quantidade",
                     name: "quantity[]",
                     class: "carInputSell",
@@ -214,7 +256,7 @@
               )
             )
         );
-
+        i++;
         // Append columns to the container
         container.append(listItemColumn, quantityInputColumn);
 
@@ -231,11 +273,10 @@
     var selectedClientId = $("#client").val();
     var selectedTermId = $("#term").val();
     var selectedClientObservations = $("#observations").val();
-    console.log(selectedClientId);
 
     // Create an array to store the selected rows and their quantities
     var selectedRowsData = [];
-
+    var qrdNumber = 0;
     // Iterate over each list item in the carList
     $("#carList li").each(function () {
       var listItem = $(this);
@@ -246,14 +287,14 @@
       // Create an object to store the data
       var rowData = {
         id: getValue(data, "ID"),
-        quantity: $("#qtd").val(),
+        quantity: $("#qtd" + qrdNumber).val(),
       };
 
       // Push the data object to the selectedRowsData array
       selectedRowsData.push(rowData);
+      qrdNumber++;
     });
 
-    console.log(selectedClientId, "e", selectedRowsData, "e", selectedTermId);
     if (selectedClientId && selectedRowsData.length > 0 && selectedTermId) {
       // Send the data to the server
       $.ajax({
@@ -262,7 +303,7 @@
         data: {
           csrfmiddlewaretoken: "{{ csrf_token }}",
           client: selectedClientId,
-            term: selectedTermId,
+          term: selectedTermId,
           observations: selectedClientObservations,
           rows: JSON.stringify(selectedRowsData),
         },
@@ -286,12 +327,12 @@
         },
       });
     } else if (selectedTermId == null) {
-        Swal.fire({
-            icon: "error",
-            title: "Erro ao criar a venda",
-            text: "Por favor selecione um tipo de pagamento",
-        });
-    }else if (selectedClientId == null) {
+      Swal.fire({
+        icon: "error",
+        title: "Erro ao criar a venda",
+        text: "Por favor selecione um tipo de pagamento",
+      });
+    } else if (selectedClientId == null) {
       Swal.fire({
         icon: "error",
         title: "Erro ao criar a venda",
