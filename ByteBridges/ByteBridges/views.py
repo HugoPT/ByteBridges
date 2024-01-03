@@ -308,7 +308,11 @@ def orderSupplierList(request):
         # If the stored procedure returns results, you can fetch them
         orders = cursor.fetchall()
 
-        return render(request, 'orderSupplierList.html', {'orders': orders})
+        cursor.execute("select * from view_suppliers_list")
+        result = cursor.fetchall()
+        suppliers = [Supplier(*row) for row in result]
+
+        return render(request, 'orderSupplierList.html', {'orders': orders, 'suppliers': suppliers})
 
 
 @csrf_exempt

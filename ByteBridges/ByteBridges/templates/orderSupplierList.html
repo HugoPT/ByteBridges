@@ -32,15 +32,29 @@
                         <button type="button" class="btn btn-dark open-modal" data-target="exampleModalCenter" data-order-id="{{ f.0 }}">
                         <i class="fa-solid fa-circle-info"></i>
                         </button>
-                        <button type="button" onclick="exportjson({{ f.0 }}")>
-                        <i class="fa-solid fa-circle-info"></i>
-                        </button>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <div class="form-field col-lg-6">
+
+            <select id="supplier" name="idsupplier" class="input-text js-input">
+                <option value="" style="display: none;" selected></option>
+                Escolha um Fornecedor
+                </option>
+                {% for s in suppliers %}
+                    <option value="{{ s.idsupplier }}">{{ s.name }}</option>
+                {% endfor %}
+            </select>
+            <label class="label" for="idsupplier">Fornecedor</label>
+        </div>
+
+        <button type="button" onclick="exportjson(document.getElementById('supplier').value)">
+            <i class="fa-solid fa-circle-info"></i>
+        </button>
 
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -129,25 +143,55 @@
             });
         }
     });
-    function exportjson(orderId) {
-            $.ajax({
-                type: "POST",
-                url: '{% url "orderSupplierExportJson" %}',
-                data: { "id": orderId },
-                dataType: "json",
-                success: function (data) {
-                    // Handle the success response
-                    //updateDocumentsLines(data);
-                },
-                error: function () {
-                    Swal.fire({
-                        title: "Erro!",
-                        text: "Falha na comunicação com o servidor",
-                        icon: "error",
-                    });
-                },
-            });
-        }
+    function exportjson(idsupplier) {
+    if (idsupplier) {
+        console.log("Selected Supplier ID: " + idsupplier);
+
+        $.ajax({
+            type: "POST",
+            url: '{% url "orderSupplierExportJson" %}',
+            data: { "id": idsupplier },
+            dataType: "json",
+            success: function (data) {
+                // Handle the success response
+                saveJsonToFile(data.jsonexport, 'exportedData.json');
+            },
+            error: function () {
+                Swal.fire({
+                    title: "Erro!",
+                    text: "Falha na comunicação com o servidor",
+                    icon: "error",
+                });
+            },
+        });
+    } else {
+        // Display an error message when no supplier is selected
+        Swal.fire({
+            icon: "error",
+            title: "Erro ao exportar",
+            text: "Por favor, selecione um fornecedor",
+        });
+    }
+}
+    function saveJsonToFile(data, fileName) {
+    // Convert the JSON data to a string
+    var jsonString = JSON.stringify(data, null, 2);
+
+    // Create a Blob containing the JSON data
+    var blob = new Blob([jsonString], { type: 'application/json' });
+
+    // Create a link element and set its attributes
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+
+    // Append the link to the body and trigger a click event to start the download
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove the link from the body
+    document.body.removeChild(link);
+}
 </script>
 
 {% endblock %}
