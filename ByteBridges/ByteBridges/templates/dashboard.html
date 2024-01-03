@@ -9,9 +9,10 @@
 
 <div class="container_dash">
   <div class="dashTitle">
-    <h1>DashBoard</h1>
+    <h1>{{user_role}}</h1>
   </div>
   <div class="row">
+    {% if user_role|default:""|safe == "Administrador" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant1">
         <div class="card-statistic-3 p-4">
@@ -35,6 +36,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant2">
         <div class="card-statistic-3 p-4">
@@ -129,7 +131,6 @@
       </div>
     </div>
 
-
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant3">
         <div class="card-statistic-3 p-4">
@@ -175,7 +176,7 @@
       </div>
     </div>
 
-      <div class="col-xl-6 col-lg-6">
+    <div class="col-xl-6 col-lg-6">
       <div class="card gradiant5">
         <div class="card-statistic-3 p-4">
           <div class="card-icon card-icon-large">

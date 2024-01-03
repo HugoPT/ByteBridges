@@ -1,15 +1,22 @@
 import datetime
 from django.shortcuts import render, redirect
 from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, \
-    Stock, ClientBuyList, Tecnician, EquipmentsItems
+    Stock, ClientBuyList, Tecnician, EquipmentsItems, UserProfile  
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import connections
 from django.http import JsonResponse, HttpResponse
 import json
 from django.core.serializers import serialize
 from django.conf import settings
+from django import template
 
+def group_required(group_name):
+    def in_group(user):
+        if user.groups.filter(name=group_name).exists():
+            return True
+        return False
+    return user_passes_test(in_group, login_url='/dashboard')
 
 def Homepage(request):
     return render(request, "Home.html")
@@ -22,11 +29,17 @@ def logout(request):
 
 @login_required
 def IndexPage(request):
-    return render(request, template_name='dashboard.html')
-
-
+    user_groups = request.user.groups.all()
+    user_role = user_groups[0] if user_groups else None
+    if user_role == "Técnico":
+        return render(request, 'xxx.html', {'user_role': user_role})
+    else:
+        return render(request, 'dashboard.html', {'user_role': user_role})
+    
+    
 # Clients
 @login_required
+@group_required('Administrador')
 def clientList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
