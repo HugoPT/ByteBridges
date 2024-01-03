@@ -27,7 +27,13 @@
                     <td>{{ f.2 }}</td>
                     <td>{{ f.4 }}</td>
                     <td>{{ f.3 }}</td>
-                    <td>{{ f.5 }}</td>
+                    <td>
+                        {% if f.5 %}
+                            Processada
+                        {% else %}
+                            Por Processada
+                        {% endif %}
+                    </td>
                     <td>{{ f.6 }}</td>
                     <td>{{ f.7 }}</td>
                     <td>
