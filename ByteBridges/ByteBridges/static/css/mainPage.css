@@ -12,7 +12,11 @@ body {
   margin: 0 auto;
   padding: 0 15px;
 }
-
+.logoinContain {
+  display: flex;
+  align-items: center;
+  width: 50px;
+}
 .navbarColor {
   background-color: #001f3f;
   color: #fff;
@@ -107,7 +111,7 @@ section {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgb(0 0 0 / 35%);
+  background: rgb(0 0 0 / 14%);
 }
 .headerImg img {
   height: 100%;

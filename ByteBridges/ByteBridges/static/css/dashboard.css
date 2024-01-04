@@ -4,6 +4,12 @@
   padding: 30px;
   margin-top: 25px;
 }
+.card-icon-large {
+  display: flex;
+  font-size: 50px;
+  flex-direction: row;
+  align-items: center;
+}
 .dashTitle {
   font-size: 30px;
   font-weight: bolder;
@@ -11,6 +17,11 @@
   margin-bottom: 20px;
   text-align: center;
   margin-top: 10px;
+}
+.sideStyle {
+  margin-right: 15px;
+  color: #fff;
+  height: 40px;
 }
 .card {
   background-color: #fff;

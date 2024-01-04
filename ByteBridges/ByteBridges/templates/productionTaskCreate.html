@@ -92,53 +92,52 @@
     </form>
   </div>
 </div>
+
 <script>
-  var serialNumbers = [];
+    var serialNumbers = [];
 
-  async function collectSerialNumbers(index, qtd) {
-    let html = "";
-    for (let i = 1; i <= qtd; i++) {
-      html +=
-        '<div class="form-row"><label class="form-check-label" for="swal-input' +
-        i +
-        '">' +
-        i +
-        'º componente:</label></br><input id="swal-input' +
-        i +
-        '" class="swal-input' +
-        i +
-        '"></div>';
-    }
+    async function collectSerialNumbers(index, qtd) {
+      let html = "";
+      for (let i = 1; i <= qtd; i++) {
+        html +=
+          '<div class="form-row"><label class="form-check-label" for="swal-input' +
+          i +
+          '">' +
+          i +
+          'º componente:</label></br><input id="swal-input' +
+          i +
+          '" class="swal-input' +
+          i +
+          '"></div>';
+      }
 
-    const { value: formValues, isConfirmed } = await Swal.fire({
-      title: "Números de série",
-      html: html,
-      focusConfirm: false,
-      preConfirm: () => {
-        let data = [];
-        for (let i = 1; i <= qtd; i++) {
-          const inputValue = document.getElementById("swal-input" + i).value;
-          if (!inputValue) {
-            Swal.showValidationMessage("Por favor, preencha todos os campos.");
-            return false; // Prevent Swal from closing
+      const { value: formValues, isConfirmed } = await Swal.fire({
+        title: "Números de série",
+        html: html,
+        focusConfirm: false,
+        preConfirm: () => {
+          let data = [];
+          for (let i = 1; i <= qtd; i++) {
+            const inputValue = document.getElementById("swal-input" + i).value;
+            if (!inputValue) {
+              Swal.showValidationMessage("Por favor, preencha todos os campos.");
+              return false; // Prevent Swal from closing
+            }
+            data.push(inputValue);
           }
-          data.push(inputValue);
-        }
-        return data;
-      },
-      confirmButtonText: "Adicionar números de série",
-    });
+          return data;
+        },
+        confirmButtonText: "Adicionar números de série",
+      });
 
-    if (isConfirmed && formValues) {
-      let obj = {};
-      obj[index] = formValues;
-      serialNumbers.push(obj);
+      if (isConfirmed && formValues) {
+        let obj = {};
+        obj[index] = formValues;
+        serialNumbers.push(obj);
+      }
     }
-  }
 
-  document
-    .getElementById("registerInvoice")
-    .addEventListener("click", function () {
+    document.getElementById("registerInvoice").addEventListener("click", function () {
       var articleline = [];
       $("#componentsTables tbody tr").each(function () {
         var line = [];
@@ -155,57 +154,59 @@
         articleline.push(line);
       });
 
-                    console.log("Data being sent in AJAX request:", {
-                        "idarticletype": {{ header.0.3 }},
-                        "idproduction": {{ idproduction }},
-                        "quantity": 1,
-                        "serialPc": document.getElementById('serialPc').value,
-                        "hour": document.getElementById('hour').value,
-                        "cost": document.getElementById('cost').value,
-                        "warehouse": document.getElementById('warehouse').value,
-                        "serialNumbers": JSON.stringify(serialNumbers),
-                        "articleline": JSON.stringify(articleline),
-                    });
+      // Check if values are present
+      var cost = document.getElementById("cost").value;
+      var hour = document.getElementById("hour").value;
+      var warehouse = document.getElementById("warehouse").value;
+      var serialPc = document.getElementById("serialPc").value;
 
-
-                    $.ajax({
-                            type: "POST",
-                            url: '{% url "productionTaskCreateSend" %}',
-                            data: {
-                                "idarticletype": {{ header.0.3 }},
-                                "idproduction": {{ idproduction }},
-                                "quantity": 1,
-                                "serialPc": document.getElementById('serialPc').value,
-                                "hour": document.getElementById('hour').value,
-                                "cost": document.getElementById('cost').value,
-                                "warehouse": document.getElementById('warehouse').value,
-                                "serialNumbers": JSON.stringify(serialNumbers),
-                                "articleline": JSON.stringify(articleline),
-                            },
-                            dataType: "json",
-                            success: function (data) {
-                                Swal.fire({
-                                    title: "Documento criado",
-                                    text: "Documento de compra criado com sucesso",
-                                    imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
-                                    imageWidth: 200,
-                                    imageHeight: 200,
-                                    imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
-                                }).then((result) => {
-                                    serialNumbers.length = 0;
-                                    window.location.replace("/dashboard")
-                                })
-
-                            },
-                            error: function () {
-                                Swal.fire({
-                                    title: "Erro!",
-                                    text: "Falha na comunicação com o servidor",
-                                    icon: "error",
-                                });
-                            },
-                        });
-                    });
+      if (cost == null || hour== null || warehouse == null || serialPc == null) {
+        console.log("aki",cost,hour,warehouse,serialPc)
+        $.ajax({
+            type: "POST",
+            url: '{% url "productionTaskCreateSend" %}',
+            data: {
+                idarticletype: {{ header.0.3 }},
+                idproduction: {{ idproduction }},
+                quantity: 1,
+                serialPc: serialPc,
+                hour: hour,
+                cost: cost,
+                warehouse: warehouse,
+                serialNumbers: JSON.stringify(serialNumbers),
+                articleline: JSON.stringify(articleline),
+            },
+            dataType: "json",
+            success: function (data) {
+                Swal.fire({
+                title: "Documento criado",
+                text: "Documento de compra criado com sucesso",
+                imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
+                imageWidth: 200,
+                imageHeight: 200,
+                imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
+                }).then((result) => {
+                serialNumbers.length = 0;
+                window.location.replace("/dashboard");
+                });
+            },
+            error: function () {
+                Swal.fire({
+                title: "Erro!",
+                text: "Falha na comunicação com o servidor",
+                icon: "error",
+                });
+            },
+            });
+      }
+      else{
+          Swal.fire({
+              title: "Erro!",
+              text: "Por favor, preencha todos os campos",
+              icon: "error",
+          });
+      }
+  });
 </script>
 
 {% endblock %}

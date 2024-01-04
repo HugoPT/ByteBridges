@@ -17,6 +17,21 @@ section.vh-100::before {
   background: rgb(0 0 0 / 28%);
   backdrop-filter: blur(2.5px);
 }
+.logoinLogin {
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.logoDisplay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
 .card {
   border-radius: 1rem;
 }
