@@ -110,7 +110,9 @@ urlpatterns = [
     # Utils
     path("getNIF", views.getNIF, name="getNIF"),
     path("sendMail", views.sendMail, name="sendMail"),
-    path("register_computer_mongo", views.register_computer_mongo, name="register_computer_mongo"),
+    path('register_computer_mongo/<int:equipment_id>/', views.register_computer_mongo, name="register_computer_mongo"),
+    path('register_computer_mongo_send', views.register_computer_mongo_send, name='register_computer_mongo_send'),
+    path('shoppingStore', views.shoppingStore, name='shoppingStore'),
 
 
     #Reporting

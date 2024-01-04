@@ -5,37 +5,107 @@
 {% block header %}Editar Produto - Gestor{% endblock %}
 
 {% block content %}
-    <h1> Personalização de catecteristicas de equipamentos</h1>
+    <h1> Personalização de catecteristicas de equipamentos </h1>
     <div class="center-form">
-        <form method="post" action="{% url 'register_computer_mongo' %}">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="product_id" class="form-label">id do produto</label>
-                <input type="text" class="form-control" name="product_id" id="product_id">
+
+        <div class="mb-3" style="display: none">
+            <label for="product_id" class="form-label">id do produto</label>
+            <input type="text" class="form-control" name="product_id" id="product_id" value="{{ equipment_id }}">
+        </div>
+        <fieldset>
+            <legend>Indique o tipo de campo</legend>
+            <div>
+                <input type="radio" id="simple" name="field_type" value="simple" checked/>
+                <label for="simple">Valor Simples</label>
             </div>
-            <fieldset>
-                <legend>Indique o tipo de campo</legend>
-                <div>
-                    <input type="radio" id="simple" name="field_type" value="simple" checked/>
-                    <label for="simple">Valor Simples</label>
+{#            <div>#}
+{#                <input type="radio" id="multiple" name="field_type" value="array"/>#}
+{#                <label for="multiple">Multiplos valores</label>#}
+{#            </div>#}
+        </fieldset>
+        <div class="mb-3">
+            <label for="field_name" class="form-label">Nome campo</label>
+            <input type="text" class="form-control" id="field_name" name="field_name">
+        </div>
+        <div class="mb-3">
+            <label for="field_value" class="form-label">Valor do campo</label>
+            <input type="text" class="form-control" id="field_value" name="field_value">
+        </div>
+        <button type="button" class="btn col-md12 btn-primary" id="create_prop">Criar Propriedade</button>
+
+
+        <div class="container mt-5">
+            <h2>Visualizador de propriedades</h2>
+            <hr>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-3">ID</dt>
+                        <dd class="col-sm-9" id="documentId"></dd>
+
+                        <dt class="col-sm-3">Propriedade</dt>
+                        <dd class="col-sm-9" id="documentReference"></dd>
+                    </dl>
                 </div>
-                <div>
-                    <input type="radio" id="multiple" name="field_type" value="array"/>
-                    <label for="multiple">Multiplos valores</label>
+
+                <div class="col-md-6">
+                    <h5>Caracteristicas</h5>
+                    <ul class="list-group" id="documentProperties">
+                        <!-- Properties will be added dynamically using JavaScript -->
+                    </ul>
                 </div>
-            </fieldset>
-            <div class="mb-3">
-                <label for="field_name" class="form-label">Nome campo</label>
-                <input type="text" class="form-control" id="field_name" name="field_name">
             </div>
-            <div class="mb-3">
-                <label for="field_value" class="form-label">Valor do campo</label>
-                <input type="text" class="form-control" id="field_value" name="field_value">
-            </div>
-            <button type="submit" class="btn col-md6 btn-primary">Criar Propriedade</button>
-        </form>
+        </div>
+
+
     </div>
     <script>
+        $("#create_prop").on("click", function () {
+            let field_name = $("#field_name").val();
+            let field_value = $("#field_value").val();
+
+            function updateList(data) {
+                documentData = data.response
+                // Dynamically populate the list of properties
+                var propertiesList = document.getElementById('documentProperties');
+                propertiesList.innerHTML = ''
+                documentData.properties.forEach(function (property) {
+                    for (var key in property) {
+                        var listItem = document.createElement('li');
+                        listItem.className = 'list-group-item';
+                        listItem.innerText = key + ': ' + property[key];
+                        propertiesList.appendChild(listItem);
+                    }
+                });
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '{% url "register_computer_mongo_send" %}',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    equipment_id: {{equipment_id}},
+                    field_name: field_name,
+                    field_value: field_value,
+                },
+                success: function (data) {
+                    updateList(data);
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Propriedade adicionada",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then((result) => {
+
+                    })
+                },
+                error: function (error) {
+                    console.error("Error sending data to the server:", error);
+                },
+            });
+        });
 
 
     </script>
