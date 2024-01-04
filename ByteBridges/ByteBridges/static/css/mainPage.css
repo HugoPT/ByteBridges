@@ -126,6 +126,16 @@ section {
   text-align: center;
   height: 30rem;
 }
+.ShopImage {
+  background-image: url("https://png.pngtree.com/thumb_back/fw800/back_our/20190622/ourmid/pngtree-simple-technology-blue-internet-database-business-background-image_209612.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center bottom;
+  color: #fff;
+  text-align: center;
+  height: 30rem;
+}
+
 .thirdImage {
   background-image: url("https://channellife.co.nz/uploads/story/2019/09/09/GettyImages-514564575.webp");
   background-repeat: no-repeat;
