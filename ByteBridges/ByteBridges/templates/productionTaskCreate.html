@@ -3,6 +3,7 @@
 {% endblock %}
     <form method="post">
         {% csrf_token %}
+        <h1 class="title">Ficha de Produção (ID: {{ idproduction }})</h1>
 
         <!-- Table -->
         <div class="ordertable">
@@ -133,8 +134,8 @@
 
 
                     console.log("Data being sent in AJAX request:", {
-                        "idarticletype": 15,
-                        "idproduction": 39,
+                        "idarticletype": {{ header.0.3 }},
+                        "idproduction": {{ idproduction }},
                         "quantity": 1,
                         "serialPc": document.getElementById('serialPc').value,
                         "hour": document.getElementById('hour').value,
@@ -149,8 +150,8 @@
                             type: "POST",
                             url: '{% url "productionTaskCreateSend" %}',
                             data: {
-                                "idarticletype": 15,
-                                "idproduction": 39,
+                                "idarticletype": {{ header.0.3 }},
+                                "idproduction": {{ idproduction }},
                                 "quantity": 1,
                                 "serialPc": document.getElementById('serialPc').value,
                                 "hour": document.getElementById('hour').value,

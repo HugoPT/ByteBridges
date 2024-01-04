@@ -1076,7 +1076,7 @@ def productionTaskCreate(request,idproduction):
         warehouses = [Warehouse(*row) for row in result]
 
 
-        return render(request, 'productionTaskCreate.html', {'tarefas': tarefas, 'header': header, 'warehouses': warehouses})
+        return render(request, 'productionTaskCreate.html', {'tarefas': tarefas, 'header': header, 'warehouses': warehouses, 'idproduction': idproduction})
 
 @login_required
 @csrf_exempt
