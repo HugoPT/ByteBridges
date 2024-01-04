@@ -1,50 +1,52 @@
-{% extends 'base_template.html' %}
+{% extends 'base_template.html' %} {% block extra_css %} {% load static %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/reporting.css' %}"
+/>
+{% endblock %} {% block content %}
+<div class="containerReporting">
+  <div class="formReporting">
+    <form method="post">
+      {% csrf_token %}
+      <label for="start_date">Start Date:</label>
+      <input type="date" name="start_date" required />
 
-{% block extra_css %}
-  {% load static %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
-{% endblock %}
+      <label for="end_date">End Date:</label>
+      <input type="date" name="end_date" required />
 
-{% block content %}
-  <form method="post">
-    {% csrf_token %}
-    <label for="start_date">Start Date:</label>
-    <input type="date" name="start_date" required>
-
-    <label for="end_date">End Date:</label>
-    <input type="date" name="end_date" required>
-
-    <button type="submit">Submit</button>
-  </form>
-
+      <button type="submit">Submit</button>
+    </form>
+  </div>
   {% if chart_data %}
+  <div class="containerGraf">
     <canvas id="myChart" width="50px" height="50px"></canvas>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  var chartData = {{ chart_data|safe }};
+  var ctx = document.getElementById('myChart').getContext('2d');
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-      var chartData = {{ chart_data|safe }};
-      var ctx = document.getElementById('myChart').getContext('2d');
-
-      var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: chartData.labels,
-          datasets: [{
-            label: 'Chart Data',
-            data: chartData.data,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: chartData.labels,
+      datasets: [{
+        label: 'Chart Data',
+        data: chartData.data,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
         }
-      });
-    </script>
-  {% endif %}
-{% endblock %}
+      }
+    }
+  });
+</script>
+{% endif %} {% endblock %}
