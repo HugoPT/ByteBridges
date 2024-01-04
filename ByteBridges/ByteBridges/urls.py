@@ -112,4 +112,8 @@ urlpatterns = [
     path("sendMail", views.sendMail, name="sendMail"),
     path("register_computer_mongo", views.register_computer_mongo, name="register_computer_mongo"),
 
+
+    #Reporting
+    path("reporting", views.reporting, name="reporting"),
+
 ]
