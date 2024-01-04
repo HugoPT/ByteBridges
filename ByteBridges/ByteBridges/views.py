@@ -1283,23 +1283,59 @@ def reporting(request):
         end_date = request.POST.get('end_date')
 
         with connections['admin'].cursor() as cursor:
-            cursor.execute("SELECT purchases, sales, invoices, productions FROM Reporting(%s, %s);", [start_date, end_date])
-            result = cursor.fetchone()
+            cursor.execute("SELECT purchases, sales, invoices, productions, equipmentsmade, componentsspent FROM Reporting(%s, %s);", [start_date, end_date])
+            result_bar = cursor.fetchone()
 
         # Extracting data for the chart
         # Assuming your result set contains only one row with 4 columns
-        chart_data = list(result)
+        chart_data_bar = list(result_bar)
 
         # Define the desired order of labels
-        desired_order = ['Compras', 'Vendas', 'Faturas', 'Produções']
+        desired_order_bar = ['Compras', 'Vendas', 'Faturas', 'Produções', 'Equipamentos Vendidos', 'Componentes Gastos']
 
-        chart_labels = desired_order
+        chart_labels_bar = desired_order_bar
 
-        chart_data_json = json.dumps({
-            'labels': chart_labels,
-            'data': chart_data,
+        chart_data_json_bar = json.dumps({
+            'labels': chart_labels_bar,
+            'data': chart_data_bar,
         })
 
-        return render(request, 'reporting.html', {'chart_data': chart_data_json})
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("SELECT purchaseditems, solditems FROM Reporting(%s, %s);", [start_date, end_date])
+            result_pie = cursor.fetchone()
+
+        # Extracting data for the chart
+        # Assuming your result set contains only one row with 4 columns
+        chart_data_pie = list(result_pie)
+
+        # Define the desired order of labels
+        desired_order_pie = ['Items Comprados', 'Items Vendidos']
+
+        chart_labels_pie = desired_order_pie
+
+        chart_data_json_pie = json.dumps({
+            'labels': chart_labels_pie,
+            'data': chart_data_pie,
+        })
+
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("SELECT totalsalesrevenue, profit, totalpurchasesrevenue FROM Reporting(%s, %s);", [start_date, end_date])
+            result_line = cursor.fetchone()
+
+        # Extracting data for the chart
+        # Assuming your result set contains only one row with 4 columns
+        chart_data_line = list(result_line)
+
+        # Define the desired order of labels
+        desired_order_line = ['Receita de Vendas', 'Lucro', 'Despesas']
+
+        chart_labels_line = desired_order_line
+
+        chart_data_json_line = json.dumps({
+            'labels': chart_labels_line,
+            'data': chart_data_line,
+        })
+
+        return render(request, 'reporting.html', {'chart_data_bar': chart_data_json_bar, 'chart_data_pie': chart_data_json_pie, 'chart_data_line': chart_data_json_line})
 
     return render(request, 'reporting.html')

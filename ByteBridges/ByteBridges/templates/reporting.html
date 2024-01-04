@@ -18,25 +18,40 @@
       <button type="submit">Submit</button>
     </form>
   </div>
-  {% if chart_data %}
+  {% if chart_data_bar %}
   <div class="containerGraf">
-    <canvas id="myChart" width="50px" height="50px"></canvas>
+    <canvas id="myChartbar" width="50px" height="50px"></canvas>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  var chartData = {{ chart_data|safe }};
-  var ctx = document.getElementById('myChart').getContext('2d');
+  var chart_data_bar = {{ chart_data_bar|safe }};
+  var ctx = document.getElementById('myChartbar').getContext('2d');
 
   var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: chartData.labels,
+      labels: chart_data_bar.labels,
       datasets: [{
-        label: 'Chart Data',
-        data: chartData.data,
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        label: 'Items',
+        data: chart_data_bar.data,
+         backgroundColor: [
+              'rgba(255, 0, 0, 0.2)',      // Red
+                'rgba(0, 128, 255, 0.2)',    // Blue
+                'rgba(255, 255, 0, 0.2)',    // Yellow
+                'rgba(0, 255, 255, 0.2)',     // Cyan
+                'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 0, 0, 1)',      // Red
+                'rgba(0, 128, 255, 1)',    // Blue
+                'rgba(255, 255, 0, 1)',    // Yellow
+                'rgba(0, 255, 255, 1)',    // Cyan
+                'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)'
+
+            ],
         borderWidth: 1
       }]
     },
@@ -49,4 +64,84 @@
     }
   });
 </script>
-{% endif %} {% endblock %}
+{% endif %}
+{% if chart_data_pie %}
+    <div class="containerGraf">
+    <canvas id="myChartpie" width="50px" height="50px"></canvas>
+  </div>
+    <script>
+      var chart_data_pie = {{ chart_data_pie|safe }};
+      var ctx = document.getElementById('myChartpie').getContext('2d');
+
+      var myChart = new Chart(ctx, {
+        type: 'pie',  // Set chart type to 'pie'
+        data: {
+          labels: chart_data_pie.labels,
+          datasets: [{
+            label: 'Items',
+            data: chart_data_pie.data,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    </script>
+{% endif %}
+
+    {% if chart_data_line %}
+    <div class="containerGraf">
+    <canvas id="myChartline" width="50px" height="50px"></canvas>
+  </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      var chart_data_line = {{ chart_data_line|safe }};
+      var ctx = document.getElementById('myChartline').getContext('2d');
+
+      var myChart = new Chart(ctx, {
+        type: 'doughnut',  // Set chart type to 'line'
+        data: {
+          labels: chart_data_line.labels,
+          datasets: [{
+            label: 'Items',
+            data: chart_data_line.data,
+            fill: false, // Set to false for a line chart without filling below the line
+            borderColor: [
+              'rgba(123, 210, 45, 1)',
+                'rgba(32, 145, 211, 1)',
+                'rgba(255, 165, 0, 1)',
+                'rgba(187, 22, 200, 1)'
+            ],
+            borderWidth: 2
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    </script>
+{% endif %}
+
+{% endblock %}
