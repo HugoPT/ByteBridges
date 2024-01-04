@@ -1,0 +1,56 @@
+{% extends 'base_template.html' %} {%block extra_css%} {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
+{%endblock%}{% block content %}
+
+<div class="listContainer">
+    <h1>Lista de Movimentos</h1>
+
+    <table id="movementsStockTable" class="display">
+      <thead>
+        <tr>
+          <th>Origem</th>
+          <th>Nome</th>
+            <th>Referência</th>
+          <th>Data</th>
+            <th>Quantidade</th>
+          <th>Entrada/Saída</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in movements %}
+        <tr>
+          <td>{{ m.0 }}</td>
+          <td>{{ m.1 }}</td>
+            <td>{{ m.2 }}</td>
+          <td>{{ m.4 }}</td>
+            <td>{{ m.3 }}</td>
+            <td>
+                    {% if m.5 == "O" %}
+                            <i class="fa fa-arrow-down" style="color: red"></i>
+                        {% else %}
+                            <i class="fa fa-arrow-up" style="color: lawngreen"></i>
+                        {% endif %}
+                    </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+<script>
+
+
+ $(document).ready(function () {
+    $("#movementsStockTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+      },
+    });
+  });
+
+
+</script>
+
+{% endblock %}

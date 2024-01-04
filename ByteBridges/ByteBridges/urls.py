@@ -84,6 +84,7 @@ urlpatterns = [
 
     # Stocks
     path("stockList", views.stockList, name="stockList"),
+    path("stockMovementList", views.stockMovementList, name="stockMovementList"),
 
     # Users
     path("userList", views.userList, name="userList"),

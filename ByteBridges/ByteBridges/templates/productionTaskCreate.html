@@ -155,57 +155,57 @@
         articleline.push(line);
       });
 
-      console.log("Data being sent in AJAX request:", {
-        idarticletype: 15,
-        idproduction: 39,
-        quantity: 1,
-        serialPc: document.getElementById("serialPc").value,
-        hour: document.getElementById("hour").value,
-        cost: document.getElementById("cost").value,
-        warehouse: document.getElementById("warehouse").value,
-        serialNumbers: JSON.stringify(serialNumbers),
-        articleline: JSON.stringify(articleline),
-      });
+                    console.log("Data being sent in AJAX request:", {
+                        "idarticletype": {{ header.0.3 }},
+                        "idproduction": {{ idproduction }},
+                        "quantity": 1,
+                        "serialPc": document.getElementById('serialPc').value,
+                        "hour": document.getElementById('hour').value,
+                        "cost": document.getElementById('cost').value,
+                        "warehouse": document.getElementById('warehouse').value,
+                        "serialNumbers": JSON.stringify(serialNumbers),
+                        "articleline": JSON.stringify(articleline),
+                    });
 
-      $.ajax({
-        type: "POST",
-        url: '{% url "productionTaskCreateSend" %}',
-        data: {
-          idarticletype: 15,
-          idproduction: 39,
-          quantity: 1,
-          serialPc: document.getElementById("serialPc").value,
-          hour: document.getElementById("hour").value,
-          cost: document.getElementById("cost").value,
-          warehouse: document.getElementById("warehouse").value,
-          serialNumbers: JSON.stringify(serialNumbers),
-          articleline: JSON.stringify(articleline),
-        },
-        dataType: "json",
-        success: function (data) {
-          Swal.fire({
-            title: "Documento criado",
-            text: "Documento de compra criado com sucesso",
-            imageUrl:
-              "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
-            imageWidth: 200,
-            imageHeight: 200,
-            imageAlt:
-              "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
-          }).then((result) => {
-            serialNumbers.length = 0;
-            window.location.replace("/dashboard");
-          });
-        },
-        error: function () {
-          Swal.fire({
-            title: "Erro!",
-            text: "Falha na comunicação com o servidor",
-            icon: "error",
-          });
-        },
-      });
-    });
+
+                    $.ajax({
+                            type: "POST",
+                            url: '{% url "productionTaskCreateSend" %}',
+                            data: {
+                                "idarticletype": {{ header.0.3 }},
+                                "idproduction": {{ idproduction }},
+                                "quantity": 1,
+                                "serialPc": document.getElementById('serialPc').value,
+                                "hour": document.getElementById('hour').value,
+                                "cost": document.getElementById('cost').value,
+                                "warehouse": document.getElementById('warehouse').value,
+                                "serialNumbers": JSON.stringify(serialNumbers),
+                                "articleline": JSON.stringify(articleline),
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                Swal.fire({
+                                    title: "Documento criado",
+                                    text: "Documento de compra criado com sucesso",
+                                    imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
+                                    imageWidth: 200,
+                                    imageHeight: 200,
+                                    imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
+                                }).then((result) => {
+                                    serialNumbers.length = 0;
+                                    window.location.replace("/dashboard")
+                                })
+
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    title: "Erro!",
+                                    text: "Falha na comunicação com o servidor",
+                                    icon: "error",
+                                });
+                            },
+                        });
+                    });
 </script>
 
 {% endblock %}
