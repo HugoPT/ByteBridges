@@ -1234,14 +1234,13 @@ def register_computer_mongo_send(request):
         field_value = request.POST.get('field_value')
         equipment_id = request.POST.get('equipment_id')
 
-
         query = {"_reference": equipment_id}
         update_operation = {'$push': {'properties': {field_name: field_value}}}
         result = collection.find_one(query)
         if result is not None:
             result = collection.update_one(query, update_operation)
         else:
-            doc = {"_reference": product_id, "properties": [{field_name: field_value}]}
+            doc = {"_reference": equipment_id, "properties": [{field_name: field_value}]}
             collection.insert_one(doc)
 
         query = {'_reference': equipment_id}
