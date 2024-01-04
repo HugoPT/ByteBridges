@@ -931,6 +931,19 @@ def stockList(request):
 
 
 @login_required
+def stockMovementList(request):
+    with connections['admin'].cursor() as cursor:
+
+        cursor.execute("select  * from view_stockhistory_list")
+        # If the stored procedure returns results, you can fetch them
+        movements = cursor.fetchall()
+
+        context = {'movements': movements}
+
+        return render(request, 'stockMovementList.html', context=context)
+
+
+@login_required
 def laborList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
