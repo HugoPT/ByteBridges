@@ -1089,20 +1089,23 @@ def productionTaskCreateSend(request):
         quantity = request.POST.get('quantity')
         idproduction = request.POST.get('idproduction')
         idarticletype = request.POST.get('idarticletype')
+        serialPc = request.POST.get('serialPc')
         serialNumbers = json.loads(request.POST.get('serialNumbers'))
+        articleline = json.loads(request.POST.get('articleline'))
         print("Serial Numbers:", serialNumbers)
 
-        cursor.execute("select fn_assembleequipment(%s,%s,%s,%s,%s,%s);",
-            [warehouse, cost, quantity, idarticletype, idproduction, hour])
-        doc = cursor.fetchall()
+        cursor.execute("select fn_assembleequipment(%s,%s,%s,%s,%s,%s,%s);",
+            [warehouse, cost, quantity, idarticletype, idproduction, hour, serialPc])
+        doc = cursor.fetchone()
         print(doc)
 
-        for x in serialNumbers:
+        for line in articleline:
+            for x in serialNumbers:
                 for key, value in x.items():
-                    if key == doc[0]:
+                    if key == line[0]:
                         for sn in value:
-                            print("serial " + sn)
-                            cursor.execute("CALL sp_serialGive(%s,%s)", [key, sn])
+                            print(key + sn)
+                            cursor.execute("CALL sp_production_setComponent(%s,%s)", [sn, idproduction])
         return JsonResponse({'list': idproduction})
 
 
