@@ -30,13 +30,13 @@ def logout(request):
 
 @login_required
 def IndexPage(request):
+    user_name = request.user
     user_groups = request.user.groups.all()
-    user_role = user_groups[0] if user_groups else None
+    user_role = user_groups[0].name if user_groups else None
     if user_role == "Técnico":
-        return render(request, 'xxx.html', {'user_role': user_role})
+        return render(request, 'tecMainPage.html', {'user_role': user_role,'user_name': user_name})
     else:
-        return render(request, 'dashboard.html', {'user_role': user_role})
-
+        return render(request, 'dashboard.html', {'user_role': user_role })
 
 # Clients
 @login_required

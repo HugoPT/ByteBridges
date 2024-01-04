@@ -1,0 +1,121 @@
+{% extends 'base_template.html' %} {% block extra_css %} {% load static %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{% static 'css/tecMainPage.css' %}"
+/>
+<style>
+  /* Custom styles for the feature cards */
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+</style>
+{% endblock %} {% block content %}
+<section class="features11 cid-st2QrM3fl4" id="features011-c">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 pb-5 col-lg-9">
+        <h6
+          class="mbr-section-title mbr-fonts-style align-center mb-0 display-1 userTitle"
+          id="greeting-message"
+        ></h6>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card md-pb col-12 col-md-6 col-lg-4">
+        <div class="card-wrapper">
+          <div class="card-box align-center">
+            <div class="iconfont-wrapper">
+              <span class="mbr-iconfont mobi-mbri-code mobi-mbri"
+                ><i class="bx bxs-factory arrowColor"></i
+              ></span>
+            </div>
+            <h5 class="card-title mbr-fonts-style display-5">
+              Produções Pendentes
+            </h5>
+            <p class="card-text mbr-fonts-style pb-4 display-7">18</p>
+            <div class="wrapper">
+              <div class="iconfont-wrapper">
+                <span class="mbr-iconfont link mobi-mbri-plus mobi-mbri"
+                  ><i class="bx bx-right-arrow-alt arrowColor"></i
+                ></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card md-pb col-12 col-md-6 col-lg-4">
+        <div class="card-wrapper center">
+          <div class="card-box align-center">
+            <div class="iconfont-wrapper">
+              <span class="mbr-iconfont mobi-mbri-change-style mobi-mbri"
+                ><i class="bx bxs-time arrowColor"></i
+              ></span>
+            </div>
+            <h5 class="card-title mbr-fonts-style display-5">
+              <strong> Produções Semanais</strong>
+            </h5>
+            <p class="card-text mbr-fonts-style pb-4 display-7">10</p>
+            <div class="wrapper">
+              <div class="iconfont-wrapper">
+                <span class="mbr-iconfont link mobi-mbri-plus mobi-mbri">
+                  <i class="bx bx-right-arrow-alt arrowColor"></i
+                ></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card col-12 col-md-6 col-lg-4">
+        <div class="card-wrapper">
+          <div class="card-box align-center">
+            <div class="iconfont-wrapper">
+              <span class="mbr-iconfont mobi-mbri-features mobi-mbri"
+                ><i class="bx bxs-alarm-exclamation arrowColor"></i
+              ></span>
+            </div>
+            <h5 class="card-title mbr-fonts-style display-5">
+              <strong>Produções Atrasadas</strong>
+            </h5>
+            <p class="card-text mbr-fonts-style pb-4 display-7">5</p>
+            <div class="wrapper">
+              <div class="iconfont-wrapper">
+                <span class="mbr-iconfont link mobi-mbri-plus mobi-mbri">
+                  <i class="bx bx-right-arrow-alt arrowColor"></i
+                ></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  // Get the user's name from the Django template
+  var userName = "{{ user_name }}";
+  var slicedName = userName.slice(0, userName.indexOf("@"));
+  // Function to get the current time and display a greeting message
+  function displayGreeting() {
+    var date = new Date();
+    var hours = date.getHours();
+    var greetingElement = document.getElementById("greeting-message");
+
+    if (hours >= 5 && hours < 12) {
+      greetingElement.innerHTML = "Bom dia, " + slicedName;
+    } else if (hours >= 12 && hours < 18) {
+      greetingElement.innerHTML = "Boa Tarde, " + slicedName;
+    } else {
+      greetingElement.innerHTML = "Boa Noite, " + slicedName;
+    }
+  }
+
+  // Call the function to display the greeting message
+  displayGreeting();
+</script>
+{% endblock %}

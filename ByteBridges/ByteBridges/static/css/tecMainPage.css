@@ -1,0 +1,173 @@
+.cid-st2QrM3fl4 {
+  padding-top: 4rem;
+  padding-bottom: 6rem;
+  background-color: #ffffff;
+}
+.row {
+  display: flex;
+}
+.userTitle {
+  margin-top: 35px;
+}
+.card {
+  background-color: transparent;
+  border: none !important;
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-bottom: 20px;
+  flex: 1;
+  color: #ffffff;
+}
+.cid-st2QrM3fl4 .card-wrapper:before {
+  position: absolute;
+  right: -100px;
+  bottom: -100px;
+  content: "";
+  transition: all 0.3s;
+  width: 200px;
+  height: 200px;
+  background: #ff8484;
+  transform: rotate(45deg);
+}
+section {
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+section,
+.container,
+.container-fluid {
+  position: relative;
+  word-wrap: break-word;
+}
+
+.container,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl {
+  max-width: 1140px;
+}
+
+@media (min-width: 768px) {
+  .container,
+  .container-md,
+  .container-sm {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm {
+    max-width: 960px;
+  }
+
+  .row {
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+}
+
+.cid-st2QrM3fl4 .row {
+  justify-content: center;
+}
+
+.row {
+  display: -webkit-flex;
+  -webkit-flex-wrap: wrap;
+}
+
+@media (min-width: 992px) {
+  .row > [class*="col"] {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+.cid-st2QrM3fl4 .card-wrapper {
+  padding: 3rem;
+  transition: all 0.3s;
+  background: #00273f;
+  position: relative;
+  -webkit-flex: 1;
+}
+
+.card-wrapper,
+.item-wrapper {
+  overflow: hidden;
+}
+
+.card-box {
+  width: 100%;
+}
+.card-box p {
+  font-size: 80px;
+}
+.card:not(:last-child) {
+  margin-right: 20px;
+  border: none;
+}
+.align-center {
+  text-align: center;
+}
+
+.cid-st2QrM3fl4 .mbr-iconfont {
+  display: block;
+  font-size: 4rem;
+  color: #ff8484;
+  margin-bottom: 2rem;
+  transition: all 0.3s;
+}
+
+/* Adjusted styles for font sizes and line heights */
+.display-5 {
+  font-family: "DM Sans", sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
+.card-title {
+  margin-bottom: 0.75rem;
+}
+
+.display-7 {
+  font-family: "DM Sans", sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.cid-st2QrM3fl4 .card-text {
+  color: #fff;
+}
+
+.cid-st2QrM3fl4 .wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.cid-st2QrM3fl4 .link {
+  font-size: 2rem;
+  margin-right: 1rem;
+  border: 1px solid #efefef;
+  background: rgb(0, 183, 255);
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0rem;
+}
+.arrowColor {
+  color: #ffffff;
+}
+.cid-st2QrM3fl4 .card-link {
+  opacity: 0;
+  color: #ffffff;
+  transition: all 0.3s;
+  transform: translateX(-10px);
+}
