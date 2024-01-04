@@ -1090,8 +1090,9 @@ def productionTaskCreateSend(request):
         idproduction = request.POST.get('idproduction')
         idarticletype = request.POST.get('idarticletype')
         serialNumbers = json.loads(request.POST.get('serialNumbers'))
+        print("Serial Numbers:", serialNumbers)
 
-        cursor.execute("call sp_assembleEquipment(%s,%s,%s,%s,%s,%s);",
+        cursor.execute("select fn_assembleequipment(%s,%s,%s,%s,%s,%s);",
             [warehouse, cost, quantity, idarticletype, idproduction, hour])
         doc = cursor.fetchall()
         print(doc)
