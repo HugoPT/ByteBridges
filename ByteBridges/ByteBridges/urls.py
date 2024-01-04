@@ -94,17 +94,18 @@ urlpatterns = [
     path('laborEdit/<int:labor_id>/', views.laborEdit, name='laborEdit'),
     path('laborDelete', views.laborDelete, name='laborDelete'),
 
-
-    #Production
+    # Production
     path("productionOrderCreate", views.productionOrderCreate, name="productionOrderCreate"),
-    
-    #TaskList
+
+    # TaskList
     path("productionTaskList", views.productionTaskList, name="productionTaskList"),
     path('productionTaskCreate/<int:idproduction>/', views.productionTaskCreate, name='productionTaskCreate'),
+    path("productionTaskCreateSend", views.productionTaskCreateSend, name="productionTaskCreateSend"),
 
-    #Items
+    # Items
     path('get_items/', views.get_items, name='get_items'),
-    # utils
+
+    # Utils
     path("getNIF", views.getNIF, name="getNIF"),
     path("sendMail", views.sendMail, name="sendMail"),
     path("register_computer_mongo", views.register_computer_mongo, name="register_computer_mongo"),

@@ -1068,9 +1068,41 @@ def productionTaskCreate(request,idproduction):
         cursor.execute("SELECT * FROM fn_productions_getLines (%s);", [idproduction])
         tarefas = cursor.fetchall()
 
+        cursor.execute("SELECT * FROM fn_production_getHeader (%s);", [idproduction])
+        header = cursor.fetchall()
 
-        return render(request, 'productionTaskCreate.html', {'tarefas': tarefas})
+        cursor.execute("select * from view_warehouses_list")
+        result = cursor.fetchall()
+        warehouses = [Warehouse(*row) for row in result]
 
+
+        return render(request, 'productionTaskCreate.html', {'tarefas': tarefas, 'header': header, 'warehouses': warehouses})
+
+@login_required
+@csrf_exempt
+def productionTaskCreateSend(request):
+    # Fetch the family information from the database
+    with connections['admin'].cursor() as cursor:
+        warehouse = request.POST.get('warehouse')
+        cost = request.POST.get('cost')
+        hour = request.POST.get('hour')
+        quantity = request.POST.get('quantity')
+        idproduction = request.POST.get('idproduction')
+        idarticletype = request.POST.get('idarticletype')
+        serialNumbers = json.loads(request.POST.get('serialNumbers'))
+
+        cursor.execute("call sp_assembleEquipment(%s,%s,%s,%s,%s,%s);",
+            [warehouse, cost, quantity, idarticletype, idproduction, hour])
+        doc = cursor.fetchall()
+        print(doc)
+
+        for x in serialNumbers:
+                for key, value in x.items():
+                    if key == doc[0]:
+                        for sn in value:
+                            print("serial " + sn)
+                            cursor.execute("CALL sp_serialGive(%s,%s)", [key, sn])
+        return JsonResponse({'list': idproduction})
 
 
 @login_required

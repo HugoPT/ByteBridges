@@ -14,6 +14,7 @@
                     <th scope="col">Componente</th>
                     <th scope="col">Referencia</th>
                     <th scope="col">Quantidade</th>
+                    <th scope="col">Total</th>
                     <th scope="col">SN</th>
                 </tr>
                 </thead>
@@ -32,6 +33,42 @@
                 </tbody>
             </table>
         </div>
+
+    <div class="form-field col-lg-6">
+            <select id="warehouse" name="idwarehouse" class="input-text js-input">
+                <option value="" style="display: none;" selected></option>
+                Escolha um Armazém
+                </option>
+                {% for w in warehouses %}
+                    <option value="{{ w.idwarehouse }}">{{ w.name }}</option>
+                {% endfor %}
+            </select>
+            <label class="label" for="idwarehouse">Armazém</label>
+        </div>
+
+    <div class="form-field col-lg-6">
+            <input
+                    id="cost"
+                    name="cost"
+                    class="input-text js-input"
+                    type="number"
+                    required
+            />
+            <label class="label" for="cost">Custo</label>
+        </div>
+
+    <div class="form-field col-lg-6">
+            <input
+                    id="hour"
+                    name="hour"
+                    class="input-text js-input"
+                    type="number"
+                    required
+            />
+            <label class="label" for="hour">Horas</label>
+        </div>
+
+    <button type="button" id="registerInvoice" class="btn btn-primary col-md-12">Registar Ordem de Produção</button>
     </form>
 
     <script>
@@ -69,6 +106,55 @@
                 serialNumbers.push(obj);
             }
         }
+
+        document.getElementById('registerInvoice').addEventListener('click', function() {
+                    // Log the data before making the AJAX request
+                    console.log("Data being sent in AJAX request:", {
+                        "idarticletype": 15,
+                        "idproduction": 39,
+                        "quantity": 3,
+                        "hour": hour,
+                        "cost": cost,
+                        "warehouse": warehouse,
+                        "serialNumbers": JSON.stringify(serialNumbers),
+                    });
+
+                    $.ajax({
+                            type: "POST",
+                            url: '{% url "productionTaskCreateSend" %}',
+                            data: {
+                                "idarticletype": 15,
+                                "idproduction": 39,
+                                "quantity": 3,
+                                "hour": 2,
+                                "cost": 1000,
+                                "warehouse": 1,
+                                "serialNumbers": JSON.stringify(serialNumbers),
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                Swal.fire({
+                                    title: "Documento criado",
+                                    text: "Documento de compra criado com sucesso",
+                                    imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",
+                                    imageWidth: 200,
+                                    imageHeight: 200,
+                                    imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"
+                                }).then((result) => {
+                                    serialNumbers.length = 0;
+                                    window.location.replace("/dashboard")
+                                })
+
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    title: "Erro!",
+                                    text: "Falha na comunicação com o servidor",
+                                    icon: "error",
+                                });
+                            },
+                        });
+                    });
     </script>
 
 {% endblock %}
