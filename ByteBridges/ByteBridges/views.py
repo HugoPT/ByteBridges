@@ -1226,3 +1226,26 @@ def register_computer_mongo(request):
         return JsonResponse({'response': "done"})
 
     return render(request, 'equipmentSpecs.html')
+
+@login_required
+def reporting(request):
+    if request.method == 'POST':
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+
+        with connections['admin'].cursor() as cursor:
+            cursor.execute("SELECT * FROM Reporting(%s, %s);", [start_date, end_date])
+            result = cursor.fetchall()
+
+        # Extracting data for the chart
+        chart_labels = [row[0] for row in result]
+        chart_data = [row[1] for row in result]
+
+        chart_data_json = json.dumps({
+            'labels': chart_labels,
+            'data': chart_data,
+        })
+
+        return render(request, 'reporting.html', {'chart_data': chart_data_json})
+
+    return render(request, 'reporting.html')
