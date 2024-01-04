@@ -1234,15 +1234,17 @@ def reporting(request):
         end_date = request.POST.get('end_date')
 
         with connections['admin'].cursor() as cursor:
-            cursor.execute("SELECT * FROM Reporting(%s, %s);", [start_date, end_date])
-            result = cursor.fetchall()
+            cursor.execute("SELECT purchases, sales, invoices, productions FROM Reporting(%s, %s);", [start_date, end_date])
+            result = cursor.fetchone()
 
-        desired_order = ['purchases', 'purchaseditems', 'totalpurchaserevenue', 'invoices', 'sales', 'solditems',
-                         'totalsalesrevenue', 'productions', 'equipmentsmade', 'componentsspent']
+        # Extracting data for the chart
+        # Assuming your result set contains only one row with 4 columns
+        chart_data = list(result)
 
-        # Extracting data for the chart, limit to the first 10 rows
+        # Define the desired order of labels
+        desired_order = ['Compras', 'Vendas', 'Faturas', 'Produções']
+
         chart_labels = desired_order
-        chart_data = [[row[desired_order.index(label)] for label in desired_order] for row in result[:10]]
 
         chart_data_json = json.dumps({
             'labels': chart_labels,
