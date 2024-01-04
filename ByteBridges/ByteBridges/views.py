@@ -1,7 +1,7 @@
 import datetime
 from django.shortcuts import render, redirect
 from .models import Supplier, Warehouse, Client, Family, ArticleType, ComponentListFamily, User, Category, Labor, Terms, \
-    Stock, ClientBuyList, Tecnician, EquipmentsItems, UserProfile  
+    Stock, ClientBuyList, Tecnician, EquipmentsItems, UserProfile
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import connections
@@ -10,6 +10,7 @@ import json
 from django.core.serializers import serialize
 from django.conf import settings
 from django import template
+import pymongo
 
 def group_required(group_name):
     def in_group(user):
@@ -35,8 +36,8 @@ def IndexPage(request):
         return render(request, 'xxx.html', {'user_role': user_role})
     else:
         return render(request, 'dashboard.html', {'user_role': user_role})
-    
-    
+
+
 # Clients
 @login_required
 @group_required('Administrador')
@@ -169,7 +170,6 @@ def orderClientFetchInvoice(request, idorder):
 
         cursor.execute("SELECT * FROM fn_invoice_getTotal(%s);", [idorder])
         total = cursor.fetchone()
-
 
         return render(request, 'orderClientInvoiceDetails.html', {'idorder': idorder,
                                                                   'order': order,
@@ -339,6 +339,7 @@ def orderSupplierLinesFetch(request):
         print(list)
         return JsonResponse({'list': list})
 
+
 @csrf_exempt
 @login_required
 def orderSupplierExportJson(request):
@@ -416,7 +417,7 @@ def get_articles(request):
 @login_required
 def get_items(request):
     if request.method == 'GET':
-        equipment_id = request.GET.get('equipment_id')   
+        equipment_id = request.GET.get('equipment_id')
         if equipment_id and equipment_id.isdigit():
             with connections['admin'].cursor() as cursor:
                 cursor.execute("SELECT * FROM fn_productionitems_get(CAST(%s AS INTEGER))", [equipment_id])
@@ -569,7 +570,7 @@ def productionEquipmentCreate(request, equipment_id):
         if request.method == 'POST':
             data = json.loads(request.POST.get('data'))
             equipment_id = request.POST.get('equipment_id')
-        
+
             cursor.execute("SELECT fn_productionitems_delete(CAST(%s AS INTEGER));", [equipment_id])
             nice = cursor.fetchone()
             if nice[0]:
@@ -1141,3 +1142,38 @@ def sendMail(request):
             html_message=body_html
         )
         return JsonResponse({'response': "sent"})
+
+
+def register_computer_mongo(request):
+    if request.method == 'POST':
+        mongo_instance = pymongo.MongoClient(settings.MONGO_DB_HOST,
+                                             username=settings.MONGO_USERNAME,
+                                             password=settings.MONGO_PASSWORD)[settings.MONGO_DB_NAME]
+        bd = mongo_instance
+        collection = bd["produtos"]
+
+        # computer_specs = json.loads(request.POST.get('computer_specs'))
+        # computer_specs = Null
+        field_name = request.POST.get('field_name')
+        field_value = request.POST.get('field_value')
+        product_id = request.POST.get('product_id')
+
+        query = {"_reference": product_id}
+        update_operation = {'$push': {'properties': {field_name: field_value}}}
+        result = collection.find_one(query)
+        print(result)
+        if result is not None:
+            result = collection.update_one(query, update_operation)
+        else:
+            doc = {"_reference": product_id, "properties": [{field_name: field_value}]}
+            collection.insert_one(doc)
+        # if computer_specs == null:
+        #     doc = {field_name: field_value}
+        #     col.insert_one(doc)
+        # else:
+        #     for field,value in computer_specs:
+        #         doc = {field: value}
+        #         col.insert_one(doc)
+        return JsonResponse({'response': "done"})
+
+    return render(request, 'equipmentSpecs.html')

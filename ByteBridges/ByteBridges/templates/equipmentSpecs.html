@@ -1,0 +1,43 @@
+{% extends 'base_template.html' %}
+
+{% block title %}Dashboard - Gestor{% endblock %}
+
+{% block header %}Editar Produto - Gestor{% endblock %}
+
+{% block content %}
+    <h1> Personalização de catecteristicas de equipamentos</h1>
+    <div class="center-form">
+        <form method="post" action="{% url 'register_computer_mongo' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="product_id" class="form-label">id do produto</label>
+                <input type="text" class="form-control" name="product_id" id="product_id">
+            </div>
+            <fieldset>
+                <legend>Indique o tipo de campo</legend>
+                <div>
+                    <input type="radio" id="simple" name="field_type" value="simple" checked/>
+                    <label for="simple">Valor Simples</label>
+                </div>
+                <div>
+                    <input type="radio" id="multiple" name="field_type" value="array"/>
+                    <label for="multiple">Multiplos valores</label>
+                </div>
+            </fieldset>
+            <div class="mb-3">
+                <label for="field_name" class="form-label">Nome campo</label>
+                <input type="text" class="form-control" id="field_name" name="field_name">
+            </div>
+            <div class="mb-3">
+                <label for="field_value" class="form-label">Valor do campo</label>
+                <input type="text" class="form-control" id="field_value" name="field_value">
+            </div>
+            <button type="submit" class="btn col-md6 btn-primary">Criar Propriedade</button>
+        </form>
+    </div>
+    <script>
+
+
+    </script>
+
+{% endblock %}
