@@ -171,3 +171,25 @@
 .beforeSelect {
   color: #dbdbdb;
 }
+.tasksContainer {
+  border: 1px solid rgb(0 0 0 / 15%);
+  border-radius: 10px;
+  padding: 5px;
+  background: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.taskBtn {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  flex-direction: column;
+}
+#registerInvoice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
