@@ -14,7 +14,6 @@
                     <th scope="col">Componente</th>
                     <th scope="col">Referencia</th>
                     <th scope="col">Quantidade</th>
-                    <th scope="col">Total</th>
                     <th scope="col">SN</th>
                 </tr>
                 </thead>
@@ -68,6 +67,17 @@
             <label class="label" for="hour">Horas</label>
         </div>
 
+    <div class="form-field col-lg-6">
+            <input
+                    id="serialPc"
+                    name="serialPc"
+                    class="input-text js-input"
+                    type="text"
+                    required
+            />
+            <label class="label" for="serialPc">Serial Number</label>
+        </div>
+
     <button type="button" id="registerInvoice" class="btn btn-primary col-md-12">Registar Ordem de Produção</button>
     </form>
 
@@ -108,16 +118,32 @@
         }
 
         document.getElementById('registerInvoice').addEventListener('click', function() {
-                    // Log the data before making the AJAX request
+
+            var articleline = [];
+                    $('#componentsTables tbody tr').each(function () {
+                        var line = [];
+                        $(this).find('td').each(function () {
+                            line.push($(this).text());
+                            $(this).find('input').each(function () {
+                                line.push($(this).val());
+                            });
+                        });
+                        articleline.push(line);
+                    });
+
+
                     console.log("Data being sent in AJAX request:", {
                         "idarticletype": 15,
                         "idproduction": 39,
-                        "quantity": 3,
-                        "hour": hour,
-                        "cost": cost,
-                        "warehouse": warehouse,
+                        "quantity": 1,
+                        "serialPc": document.getElementById('serialPc').value,
+                        "hour": document.getElementById('hour').value,
+                        "cost": document.getElementById('cost').value,
+                        "warehouse": document.getElementById('warehouse').value,
                         "serialNumbers": JSON.stringify(serialNumbers),
+                        "articleline": JSON.stringify(articleline),
                     });
+
 
                     $.ajax({
                             type: "POST",
@@ -125,11 +151,13 @@
                             data: {
                                 "idarticletype": 15,
                                 "idproduction": 39,
-                                "quantity": 3,
-                                "hour": 2,
-                                "cost": 1000,
-                                "warehouse": 1,
+                                "quantity": 1,
+                                "serialPc": document.getElementById('serialPc').value,
+                                "hour": document.getElementById('hour').value,
+                                "cost": document.getElementById('cost').value,
+                                "warehouse": document.getElementById('warehouse').value,
                                 "serialNumbers": JSON.stringify(serialNumbers),
+                                "articleline": JSON.stringify(articleline),
                             },
                             dataType: "json",
                             success: function (data) {
