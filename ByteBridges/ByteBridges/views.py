@@ -1192,17 +1192,15 @@ def sendMail(request):
         )
         return JsonResponse({'response': "sent"})
 
+@login_required
+def register_computer_mongo(request, equipment_id):
+    mongo_instance = pymongo.MongoClient(settings.MONGO_DB_HOST,
+                                         username=settings.MONGO_USERNAME,
+                                         password=settings.MONGO_PASSWORD)[settings.MONGO_DB_NAME]
+    bd = mongo_instance
+    collection = bd["produtos"]
 
-def register_computer_mongo(request):
     if request.method == 'POST':
-        mongo_instance = pymongo.MongoClient(settings.MONGO_DB_HOST,
-                                             username=settings.MONGO_USERNAME,
-                                             password=settings.MONGO_PASSWORD)[settings.MONGO_DB_NAME]
-        bd = mongo_instance
-        collection = bd["produtos"]
-
-        # computer_specs = json.loads(request.POST.get('computer_specs'))
-        # computer_specs = Null
         field_name = request.POST.get('field_name')
         field_value = request.POST.get('field_value')
         product_id = request.POST.get('product_id')
@@ -1210,22 +1208,73 @@ def register_computer_mongo(request):
         query = {"_reference": product_id}
         update_operation = {'$push': {'properties': {field_name: field_value}}}
         result = collection.find_one(query)
-        print(result)
         if result is not None:
             result = collection.update_one(query, update_operation)
         else:
             doc = {"_reference": product_id, "properties": [{field_name: field_value}]}
             collection.insert_one(doc)
-        # if computer_specs == null:
-        #     doc = {field_name: field_value}
-        #     col.insert_one(doc)
-        # else:
-        #     for field,value in computer_specs:
-        #         doc = {field: value}
-        #         col.insert_one(doc)
-        return JsonResponse({'response': "done"})
 
-    return render(request, 'equipmentSpecs.html')
+        query = {'_reference': equipment_id}
+        document = collection.find_one(query)
+        return JsonResponse({'response': document})
+    query = {'_reference': equipment_id}
+    document = collection.find_one(query)
+    context = {'equipment_id': equipment_id, 'product': document}
+    return render(request, 'equipmentSpecs.html', context)
+
+@login_required
+def register_computer_mongo_send(request):
+    if request.method == 'POST':
+        mongo_instance = pymongo.MongoClient(settings.MONGO_DB_HOST,
+                                             username=settings.MONGO_USERNAME,
+                                             password=settings.MONGO_PASSWORD)[settings.MONGO_DB_NAME]
+        bd = mongo_instance
+        collection = bd["produtos"]
+        field_name = request.POST.get('field_name')
+        field_value = request.POST.get('field_value')
+        equipment_id = request.POST.get('equipment_id')
+
+        query = {"_reference": equipment_id}
+        update_operation = {'$push': {'properties': {field_name: field_value}}}
+        result = collection.find_one(query)
+        if result is not None:
+            result = collection.update_one(query, update_operation)
+        else:
+            doc = {"_reference": equipment_id, "properties": [{field_name: field_value}]}
+            collection.insert_one(doc)
+
+        query = {'_reference': equipment_id}
+        print(query)
+        document = collection.find_one(query)
+        print(document)
+        if document:
+            # Convert ObjectId to string
+            document['_id'] = str(document['_id'])
+
+            # Convert list of dictionaries to a list of JSON strings
+            properties_json = [json.dumps(prop) for prop in document.get('properties', [])]
+
+            # Return the updated document as JSON
+            return JsonResponse({'response': document, 'properties_json': properties_json})
+        else:
+            # Return an error response if the document is not found
+            return JsonResponse({'error': 'Document not found'}, status=404)
+
+@login_required
+def shoppingStore(request):
+    if request.method == 'POST':
+        mongo_instance = pymongo.MongoClient(settings.MONGO_DB_HOST,
+                                             username=settings.MONGO_USERNAME,
+                                             password=settings.MONGO_PASSWORD)[settings.MONGO_DB_NAME]
+        bd = mongo_instance
+        collection = bd["produtos"]
+        documents = list(collection.find())
+        for doc in documents:
+            doc['_id'] = str(doc['_id'])
+        return JsonResponse({'documents': documents})
+    else:
+        return JsonResponse({'error': 'Documents not found using POST METHOD'}, status=404)
+
 
 @login_required
 def reporting(request):
