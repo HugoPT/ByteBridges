@@ -26,7 +26,7 @@ def Homepage(request):
 
 @csrf_exempt
 def logout(request):
-    return render(request, "home.html")
+    return render(request, "Home.html")
 
 
 @login_required
