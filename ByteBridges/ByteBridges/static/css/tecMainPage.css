@@ -2,6 +2,22 @@
   padding-top: 4rem;
   padding-bottom: 6rem;
   background-color: #ffffff;
+  display: none;
+}
+.loader {
+  display: flex;
+  padding: 15px;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 8rem;
+}
+.mainLoad {
+  display: flex;
+  justify-content: center;
+  height: 20rem;
+  width: 20rem;
+  flex-direction: column;
+  align-items: center;
 }
 .row {
   display: flex;

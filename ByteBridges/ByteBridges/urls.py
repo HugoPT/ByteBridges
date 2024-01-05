@@ -101,6 +101,7 @@ urlpatterns = [
 
     # TaskList
     path("productionTaskList", views.productionTaskList, name="productionTaskList"),
+    path("tecProductionTaskList", views.tecProductionTaskList, name="tecProductionTaskList"),
     path('productionTaskCreate/<int:idproduction>/', views.productionTaskCreate, name='productionTaskCreate'),
     path("productionTaskCreateSend", views.productionTaskCreateSend, name="productionTaskCreateSend"),
 
@@ -118,5 +119,13 @@ urlpatterns = [
 
     #Reporting
     path("reporting", views.reporting, name="reporting"),
+    
+    
+    #TEC PAGE
+    path("weeklyProduction", views.weeklyProduction, name="weeklyProduction"),
+    path("pendentProductions", views.pendentProductions, name="pendentProductions"),
+    path("delayedProduction", views.delayedProduction, name="delayedProduction"),
+    
+    path("getCounts", views.getCounts, name="getCounts"),
 
 ]

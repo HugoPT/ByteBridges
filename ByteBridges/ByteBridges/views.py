@@ -22,14 +22,52 @@ def group_required(group_name):
 
 
 def Homepage(request):
-    
-    
     return render(request, "Home.html")
 
+@login_required
+@group_required('Técnico')
+def weeklyProduction(request):
+    user_id = request.user.id
+    with connections['technician'].cursor() as cursor:
+        cursor.execute("select  * FROM fn_technician_weeklyproductions(CAST(%s AS INTEGER));", [user_id])
+        weeklyProduction = cursor.fetchall()
+        return render(request, 'weeklyProduction.html', {'weeklyProduction': weeklyProduction})
+    
+
+@login_required
+@group_required('Técnico')
+def pendentProductions(request):
+    return render(request, "pendentProductions.html")
+
+@login_required
+@group_required('Técnico')
+def delayedProduction(request):
+    user_id = request.user.id
+    with connections['technician'].cursor() as cursor:
+        cursor.execute("select  * FROM fn_technician_delayedproductions(CAST(%s AS INTEGER));", [user_id])
+        delayedProduction = cursor.fetchall()
+        return render(request, 'delayedProduction.html', {'delayedProduction': delayedProduction})
 
 @csrf_exempt
 def logout(request):
     return render(request, "home.html")
+
+def getCounts(request):
+    data = request
+    print(data) 
+    if request.method == 'POST':
+        with connections['technician'].cursor() as cursor:
+            user_id = request.POST.get('userId')
+            # Call the stored procedure using the CALL statement
+            cursor.execute("SELECT * FROM fn_count_totalProductions(CAST(%s AS INTEGER));", [user_id])
+            totalProduction = cursor.fetchone()[0]
+            cursor.execute("SELECT * FROM fn_count_weeklyProductions(CAST(%s AS INTEGER));", [user_id])
+            weeklyProductions = cursor.fetchone()[0]
+            cursor.execute("SELECT * FROM fn_count_delayedProductions(CAST(%s AS INTEGER));", [user_id])
+            delayedProductions = cursor.fetchone()[0]
+
+            data = {'totalProduction': totalProduction,'delayedProductions':delayedProductions, 'weeklyProductions': weeklyProductions }
+            return JsonResponse(data)
 
 
 @login_required
@@ -37,8 +75,9 @@ def IndexPage(request):
     user_name = request.user
     user_groups = request.user.groups.all()
     user_role = user_groups[0].name if user_groups else None
+    user_id = request.user.id
     if user_role == "Técnico":
-        return render(request, 'tecMainPage.html', {'user_role': user_role,'user_name': user_name})
+        return render(request, 'tecMainPage.html', {'user_role': user_role,'user_name': user_name,'user_id': user_id})
     else:
         return render(request, 'dashboard.html', {'user_role': user_role })
 
@@ -1132,6 +1171,14 @@ def productionTaskList(request):
         # Call the stored procedure using the CALL statement
         cursor.execute("select  * from view_productions_list", [])
         # If the stored procedure returns results, you can fetch them
+        tarefas = cursor.fetchall()
+
+        return render(request, 'productionTaskList.html', {'tarefas': tarefas})
+
+def tecProductionTaskList(request):
+    user_id = request.user.id
+    with connections['technician'].cursor() as cursor:
+        cursor.execute("select  * from view_productions_list", [])
         tarefas = cursor.fetchall()
 
         return render(request, 'productionTaskList.html', {'tarefas': tarefas})
