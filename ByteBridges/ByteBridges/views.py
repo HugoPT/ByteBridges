@@ -152,7 +152,6 @@ def orderClientList(request):
 
 @csrf_exempt
 @login_required
-@group_required('Gestor de Vendas', 'Administrador')
 def orderClientLinesFetch(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -165,7 +164,6 @@ def orderClientLinesFetch(request):
 
 @csrf_exempt
 @login_required
-@group_required('Gestor de Vendas', 'Administrador')
 def orderClientFetchInvoice(request, idorder):
     # Fetch the supplier information from the database
     with connections['admin'].cursor() as cursor:
@@ -355,7 +353,6 @@ def orderSupplierLinesFetch(request):
 
 @csrf_exempt
 @login_required
-@group_required('Gestor de Stock', 'Administrador')
 def orderSupplierExportJson(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -511,7 +508,6 @@ def invoiceSupplierRegister(request):
 # todo fix this csrf
 @csrf_exempt
 @login_required
-@group_required('Gestor de Stock', 'Administrador')
 def documentsSupplierFetch(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -524,7 +520,6 @@ def documentsSupplierFetch(request):
 # todo fix this csrf
 @csrf_exempt
 @login_required
-@group_required('Gestor de Stock', 'Administrador')
 def documentsSupplierLinesFetch(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -536,7 +531,6 @@ def documentsSupplierLinesFetch(request):
 
 @csrf_exempt
 @login_required
-@group_required('Gestor de Stock', 'Administrador')
 def documentsSupplierRegisterInvoice(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -569,7 +563,6 @@ def documentsSupplierRegisterInvoice(request):
 
 @csrf_exempt
 @login_required
-@group_required('Gestor de Stock', 'Administrador')
 def documentsSupplierRegisterInvoiceLines(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
