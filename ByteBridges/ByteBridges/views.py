@@ -12,18 +12,15 @@ from django.conf import settings
 from django import template
 import pymongo
 
-def group_required(group_name):
+def group_required(*group_names):
     def in_group(user):
-        if user.groups.filter(name=group_name).exists():
-            return True
-        return False
+        return any(user.groups.filter(name=group_name).exists() for group_name in group_names)
     return user_passes_test(in_group, login_url='/dashboard')
 
 
 
 def Homepage(request):
-    
-    
+
     return render(request, "Home.html")
 
 
@@ -44,7 +41,7 @@ def IndexPage(request):
 
 # Clients
 @login_required
-@group_required('Administrador')
+@group_required('Gestor de Vendas', 'Administrador')
 def clientList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -57,6 +54,7 @@ def clientList(request):
 
 
 @login_required
+@group_required('Gestor de Vendas', 'Administrador')
 def clientCreate(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -84,6 +82,7 @@ def clientCreate(request):
 
 
 @login_required
+@group_required('Gestor de Vendas', 'Administrador')
 def clientEdit(request, client_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -120,6 +119,7 @@ def clientEdit(request, client_id):
 
 
 @login_required
+@group_required('Gestor de Vendas', 'Administrador')
 def clientDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
@@ -132,6 +132,7 @@ def clientDelete(request):
 
 
 @login_required
+@group_required('Gestor de Vendas', 'Administrador')
 def orderClientList(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("SELECT * FROM view_buy_list_clients", [])
@@ -151,6 +152,7 @@ def orderClientList(request):
 
 @csrf_exempt
 @login_required
+@group_required('Gestor de Vendas', 'Administrador')
 def orderClientLinesFetch(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -163,6 +165,7 @@ def orderClientLinesFetch(request):
 
 @csrf_exempt
 @login_required
+@group_required('Gestor de Vendas', 'Administrador')
 def orderClientFetchInvoice(request, idorder):
     # Fetch the supplier information from the database
     with connections['admin'].cursor() as cursor:
@@ -188,6 +191,7 @@ def orderClientFetchInvoice(request, idorder):
 
 
 @login_required
+@group_required('Gestor de Vendas', 'Administrador')
 def orderClientCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_equipments_list2")
@@ -225,7 +229,7 @@ def orderClientCreate(request):
 
 
 @login_required
-# Suppliers
+@group_required('Gestor de Stock', 'Administrador')
 def supplierList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -238,6 +242,7 @@ def supplierList(request):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def supplierCreate(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -263,6 +268,7 @@ def supplierCreate(request):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def supplierEdit(request, idsupplier):
     # Fetch the supplier information from the database
     with connections['admin'].cursor() as cursor:
@@ -307,6 +313,7 @@ def supplierEdit(request, idsupplier):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def supplierDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         with connections['admin'].cursor() as cursor:
@@ -318,6 +325,7 @@ def supplierDelete(request):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def orderSupplierList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -334,6 +342,7 @@ def orderSupplierList(request):
 
 @csrf_exempt
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def orderSupplierLinesFetch(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -346,6 +355,7 @@ def orderSupplierLinesFetch(request):
 
 @csrf_exempt
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def orderSupplierExportJson(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -357,6 +367,7 @@ def orderSupplierExportJson(request):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def orderSupplierCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_suppliers_list")
@@ -450,6 +461,7 @@ def get_items(request):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def invoiceSupplierRegister(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_suppliers_list")
@@ -499,6 +511,7 @@ def invoiceSupplierRegister(request):
 # todo fix this csrf
 @csrf_exempt
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def documentsSupplierFetch(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -511,6 +524,7 @@ def documentsSupplierFetch(request):
 # todo fix this csrf
 @csrf_exempt
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def documentsSupplierLinesFetch(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -522,6 +536,7 @@ def documentsSupplierLinesFetch(request):
 
 @csrf_exempt
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def documentsSupplierRegisterInvoice(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -554,6 +569,7 @@ def documentsSupplierRegisterInvoice(request):
 
 @csrf_exempt
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def documentsSupplierRegisterInvoiceLines(request):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -565,6 +581,7 @@ def documentsSupplierRegisterInvoiceLines(request):
 
 
 @login_required
+@group_required('Gestor de Produção', 'Administrador')
 def productionEquipmentCreate(request, equipment_id):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_families_list")
@@ -589,6 +606,7 @@ def productionEquipmentCreate(request, equipment_id):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def familyList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -600,6 +618,7 @@ def familyList(request):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def familyCreate(request):
     with connections['admin'].cursor() as cursor:
         if request.method == 'POST':
@@ -616,6 +635,7 @@ def familyCreate(request):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def familyEdit(request, family_id):
     # Fetch the family information from the database
     with connections['admin'].cursor() as cursor:
@@ -639,6 +659,7 @@ def familyEdit(request, family_id):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def familyDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
@@ -651,6 +672,7 @@ def familyDelete(request):
 
 
 @login_required
+@group_required('Gestor de Produção', 'Administrador')
 def equipmentList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -662,6 +684,7 @@ def equipmentList(request):
 
 
 @login_required
+@group_required('Gestor de Produção', 'Administrador')
 def equipmentCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_categories_list")
@@ -729,30 +752,7 @@ def equipmentCreate(request):
 
 
 @login_required
-def productionEquipmentEdit(request, equipment_id):
-    with connections['admin'].cursor() as cursor:
-
-        cursor.execute("SELECT * FROM fn_productionitems_get (%s);", [equipment_id])
-        equipment = cursor.fetchall()
-
-        cursor.execute("select * from view_families_list")
-        result = cursor.fetchall()
-        families = [Family(*row) for row in result]
-
-    if request.method == 'POST':
-        data = json.loads(request.POST.get('data'))
-        for item in data:
-            with connections['admin'].cursor() as cursor:
-                cursor.execute("CALL sp_productionitems_update(%s,%s,%s)",
-                               [equipment_id,
-                                item['component'],
-                                item['quantity']])
-        return JsonResponse({'status': 'success'})
-    return render(request, 'productionEquipmentEdit.html', {'families': families, 'equipment_id': equipment_id,
-                                                            'equipment': equipment})
-
-
-@login_required
+@group_required('Gestor de Produção', 'Administrador')
 def equipmentEdit(request, equipment_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -790,6 +790,7 @@ def equipmentEdit(request, equipment_id):
 
 
 @login_required
+@group_required('Gestor de Produção', 'Administrador')
 def equipmentDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
@@ -802,6 +803,7 @@ def equipmentDelete(request):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def componentList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -814,6 +816,7 @@ def componentList(request):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def componentCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_families_list")
@@ -864,6 +867,7 @@ def componentCreateViaJSON(request):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def componentEdit(request, component_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -903,6 +907,7 @@ def componentEdit(request, component_id):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def componentDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
@@ -915,6 +920,7 @@ def componentDelete(request):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def stockList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -935,6 +941,7 @@ def stockList(request):
 
 
 @login_required
+@group_required('Gestor de Stock', 'Administrador')
 def stockMovementList(request):
     with connections['admin'].cursor() as cursor:
 
@@ -948,6 +955,7 @@ def stockMovementList(request):
 
 
 @login_required
+@group_required('Administrador')
 def laborList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -959,6 +967,7 @@ def laborList(request):
 
 
 @login_required
+@group_required('Administrador')
 def laborCreate(request):
     if request.method == 'POST':
         # Get the data from the form
@@ -980,6 +989,7 @@ def laborCreate(request):
 
 
 @login_required
+@group_required('Administrador')
 def laborEdit(request, labor_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -1005,6 +1015,7 @@ def laborEdit(request, labor_id):
 
 
 @login_required
+@group_required('Administrador')
 def laborDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
@@ -1017,6 +1028,7 @@ def laborDelete(request):
 
 
 @login_required
+@group_required('Administrador')
 def userList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -1029,6 +1041,7 @@ def userList(request):
 
 
 @login_required
+@group_required('Administrador')
 def userEdit(request, user_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -1056,30 +1069,7 @@ def userEdit(request, user_id):
 
 
 @login_required
-def productionEquipmentEdit(request, equipment_id):
-    with connections['admin'].cursor() as cursor:
-
-        cursor.execute("SELECT * FROM fn_productionitems_get (%s);", [equipment_id])
-        equipment = cursor.fetchall()
-
-        cursor.execute("select * from view_families_list")
-        result = cursor.fetchall()
-        families = [Family(*row) for row in result]
-
-    if request.method == 'POST':
-        data = json.loads(request.POST.get('data'))
-        for item in data:
-            with connections['admin'].cursor() as cursor:
-                cursor.execute("CALL sp_productionitems_update(%s,%s,%s)",
-                               [equipment_id,
-                                item['component'],
-                                item['quantity']])
-        return JsonResponse({'status': 'success'})
-    return render(request, 'productionEquipmentEdit.html', {'families': families, 'equipment_id': equipment_id,
-                                                            'equipment': equipment})
-
-
-@login_required
+@group_required('Administrador', 'Técnico')
 def productionTaskCreate(request,idproduction):
     with connections['admin'].cursor() as cursor:
         cursor.execute("SELECT * FROM fn_productions_getLines (%s);", [idproduction])
@@ -1127,6 +1117,7 @@ def productionTaskCreateSend(request):
 
 
 @login_required
+@group_required('Administrador', 'Gestor de Produção')
 def productionTaskList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -1138,6 +1129,7 @@ def productionTaskList(request):
 
 
 @login_required
+@group_required('Administrador', 'Gestor de Produção', 'Técnico')
 def productionOrderCreate(request):
     current_user = request.user.id
     print("Current User ID:", current_user)
@@ -1197,6 +1189,7 @@ def sendMail(request):
         return JsonResponse({'response': "sent"})
 
 @login_required
+@group_required('Administrador', 'Gestor de Produção')
 def register_computer_mongo(request, equipment_id):
     mongo_instance = pymongo.MongoClient(settings.MONGO_DB_HOST,
                                          username=settings.MONGO_USERNAME,
@@ -1227,6 +1220,7 @@ def register_computer_mongo(request, equipment_id):
     return render(request, 'equipmentSpecs.html', context)
 
 @login_required
+@group_required('Administrador', 'Gestor de Produção')
 def register_computer_mongo_send(request):
     if request.method == 'POST':
         mongo_instance = pymongo.MongoClient(settings.MONGO_DB_HOST,
@@ -1281,6 +1275,7 @@ def shoppingStore(request):
 
 
 @login_required
+@group_required('Administrador')
 def reporting(request):
     if request.method == 'POST':
         start_date = request.POST.get('start_date')

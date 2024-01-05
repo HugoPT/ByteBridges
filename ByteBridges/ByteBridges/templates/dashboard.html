@@ -12,16 +12,14 @@
     <h1>{{user_role}}</h1>
   </div>
   <div class="row">
-    {% if user_role|default:""|safe == "Administrador" %}
+    {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant1">
         <div class="card-statistic-3 p-4">
-          <div class="mb-4">
             <div class="card-icon card-icon-large">
               <i class="fa fa-users sideStyle" aria-hidden="true"></i>
               <h5 class="card-title mb-0">Fornecedores</h5>
             </div>
-          </div>
           <div class="row align-items-center mb-2 dashBtns">
             <!-- Botão 1 -->
             <a href="supplierList" class="btn btnChange">
@@ -37,14 +35,15 @@
       </div>
     </div>
     {% endif %}
+
+      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Vendas" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant2">
         <div class="card-statistic-3 p-4">
           <div class="card-icon card-icon-large">
             <i class="fa fa-user sideStyle" aria-hidden="true"></i>
             <h5 class="card-title mb-0">Clientes</h5>
-          </div>
-
+            </div>
           <div class="row align-items-center mb-2 dashBtns">
             <!-- Botão 1 -->
             <a href="clientList" class="btn btnChange">
@@ -60,6 +59,8 @@
         </div>
       </div>
     </div>
+    {% endif %}
+        {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stocks" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant6">
         <div class="card-statistic-3 p-4">
@@ -83,6 +84,8 @@
         </div>
       </div>
     </div>
+    {% endif %}
+          {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Vendas" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant7">
         <div class="card-statistic-3 p-4">
@@ -105,7 +108,8 @@
         </div>
       </div>
     </div>
-
+    {% endif %}
+      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant5">
         <div class="card-statistic-3 p-4">
@@ -123,7 +127,8 @@
         </div>
       </div>
     </div>
-
+    {% endif %}
+      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant3">
         <div class="card-statistic-3 p-4">
@@ -147,7 +152,8 @@
         </div>
       </div>
     </div>
-
+    {% endif %}
+      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Produção" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant5">
         <div class="card-statistic-3 p-4">
@@ -165,7 +171,8 @@
         </div>
       </div>
     </div>
-
+    {% endif %}
+      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant5">
         <div class="card-statistic-3 p-4">
@@ -184,7 +191,8 @@
         </div>
       </div>
     </div>
-
+    {% endif %}
+      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Produção" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant4">
         <div class="card-statistic-3 p-4">
@@ -208,6 +216,8 @@
         </div>
       </div>
     </div>
+  {% endif %}
+      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant6">
         <div class="card-statistic-3 p-4">
@@ -231,6 +241,8 @@
         </div>
       </div>
     </div>
+  {% endif %}
+      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant2">
         <div class="card-statistic-3 p-4">
@@ -254,7 +266,8 @@
         </div>
       </div>
     </div>
-
+    {% endif %}
+      {% if user_role|default:""|safe == "Administrador" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant1">
         <div class="card-statistic-3 p-4">
@@ -292,6 +305,7 @@
         </div>
       </div>
     </div>
+      {% endif %}
   </div>
 </div>
 {% endblock %}

@@ -6,6 +6,8 @@ class UserProfile(models.Model):
         ('Administrador', 'Administrador'),
         ('Técnico', 'Técnico'),
         ('Gestor de Produção', 'Gestor de Produção'),
+        ('Gestor de Vendas', 'Gestor de Vendas'),
+        ('Gestor de Stock', 'Gestor de Stock'),
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
