@@ -156,6 +156,10 @@ section {
 .card {
   border: none;
 }
+
+.shopCards {
+  border: 1px solid black !important;
+}
 .card-img {
   border-radius: 0;
 }
@@ -216,4 +220,14 @@ section {
       padding: 0;
     }
   }
+}
+.card-img-center {
+  width: 250px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+.noImg {
+  width: 100%;
+  margin-left: 50%;
+  transform: translateX(-50%);
 }

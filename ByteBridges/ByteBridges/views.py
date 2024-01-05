@@ -19,7 +19,11 @@ def group_required(group_name):
         return False
     return user_passes_test(in_group, login_url='/dashboard')
 
+
+
 def Homepage(request):
+    
+    
     return render(request, "Home.html")
 
 
@@ -1260,7 +1264,7 @@ def register_computer_mongo_send(request):
             # Return an error response if the document is not found
             return JsonResponse({'error': 'Document not found'}, status=404)
 
-@login_required
+@csrf_exempt
 def shoppingStore(request):
     if request.method == 'POST':
         mongo_instance = pymongo.MongoClient(settings.MONGO_DB_HOST,
