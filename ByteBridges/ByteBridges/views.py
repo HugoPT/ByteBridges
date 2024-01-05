@@ -450,7 +450,7 @@ def get_items(request):
 
 
 @login_required
-def documentsSupplier(request):
+def invoiceSupplierRegister(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_suppliers_list")
         result = cursor.fetchall()
@@ -493,7 +493,7 @@ def documentsSupplier(request):
                                         item['component'],
                                         item['quantity']])
                 return JsonResponse({'status': 'success'})
-    return render(request, template_name='documentsSupplier.html', context=context)
+    return render(request, template_name='invoiceSupplierRegister.html', context=context)
 
 
 # todo fix this csrf

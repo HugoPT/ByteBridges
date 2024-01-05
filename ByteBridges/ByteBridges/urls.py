@@ -55,7 +55,7 @@ urlpatterns = [
     path('orderSupplierExportJson', views.orderSupplierExportJson, name='orderSupplierExportJson'),
 
     # documentsSupplier
-    path("documentsSupplier", views.documentsSupplier, name="documentsSupplier"),
+    path("invoiceSupplierRegister", views.invoiceSupplierRegister, name="invoiceSupplierRegister"),
     path("documentsSupplierFetch", views.documentsSupplierFetch, name="documentsSupplierFetch"),
     path("documentsSupplierLinesFetch", views.documentsSupplierLinesFetch, name="documentsSupplierLinesFetch"),
     path("documentsSupplierRegisterInvoice", views.documentsSupplierRegisterInvoice,name="documentsSupplierRegisterInvoice"),
