@@ -1,147 +1,201 @@
-{% extends 'base_template.html' %} {% block extra_css %} {% load static %}
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{% static 'css/reporting.css' %}"
-/>
-{% endblock %} {% block content %}
-<div class="containerReporting">
-  <div class="formReporting">
-    <form method="post">
-      {% csrf_token %}
-      <label for="start_date">Start Date:</label>
-      <input type="date" name="start_date" required />
+{% extends 'forms.html' %} {% block formContent %} {% block formTitle %}
+    <h1 class="title">Reporting</h1>
+{% endblock %}
 
-      <label for="end_date">End Date:</label>
-      <input type="date" name="end_date" required />
+<style>
+input[type="date"]::before {
+    color: #999999;
+    content: attr(placeholder);
+}
+input[type="date"] {
+    color: #ffffff;
+}
+input[type="date"]:focus,
+input[type="date"]:valid {
+    color: #666666;
+}
+input[type="date"]:focus::before,
+input[type="date"]:valid::before {
+    content: "" !important;
+}
+</style>
+   <div class="container">
 
-      <button type="submit">Submit</button>
-    </form>
-  </div>
-  {% if chart_data_bar %}
-  <div class="containerGraf">
-    <canvas id="myChartbar" width="50px" height="50px"></canvas>
-  </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  var chart_data_bar = {{ chart_data_bar|safe }};
-  var ctx = document.getElementById('myChartbar').getContext('2d');
+   <div class="containerReporting">
+            <div class="formReporting">
+                <form method="post" class="allforms row">
+                    {% csrf_token %}
 
-  var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: chart_data_bar.labels,
-      datasets: [{
-        label: 'Items',
-        data: chart_data_bar.data,
-         backgroundColor: [
-              'rgba(255, 0, 0, 0.2)',      // Red
-                'rgba(0, 128, 255, 0.2)',    // Blue
-                'rgba(255, 255, 0, 0.2)',    // Yellow
-                'rgba(0, 255, 255, 0.2)',     // Cyan
-                'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)'
-            ],
-            borderColor: [
-              'rgba(255, 0, 0, 1)',      // Red
-                'rgba(0, 128, 255, 1)',    // Blue
-                'rgba(255, 255, 0, 1)',    // Yellow
-                'rgba(0, 255, 255, 1)',    // Cyan
-                'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)'
+                    <div class="form-field col-lg-6">
+                        <input
+                                id="start_date"
+                                name="start_date"
+                                class="input-text js-input"
+                                type="date"
+                                onfocus="(this.type='date')" onfocusout="(this.type='text')"
+                                required
+                        />
+                        <label class="label" for="start_date">Data Inicial</label>
+                    </div>
 
-            ],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-</script>
-{% endif %}
-{% if chart_data_pie %}
-    <div class="containerGraf">
-    <canvas id="myChartpie" width="50px" height="50px"></canvas>
-  </div>
-    <script>
-      var chart_data_pie = {{ chart_data_pie|safe }};
-      var ctx = document.getElementById('myChartpie').getContext('2d');
+                    <div class="form-field col-lg-6">
+                        <input
+                                id="end_date"
+                                name="end_date"
+                                class="input-text js-input"
+                                type="date"
+                                required
+                        />
+                        <label class="label" for="end_date">Data Final</label>
+                    </div>
 
-      var myChart = new Chart(ctx, {
-        type: 'pie',  // Set chart type to 'pie'
-        data: {
-          labels: chart_data_pie.labels,
-          datasets: [{
-            label: 'Items',
-            data: chart_data_pie.data,
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)'
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    </script>
-{% endif %}
+                    <div class="form-field col-lg-12 submitBtn">
+                        <button class="submit-btn" type="submit">Submeter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Bar Chart -->
+            <div class="col-lg-4">
+                <div class="containerGraf">
+                    <canvas id="myChartbar" width="100px" height="100px"></canvas>
+                </div>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="col-lg-4">
+                <div class="containerGraf">
+                    <canvas id="myChartpie" width="50px" height="50px"></canvas>
+                </div>
+            </div>
+
+            <!-- Line Chart -->
+            <div class="col-lg-4">
+                <div class="containerGraf">
+                    <canvas id="myChartline" width="50px" height="50px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if chart_data_bar %}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Bar Chart Script
+            var chart_data_bar = {{ chart_data_bar|safe }};
+            var ctx_bar = document.getElementById('myChartbar').getContext('2d');
+
+
+            var myChartBar = new Chart(ctx_bar, {
+                type: 'bar',
+                data: {
+                    labels: chart_data_bar.labels,
+                    datasets: [{
+                        label: 'Items',
+                        data: chart_data_bar.data,
+                        backgroundColor: [
+                            'rgba(255, 0, 0, 0.2)',
+                            'rgba(0, 128, 255, 0.2)',
+                            'rgba(255, 255, 0, 0.2)',
+                            'rgba(0, 255, 255, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 0, 0, 1)',
+                            'rgba(0, 128, 255, 1)',
+                            'rgba(255, 255, 0, 1)',
+                            'rgba(0, 255, 255, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+    {% endif %}
+
+    {% if chart_data_pie %}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Pie Chart Script
+            var chart_data_pie = {{ chart_data_pie|safe }};
+            var ctx_pie = document.getElementById('myChartpie').getContext('2d');
+
+            var myChartPie = new Chart(ctx_pie, {
+                type: 'pie',
+                data: {
+                    labels: chart_data_pie.labels,
+                    datasets: [{
+                        label: 'Items',
+                        data: chart_data_pie.data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+    {% endif %}
 
     {% if chart_data_line %}
-    <div class="containerGraf">
-    <canvas id="myChartline" width="50px" height="50px"></canvas>
-  </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Line Chart Script
+            var chart_data_line = {{ chart_data_line|safe }};
+            var ctx_line = document.getElementById('myChartline').getContext('2d');
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-      var chart_data_line = {{ chart_data_line|safe }};
-      var ctx = document.getElementById('myChartline').getContext('2d');
-
-      var myChart = new Chart(ctx, {
-        type: 'doughnut',  // Set chart type to 'line'
-        data: {
-          labels: chart_data_line.labels,
-          datasets: [{
-            label: 'Items',
-            data: chart_data_line.data,
-            fill: false, // Set to false for a line chart without filling below the line
-            borderColor: [
-              'rgba(123, 210, 45, 1)',
-                'rgba(32, 145, 211, 1)',
-                'rgba(255, 165, 0, 1)',
-                'rgba(187, 22, 200, 1)'
-            ],
-            borderWidth: 2
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    </script>
-{% endif %}
-
+            var myChartLine = new Chart(ctx_line, {
+                type: 'doughnut',
+                data: {
+                    labels: chart_data_line.labels,
+                    datasets: [{
+                        label: 'Items',
+                        data: chart_data_line.data,
+                        fill: false,
+                        borderColor: [
+                            'rgba(123, 210, 45, 1)',
+                            'rgba(32, 145, 211, 1)',
+                            'rgba(255, 165, 0, 1)',
+                            'rgba(187, 22, 200, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+    {% endif %}
 {% endblock %}
