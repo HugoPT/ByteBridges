@@ -1334,6 +1334,32 @@ def shoppingStore(request):
 
 
 @login_required
+def get_computer_mongo(request):
+    if request.method == 'POST':
+        mongo_instance = pymongo.MongoClient(settings.MONGO_DB_HOST,
+                                             username=settings.MONGO_USERNAME,
+                                             password=settings.MONGO_PASSWORD)[settings.MONGO_DB_NAME]
+        bd = mongo_instance
+        collection = bd["produtos"]
+        equipment_id = request.POST.get('equipment_id')
+
+        query = {"_reference": equipment_id}
+        document = collection.find_one(query)
+        print(document)
+        if document:
+            # Convert ObjectId to string
+            document['_id'] = str(document['_id'])
+
+            # Convert list of dictionaries to a list of JSON strings
+            properties_json = [json.dumps(prop) for prop in document.get('properties', [])]
+
+            # Return the updated document as JSON
+            return JsonResponse({'response': document, 'properties_json': properties_json})
+        else:
+            # Return an error response if the document is not found
+            return JsonResponse({'error': 'Document not found'}, status=404)
+
+@login_required
 @group_required('Administrador')
 def reporting(request):
     if request.method == 'POST':

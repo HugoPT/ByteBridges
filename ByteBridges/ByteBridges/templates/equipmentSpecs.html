@@ -5,7 +5,7 @@
 {% block header %}Editar Produto - Gestor{% endblock %}
 
 {% block content %}
-    <h1> Personalização de catecteristicas de equipamentos </h1>
+    <h1> Personalização de caracteristicas de equipamentos </h1>
     <div class="center-form">
 
         <div class="mb-3" style="display: none">
@@ -18,10 +18,10 @@
                 <input type="radio" id="simple" name="field_type" value="simple" checked/>
                 <label for="simple">Valor Simples</label>
             </div>
-{#            <div>#}
-{#                <input type="radio" id="multiple" name="field_type" value="array"/>#}
-{#                <label for="multiple">Multiplos valores</label>#}
-{#            </div>#}
+            {#            <div>#}
+            {#                <input type="radio" id="multiple" name="field_type" value="array"/>#}
+            {#                <label for="multiple">Multiplos valores</label>#}
+            {#            </div>#}
         </fieldset>
         <div class="mb-3">
             <label for="field_name" class="form-label">Nome campo</label>
@@ -61,24 +61,48 @@
 
     </div>
     <script>
+        $(document).ready(function () {
+
+            fetchMongoData()
+        });
+
+
+        function updateList(data) {
+            documentData = data.response
+            document.getElementById('documentId').innerText = data.response._id;
+            document.getElementById('documentReference').innerText = data.response._reference;
+            var propertiesList = document.getElementById('documentProperties');
+            propertiesList.innerHTML = ''
+            documentData.properties.forEach(function (property) {
+                for (var key in property) {
+                    var listItem = document.createElement('li');
+                    listItem.className = 'list-group-item';
+                    listItem.innerText = key + ': ' + property[key];
+                    propertiesList.appendChild(listItem);
+                }
+            });
+        }
+
+        function fetchMongoData() {
+            $.ajax({
+                type: "POST",
+                url: '{% url "get_computer_mongo" %}',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    equipment_id: {{equipment_id}},
+                },
+                success: function (data) {
+                    updateList(data);
+                },
+                error: function (error) {
+                    console.error("Erro de acesso ao servidor:", error);
+                },
+            });
+        }
+
         $("#create_prop").on("click", function () {
             let field_name = $("#field_name").val();
             let field_value = $("#field_value").val();
-
-            function updateList(data) {
-                documentData = data.response
-                // Dynamically populate the list of properties
-                var propertiesList = document.getElementById('documentProperties');
-                propertiesList.innerHTML = ''
-                documentData.properties.forEach(function (property) {
-                    for (var key in property) {
-                        var listItem = document.createElement('li');
-                        listItem.className = 'list-group-item';
-                        listItem.innerText = key + ': ' + property[key];
-                        propertiesList.appendChild(listItem);
-                    }
-                });
-            }
 
             $.ajax({
                 type: "POST",
@@ -102,7 +126,7 @@
                     })
                 },
                 error: function (error) {
-                    console.error("Error sending data to the server:", error);
+                    console.error("Erro de acesso ao servidor:", error);
                 },
             });
         });
