@@ -12,14 +12,15 @@
     <h1>{{user_role}}</h1>
   </div>
   <div class="row">
-    {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
+    {% if user_role|default:""|safe == "Administrador" or
+    user_role|default:""|safe == "Gestor de Stock" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant1">
         <div class="card-statistic-3 p-4">
-            <div class="card-icon card-icon-large">
-              <i class="fa fa-users sideStyle" aria-hidden="true"></i>
-              <h5 class="card-title mb-0">Fornecedores</h5>
-            </div>
+          <div class="card-icon card-icon-large">
+            <i class="fa fa-users sideStyle" aria-hidden="true"></i>
+            <h5 class="card-title mb-0">Fornecedores</h5>
+          </div>
           <div class="row align-items-center mb-2 dashBtns">
             <!-- Botão 1 -->
             <a href="supplierList" class="btn btnChange">
@@ -34,16 +35,15 @@
         </div>
       </div>
     </div>
-    {% endif %}
-
-      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Vendas" %}
+    {% endif %} {% if user_role|default:""|safe == "Administrador" or
+    user_role|default:""|safe == "Gestor de Vendas" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant2">
         <div class="card-statistic-3 p-4">
           <div class="card-icon card-icon-large">
             <i class="fa fa-user sideStyle" aria-hidden="true"></i>
             <h5 class="card-title mb-0">Clientes</h5>
-            </div>
+          </div>
           <div class="row align-items-center mb-2 dashBtns">
             <!-- Botão 1 -->
             <a href="clientList" class="btn btnChange">
@@ -59,8 +59,8 @@
         </div>
       </div>
     </div>
-    {% endif %}
-        {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stocks" %}
+    {% endif %} {% if user_role|default:""|safe == "Administrador" or
+    user_role|default:""|safe == "Gestor de Stocks" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant6">
         <div class="card-statistic-3 p-4">
@@ -84,8 +84,8 @@
         </div>
       </div>
     </div>
-    {% endif %}
-          {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Vendas" %}
+    {% endif %} {% if user_role|default:""|safe == "Administrador" or
+    user_role|default:""|safe == "Gestor de Vendas" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant7">
         <div class="card-statistic-3 p-4">
@@ -108,8 +108,8 @@
         </div>
       </div>
     </div>
-    {% endif %}
-      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
+    {% endif %} {% if user_role|default:""|safe == "Administrador" or
+    user_role|default:""|safe == "Gestor de Stock" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant5">
         <div class="card-statistic-3 p-4">
@@ -119,7 +119,10 @@
           </div>
           <div class="row align-items-center mb-2 dashBtns">
             <!-- Botão 1 -->
-            <a href="{% url 'invoiceSupplierRegister' %} " class="btn btnChange">
+            <a
+              href="{% url 'invoiceSupplierRegister' %} "
+              class="btn btnChange"
+            >
               Registar Documentos
               <i class="bx bx-right-arrow-alt iconsDash"></i>
             </a>
@@ -127,8 +130,8 @@
         </div>
       </div>
     </div>
-    {% endif %}
-      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
+    {% endif %} {% if user_role|default:""|safe == "Administrador" or
+    user_role|default:""|safe == "Gestor de Stock" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant3">
         <div class="card-statistic-3 p-4">
@@ -152,8 +155,8 @@
         </div>
       </div>
     </div>
-    {% endif %}
-      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Produção" %}
+    {% endif %} {% if user_role|default:""|safe == "Administrador" or
+    user_role|default:""|safe == "Gestor de Produção" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant5">
         <div class="card-statistic-3 p-4">
@@ -171,8 +174,8 @@
         </div>
       </div>
     </div>
-    {% endif %}
-      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor" %}
+    {% endif %} {% if user_role|default:""|safe == "Administrador" or
+    user_role|default:""|safe == "Gestor" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant5">
         <div class="card-statistic-3 p-4">
@@ -191,8 +194,8 @@
         </div>
       </div>
     </div>
-    {% endif %}
-      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Produção" %}
+    {% endif %} {% if user_role|default:""|safe == "Administrador" or
+    user_role|default:""|safe == "Gestor de Produção" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant4">
         <div class="card-statistic-3 p-4">
@@ -216,8 +219,8 @@
         </div>
       </div>
     </div>
-  {% endif %}
-      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
+    {% endif %} {% if user_role|default:""|safe == "Administrador" or
+    user_role|default:""|safe == "Gestor de Stock" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant6">
         <div class="card-statistic-3 p-4">
@@ -241,8 +244,8 @@
         </div>
       </div>
     </div>
-  {% endif %}
-      {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
+    {% endif %} {% if user_role|default:""|safe == "Administrador" or
+    user_role|default:""|safe == "Gestor de Stock" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant2">
         <div class="card-statistic-3 p-4">
@@ -266,8 +269,7 @@
         </div>
       </div>
     </div>
-    {% endif %}
-      {% if user_role|default:""|safe == "Administrador" %}
+    {% endif %} {% if user_role|default:""|safe == "Administrador" %}
     <div class="col-xl-6 col-lg-6">
       <div class="card gradiant1">
         <div class="card-statistic-3 p-4">
@@ -295,7 +297,7 @@
               <i class="bx bx-right-arrow-alt iconsDash"></i>
             </a>
           </div>
-            <div class="row align-items-center mb-2 dashBtns">
+          <div class="row align-items-center mb-2 dashBtns">
             <!-- Botão 1 -->
             <a href="reporting" class="btn btnChange">
               Reporting
@@ -305,7 +307,7 @@
         </div>
       </div>
     </div>
-      {% endif %}
+    {% endif %}
   </div>
 </div>
 {% endblock %}

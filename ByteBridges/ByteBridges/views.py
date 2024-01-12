@@ -27,7 +27,7 @@ def Homepage(request):
 def weeklyProduction(request):
     user_id = request.user.id
     with connections['technician'].cursor() as cursor:
-        cursor.execute("select  * FROM fn_technician_weeklyproductions(CAST(%s AS INTEGER));", [user_id])
+        cursor.execute("select  * FROM fn_technician_weeklyproductions(%s)", [user_id])
         weeklyProduction = cursor.fetchall()
         return render(request, 'weeklyProduction.html', {'weeklyProduction': weeklyProduction})
     
@@ -42,7 +42,7 @@ def pendentProductions(request):
 def delayedProduction(request):
     user_id = request.user.id
     with connections['technician'].cursor() as cursor:
-        cursor.execute("select  * FROM fn_technician_delayedproductions(CAST(%s AS INTEGER));", [user_id])
+        cursor.execute("select  * FROM fn_technician_delayedproductions(%s)", [user_id])
         delayedProduction = cursor.fetchall()
         return render(request, 'delayedProduction.html', {'delayedProduction': delayedProduction})
 
@@ -91,6 +91,7 @@ def IndexPage(request):
     user_groups = request.user.groups.all()
     user_role = user_groups[0].name if user_groups else None
     user_id = request.user.id
+    print("aaaaaaaaaaaaaaaa",user_role)
     if user_role == "Técnico":
         return render(request, 'tecMainPage.html', {'user_role': user_role,'user_name': user_name,'user_id': user_id})
     else:
@@ -1180,10 +1181,10 @@ def productionTaskList(request):
 def tecProductionTaskList(request):
     user_id = request.user.id
     with connections['technician'].cursor() as cursor:
-        cursor.execute("select  * from view_productions_list", [])
+        cursor.execute("select  * from fn_pendingproductions_get(%s)", [user_id])
         tarefas = cursor.fetchall()
-
-        return render(request, 'productionTaskList.html', {'tarefas': tarefas})
+        print(tarefas)
+        return render(request, 'tecProductionTaskList.html', {'tarefas': tarefas})
 
 
 @login_required

@@ -6,7 +6,7 @@ class UserProfile(models.Model):
         ('Administrador', 'Administrador'),
         ('Técnico', 'Técnico'),
         ('Gestor de Produção', 'Gestor de Produção'),
-        ('Gestor de Vendas', 'Gestor de Vendas'),
+        ('GestordeVendas', 'GestordeVendas'),
         ('Gestor de Stock', 'Gestor de Stock'),
     ]
 

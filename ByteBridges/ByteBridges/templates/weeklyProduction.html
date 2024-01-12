@@ -10,32 +10,27 @@
       <tr>
         <th>Ordem</th>
         <th>Nome</th>
-        <th>Categoria</th>
+        <th>Criador da Produção</th>
         <th>Data</th>
-        <th>Responsavel</th>
-        <th>Tecnico</th>
-        <th>Status</th>
+        <th>Referência</th>
         <th>Operações</th>
       </tr>
     </thead>
     <tbody>
-      {% for t in weeklyproductions %}
+      {% for w in weeklyProduction %}
       <tr>
-        <td>{{ t.3 }}</td>
-        <td>{{ t.6 }}</td>
-        <td>{{ t.8 }}</td>
-        <td>{{ t.2 }}</td>
-        <td>{{ t.4 }}</td>
-        <td>{{ t.5 }}</td>
-        <td>{% if t.1 %} Concluida {% else %} Pendente {% endif %}</td>
+        <td>{{ w.1 }}</td>
+        <td>{{ w.4 }}</td>
+        <td>{{ w.2 }}</td>
+        <td>{{ w.6 }}</td>
+        <td>{{ w.5 }}</td>
+
         <td>
-          {% if t.1 %} {% else %}
           <a
             class="btn btn-warning"
-            href="{% url 'productionTaskCreate' idproduction=t.0 %}"
+            href="{% url 'productionTaskCreate' idproduction=w.0 %}"
             >Montar</a
           >
-          {% endif %}
         </td>
       </tr>
       {% endfor %}

@@ -1,65 +1,59 @@
 {% extends 'base_template.html' %} {% block extra_css %} {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
 {% endblock %}{% block content %}
 
-    <div class="listContainer">
-        <h1>Lista de Tarefas de Produção</h1>
+<div class="listContainer">
+  <h1>Lista de Tarefas de Produção</h1>
 
-        <table id="productionTaskTable" class="display">
-            <thead>
-            <tr>
-                <th>Ordem</th>
-                <th>Nome</th>
-                <th>Categoria</th>
-                <th>Data</th>
-                <th>Responsavel</th>
-                <th>Tecnico</th>
-                <th>Status</th>
-                <th>Operações</th>
+  <table id="productionTaskTable" class="display">
+    <thead>
+      <tr>
+        <th>Ordem</th>
+        <th>Nome</th>
+        <th>Categoria</th>
+        <th>Data</th>
+        <th>Responsavel</th>
+        <th>Tecnico</th>
+        <th>Status</th>
+        <th>Operações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in tarefas %}
+      <tr>
+        <td>{{ t.3 }}</td>
+        <td>{{ t.6 }}</td>
+        <td>{{ t.8 }}</td>
+        <td>{{ t.2 }}</td>
+        <td>{{ t.4 }}</td>
+        <td>{{ t.5 }}</td>
+        <td>{% if t.1 %} Concluida {% else %} Pendente {% endif %}</td>
+        <td>
+          {% if t.1 %} {% else %}
+          <a
+            class="btn btn-warning"
+            href="{% url 'productionTaskCreate' idproduction=t.0 %}"
+            >Montar</a
+          >
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
-            </tr>
-            </thead>
-            <tbody>
-            {% for t in tarefas %}
-                <tr>
-                    <td>{{ t.3 }}</td>
-                    <td>{{ t.6 }}</td>
-                    <td>{{ t.8 }}</td>
-                    <td>{{ t.2 }}</td>
-                    <td>{{ t.4 }}</td>
-                    <td>{{ t.5 }}</td>
-                    <td>
-                    {% if t.1 %}
-                            Concluida
-                        {% else %}
-                            Pendente
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if t.1 %}
-                        {% else %}
-                        <a class="btn btn-warning" href="{% url 'productionTaskCreate' idproduction=t.0 %}">Montar</a>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <script>
-
-
-        $(document).ready(function () {
-            $("#productionTaskTable").DataTable({
-                dom: "Bfrtip",
-                buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
-                order: [[0, 'desc']],
-                language: {
-                    url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
-                },
-            });
-        });
-    </script>
+<script>
+  $(document).ready(function () {
+    $("#productionTaskTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+      order: [[0, "desc"]],
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+      },
+    });
+  });
+</script>
 
 {% endblock %}
