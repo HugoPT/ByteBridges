@@ -335,6 +335,7 @@ def supplierEdit(request, idsupplier):
         # If the supplier is not found, handle it accordingly (e.g., return a 404 or display an error message)
         return render(request, 'supplierEdit.html', {'supplier_not_found': True})
 
+
     if request.method == 'POST':
         # Get the data from the form
         name = request.POST.get('name')
