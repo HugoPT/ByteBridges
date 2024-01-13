@@ -1181,6 +1181,8 @@ def productionTaskList(request):
 
         return render(request, 'productionTaskList.html', {'tarefas': tarefas})
 
+@login_required
+@group_required('Tecnico')
 def tecProductionTaskList(request):
     user_id = request.user.id
     with connections['technician'].cursor() as cursor:
