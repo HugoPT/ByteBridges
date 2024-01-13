@@ -160,7 +160,7 @@
       var warehouse = document.getElementById("warehouse").value;
       var serialPc = document.getElementById("serialPc").value;
 
-      if (cost == null || hour== null || warehouse == null || serialPc == null) {
+      if (cost != null || hour!= null || warehouse != null || serialPc != null) {
         console.log("aki",cost,hour,warehouse,serialPc)
         $.ajax({
             type: "POST",
