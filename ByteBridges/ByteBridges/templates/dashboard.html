@@ -157,7 +157,7 @@
             {% endif %}
             {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Produção" %}
                 <div class="col-xl-6 col-lg-6">
-                    <div class="card gradiant5">
+                    <div class="card gradiant2">
                         <div class="card-statistic-3 p-4">
                             <div class="card-icon card-icon-large">
                                 <i class="fa fa-industry sideStyle" aria-hidden="true"></i>
@@ -267,7 +267,27 @@
                         </div>
                     </div>
                 </div>
-            {% endif %} {% if user_role|default:""|safe == "Administrador" %}
+            {% endif %} 
+            {% if user_role|default:""|safe == "Administrador" %}
+            <div class="col-xl-6 col-lg-6">
+                <div class="card gradiant3">
+                    <div class="card-statistic-3 p-4">
+                        <div class="card-icon card-icon-large">
+                            <i class="fa fa-id-badge sideStyle" aria-hidden="true"></i>
+                            <h5 class="card-title mb-0">Reporting</h5>
+                        </div>
+                        <div class="row align-items-center mb-2 dashBtns">
+                            <!-- Botão 1 -->
+                            <a href="reporting" class="btn btnChange">
+                                Ver Reporting
+                                <i class="bx bx-right-arrow-alt iconsDash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if user_role|default:""|safe == "Administrador" %}
             <div class="col-xl-6 col-lg-6">
                 <div class="card gradiant1">
                     <div class="card-statistic-3 p-4">
@@ -295,17 +315,11 @@
                                 <i class="bx bx-right-arrow-alt iconsDash"></i>
                             </a>
                         </div>
-                        <div class="row align-items-center mb-2 dashBtns">
-                            <!-- Botão 1 -->
-                            <a href="reporting" class="btn btnChange">
-                                Reporting
-                                <i class="bx bx-right-arrow-alt iconsDash"></i>
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
         {% endif %}
+     
         </div>
     </div>
 {% endblock %}
