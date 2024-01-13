@@ -52,7 +52,6 @@ def logout(request):
 
 def getCounts(request):
     data = request
-    print(data)
     if request.method == 'POST':
         with connections['technician'].cursor() as cursor:
             user_id = request.POST.get('userId')
@@ -69,7 +68,6 @@ def getCounts(request):
 
 def getCounts(request):
     data = request
-    print(data)
     if request.method == 'POST':
         with connections['technician'].cursor() as cursor:
             user_id = request.POST.get('userId')
@@ -102,11 +100,9 @@ def IndexPage(request):
 @group_required('Gestor_de_Vendas', 'Administrador')
 def clientList(request):
     with connections['admin'].cursor() as cursor:
-        # Call the stored procedure using the CALL statement
         cursor.execute("SELECT * FROM view_clients_list", [])
         # If the stored procedure returns results, you can fetch them
         result = cursor.fetchall()
-        print(result)
         clients = [Client(*row) for row in result]
         return render(request, 'clientList.html', {'clients': clients})
 
@@ -124,10 +120,6 @@ def clientCreate(request):
         email = request.POST.get('email')
         obs = request.POST.get('obs')
         eletronicinvoice = True
-
-        print(
-            f"Inserted client {name} {nif} {address} {zipcode} {email} {city} {obs}")
-
         with connections['admin'].cursor() as cursor:
             # Call the stored procedure using the CALL statement
             cursor.execute("CALL sp_clients_create(%s,%s,%s,%s,%s,%s,%s,%s,%s)",
@@ -202,9 +194,6 @@ def orderClientList(request):
             date = datetime.datetime.strptime(date_str, '%d-%m-%Y').date()
             duedate = datetime.datetime.strptime(duedate_str, '%d-%m-%Y').date()
             sales.append(ClientBuyList(iddocument, documentnumber, name, date, duedate, status))
-
-        print("aaaaaaaaaaa", sales)
-
     return render(request, 'orderClientList.html', {'sales': sales})
 
 
@@ -216,7 +205,6 @@ def orderClientLinesFetch(request):
         id = request.POST.get('id')
         cursor.execute("SELECT * FROM fn_ordersClient_getLines(%s);", [id])
         list = cursor.fetchall()
-        print(list)
         return JsonResponse({'list': list})
 
 
@@ -266,8 +254,6 @@ def orderClientCreate(request):
             term_id = request.POST.get('term')
             rows_data = json.loads(request.POST.get('rows'))
             observations = request.POST.get('observations')
-            print("client_id:", client_id)
-            print("term_id:", term_id)
 
             # Create order client
             cursor.execute("SELECT fn_ordersclient_create(CAST(%s AS INTEGER), %s, CAST(%s AS INTEGER))",
@@ -275,7 +261,7 @@ def orderClientCreate(request):
             idorderclient = cursor.fetchone()
             if idorderclient:
                 for row in rows_data:
-                    print("Row:", row)
+                    
                     cursor.execute("CALL sp_sales_create(%s,%s,%s)", [idorderclient[0], row['id'], row['quantity']])
 
                 return JsonResponse({'status': 'success'})
@@ -292,7 +278,6 @@ def supplierList(request):
         cursor.execute("select  * from view_suppliers_list", [])
         # If the stored procedure returns results, you can fetch them
         result = cursor.fetchall()
-        print(result)
         suppliers = [Supplier(*row) for row in result]
         return render(request, 'supplierList.html', {'suppliers': suppliers})
 
@@ -313,12 +298,6 @@ def supplierCreate(request):
             # Call the stored procedure using the CALL statement
             cursor.execute("CALL sp_suppliers_create(%s,%s,%s,%s,%s,%s,%s,%s)",
                            [name, nif, address, zipcode, city, phone, email, obs])
-            # If the stored procedure returns results, you can fetch them
-            # result = cursor.fetchall()
-            # print(result)
-        print(
-            f"Inserted supplier " + name + " " + nif + " " + address + " " + zipcode + " " + city + " " + phone + " " + email + " " + obs)
-        # return render(request, 'your_template.html', {'result': result})
         return redirect('dashboard')
     return render(request, template_name='supplierCreate.html')
 
@@ -334,8 +313,6 @@ def supplierEdit(request, idsupplier):
     if not supplier:
         # If the supplier is not found, handle it accordingly (e.g., return a 404 or display an error message)
         return render(request, 'supplierEdit.html', {'supplier_not_found': True})
-
-
     if request.method == 'POST':
         # Get the data from the form
         name = request.POST.get('name')
@@ -346,12 +323,6 @@ def supplierEdit(request, idsupplier):
         phone = request.POST.get('phone')
         email = request.POST.get('email')
         obs = request.POST.get('obs')
-
-        # Print the data before updating the supplier
-        print("Data before update:")
-        print(
-            f"Name: {name}, NIF: {nif}, Address: {address}, Zipcode: {zipcode}, City: {city}, Phone: {phone}, Email: {email}, Observations: {obs}")
-
         # Call the stored procedure to update the supplier
         with connections['admin'].cursor() as cursor:
             cursor.execute("CALL sp_suppliers_update(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
@@ -406,7 +377,6 @@ def orderSupplierLinesFetch(request):
         id = request.POST.get('id')
         cursor.execute("SELECT * FROM fn_orderssuplier_getlines(%s);", [id])
         list = cursor.fetchall()
-        print(list)
         return JsonResponse({'list': list})
 
 
@@ -418,7 +388,6 @@ def orderSupplierExportJson(request):
         id = request.POST.get('id')
         cursor.execute("SELECT * FROM fn_export_orderssupplier_and_lines(%s);", [id])
         jsonexport = cursor.fetchall()
-        print(jsonexport)
         return JsonResponse({'jsonexport': jsonexport})
 
 
@@ -465,22 +434,18 @@ def orderSupplierCreate(request):
 
 @login_required
 def get_articles(request):
-    print(request)
     if request.method == 'GET':
         family_id = request.GET.get('family_id')
-
         with connections['admin'].cursor() as cursor:
             cursor.execute("SELECT * FROM fn_components_list_family(CAST(%s AS INTEGER))", [family_id])
             result = cursor.fetchall()
-            print(result)
+            
             articles = [ComponentListFamily(*row) for row in result]
 
         # Convert ComponentListFamily objects to dictionaries
         articles_data = [{'idarticle': article.at_id, 'name': article.at_name} for article in articles]
-        print(articles_data)
-
         data = {'articles': articles_data}
-        print(data)
+        
         return JsonResponse(data)
 
 
@@ -509,10 +474,9 @@ def get_items(request):
                 }
                 for item in items
             ]
-            print(items_data)
+            
 
             data = {'items': items_data}
-            print(data)
             return JsonResponse(data)
 
 
@@ -546,16 +510,13 @@ def invoiceSupplierRegister(request):
     if request.method == 'POST':
         data = json.loads(request.POST.get('data'))
         header = json.loads(request.POST.get('header'))
-        print("data" + data)
-        print("header" +header)
-
         with connections['admin'].cursor() as cursor:
             cursor.execute("select fn_orderssupplier_create(%s,%s,%s)",
                            [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
             result = cursor.fetchone()
             if result:
                 for item in data:
-                    print(item[result[0]] + " " + item[component] + " " + item[quantity])
+                    
                     with connections['admin'].cursor() as cursor:
                         cursor.execute("CALL sp_buy_create(%s,%s,%s)",
                                        [result[0],
@@ -609,15 +570,14 @@ def documentsSupplierRegisterInvoice(request):
         cursor.execute("select fn_generate_ordersSupplier_invoice(%s,%s,%s,%s,%s,%s);",
                        [payment_type, related_document_id, obs, invoice_type, invoice_number, invoice_date])
         doc = cursor.fetchone()
-        print(doc)
+       
         for line in documentLines:
-            print(line)
+            
             cursor.execute("call sp_linesInvoice_create (%s,%s,%s,%s);", [doc[0], line[0], line[6], line[4]])
             for x in serialNumbers:
                 for key, value in x.items():
                     if key == line[0]:
                         for sn in value:
-                            print("key " + key + " serial " + sn)
                             cursor.execute("CALL sp_serialGive(%s,%s)", [key, sn])
         return JsonResponse({'list': related_document_id})
 
@@ -630,7 +590,6 @@ def documentsSupplierRegisterInvoiceLines(request):
         id = request.POST.get('id')
         cursor.execute("SELECT * FROM fn_orderssuplier_getlines(%s);", [id])
         list = cursor.fetchall()
-        print(list)
         return JsonResponse({'list': list})
 
 
@@ -682,8 +641,6 @@ def familyCreate(request):
                 # Call the stored procedure using the CALL statement
                 cursor.execute("CALL sp_families_create(%s,%s)",
                                [name, desc])
-
-            print(f"Inserted Family " + name + " " + desc)
             return redirect('dashboard')
         return render(request, template_name='familyCreate.html')
 
@@ -753,8 +710,6 @@ def equipmentCreate(request):
 
         if request.method == 'POST':
             equipment_data = request.POST.get('equipment')
-            print("CHEGUEI CRLH TOU AKI AAAAAAAAAAAAA", equipment_data)
-
             # Convert the JSON string to a Python list containing a dictionary
             equipment_list = json.loads(equipment_data)
 
@@ -1027,10 +982,6 @@ def laborCreate(request):
         # Get the data from the form
         name = request.POST.get('name')
         hourrate = request.POST.get('hourrate')
-
-        print(
-            f"Inserted labor {name} {hourrate}")
-
         with connections['admin'].cursor() as cursor:
             # Call the stored procedure using the CALL statement
             cursor.execute("CALL sp_labors_create(%s,%s)",
@@ -1089,7 +1040,7 @@ def userList(request):
         cursor.execute("SELECT * FROM view_users_list", [])
         # If the stored procedure returns results, you can fetch them
         result = cursor.fetchall()
-        print(result)
+     
         users = [User(*row) for row in result]
         return render(request, 'userList.html', {'users': users})
 
@@ -1153,19 +1104,18 @@ def productionTaskCreateSend(request):
         serialPc = request.POST.get('serialPc')
         serialNumbers = json.loads(request.POST.get('serialNumbers'))
         articleline = json.loads(request.POST.get('articleline'))
-        print("Serial Numbers:", serialNumbers)
+
 
         cursor.execute("select fn_assembleequipment(%s,%s,%s,%s,%s,%s,%s);",
             [warehouse, cost, quantity, idarticletype, idproduction, hour, serialPc])
         doc = cursor.fetchone()
-        print(doc)
+   
 
         for line in articleline:
             for x in serialNumbers:
                 for key, value in x.items():
                     if key == line[0]:
                         for sn in value:
-                            print(key + sn)
                             cursor.execute("CALL sp_production_setComponent(%s,%s)", [sn, idproduction])
         return JsonResponse({'list': idproduction})
 
@@ -1188,7 +1138,6 @@ def tecProductionTaskList(request):
     with connections['technician'].cursor() as cursor:
         cursor.execute("select  * from fn_pendingproductions_get(%s)", [user_id])
         tarefas = cursor.fetchall()
-        print(tarefas)
         return render(request, 'tecProductionTaskList.html', {'tarefas': tarefas})
 
 
@@ -1196,7 +1145,6 @@ def tecProductionTaskList(request):
 @group_required('Administrador', 'Gestor de Produção', 'Tecnico')
 def productionOrderCreate(request):
     current_user = request.user.id
-    print("Current User ID:", current_user)
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_equipments_production")
         production = cursor.fetchall()
@@ -1209,7 +1157,6 @@ def productionOrderCreate(request):
             tecnico = request.POST.get('client')
             rows_data = json.loads(request.POST.get('rows'))
             for row in rows_data:
-                print("Quantity:", row['quantity'])
                 cursor.execute("CALL sp_production_create(%s,%s,%s,%s)",
                                [current_user, tecnico, row['id'], row['quantity']])
             return JsonResponse({'status': 'success'})
@@ -1230,7 +1177,7 @@ def getNIF(request):
         conn.request("GET", "/?json=1&q=" + nif + "&key=" + settings.NIF_PT_TOKEN + "", payload, headers)
         res = conn.getresponse()
         data = res.read()
-        print(data.decode("utf-8"))
+  
         return JsonResponse({'response': data.decode("utf-8")})
 
 
@@ -1306,9 +1253,9 @@ def register_computer_mongo_send(request):
             collection.insert_one(doc)
 
         query = {'_reference': equipment_id}
-        print(query)
+
         document = collection.find_one(query)
-        print(document)
+
         if document:
             # Convert ObjectId to string
             document['_id'] = str(document['_id'])
@@ -1350,7 +1297,6 @@ def get_computer_mongo(request):
 
         query = {"_reference": equipment_id}
         document = collection.find_one(query)
-        print(document)
         if document:
             # Convert ObjectId to string
             document['_id'] = str(document['_id'])
