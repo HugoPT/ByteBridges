@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 class UserProfile(models.Model):
     ROLES = [
         ('Administrador', 'Administrador'),
-        ('Técnico', 'Técnico'),
-        ('Gestor de Produção', 'Gestor de Produção'),
-        ('GestordeVendas', 'GestordeVendas'),
-        ('Gestor de Stock', 'Gestor de Stock'),
+        ('Tecnico', 'Tecnico'),
+        ('Gestor_de_Producao', 'Gestor_de_Producao'),
+        ('Gestor_de_Vendas', 'Gestor_de_Vendas'),
+        ('Gestor_de_Stock', 'Gestor_de_Stock'),
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)

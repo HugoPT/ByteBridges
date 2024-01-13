@@ -73,7 +73,38 @@
 <!-- Include  JS PDF  from CDN -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script><script>
-    document.addEventListener("DOMContentLoaded", function () {
+    $(document).ready(function () {
+        var userRole = null;
+        initializeApp();
+        function getCookie(name) {
+            return new Promise(function (resolve, reject) {
+                var value = "; " + document.cookie;
+                var parts = value.split("; " + name + "=");
+                if (parts.length === 2) {
+                    resolve(parts.pop().split(";").shift());
+                } else {
+                    reject("Cookie not found");
+                }
+            });
+        }
+
+        function initializeApp() {
+            getCookie('user_role')
+                .then(function (role) {
+                    userRole = role;
+                    console.log('User Role:', userRole);
+                    if (userRole === "Tecnico") {
+                        console.log("This is the 'Tecnico' role.");
+                        $('.hideFromTec').hide();
+                    } else {
+                        $('.hideFromRest').hide();
+                    }
+                })
+                .catch(function (error) {
+                    console.error(error);
+                });
+        }
+
         const toggleNavbar = (toggleId, navId, bodyId, headerId) => {
             const toggle = document.getElementById(toggleId),
                 nav = document.getElementById(navId),
@@ -142,9 +173,8 @@
                 }
             });
         });
+        
     });
-    
-    
 </script>
 <!--Menu-->
 <header class="header" id="header">
@@ -155,7 +185,6 @@
         <img src="https://freesvg.org/img/abstract-user-flat-4.png" alt=""/>
     </div>
 </header>
-
 <div class="l-navbar" id="nav-bar">
     <nav class="nav">
         <div>
@@ -163,8 +192,8 @@
                 <i class="bx bx-layer nav_logo-icon"></i>
                 <span class="nav_logo-name">ByteBridges</span>
             </a>
-            <div>
-                 <div class="nav_link_dropdown">
+            <div> 
+                 <div class="nav_link_dropdown hideFromTec">
                     <div>
                         <a href="#" class="nav_link nav_hover">
                             <i class="bx bx-grid-alt nav_icon"></i>
@@ -193,7 +222,7 @@
                   
                     </div>
                 </div>
-                <div class="nav_link_dropdown">
+                <div class="nav_link_dropdown hideFromTec">
                     <div>
                         <a href="#" class="nav_link nav_hover">
                             <i class='bx bx-package nav_icon'></i>
@@ -202,7 +231,7 @@
                     </div>
                     <div class="dropdown_content nav_link">
                         <!-- Submenu -->
-                        <div class="nav_link_dropdown">
+                        <div class="nav_link_dropdown hideFromTec">
                             <div>
                                 <a href="#" class="nav_link nav_hover_sub">
                                     <i class='bx bx-package nav_icon'></i>
@@ -219,7 +248,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="nav_link_dropdown">
+                        <div class="nav_link_dropdown hideFromTec">
                             <div>
        
                                 <a href="#" class="nav_link nav_hover_sub">
@@ -238,7 +267,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="nav_link_dropdown">
+                <div class="nav_link_dropdown hideFromTec">
                     <div>
                         <a href="#" class="nav_link nav_hover">
                             <i class="bx bx-user nav_icon"></i>
@@ -254,7 +283,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="nav_link_dropdown">
+                <div class="nav_link_dropdown hideFromTec">
                     <div>
                         <a href="#" class="nav_link nav_hover">
                             <i class="bx bx-message-square-detail nav_icon"></i>
@@ -277,7 +306,7 @@
                     </div>
                 </div>
 
-                <div class="nav_link_dropdown">
+                <div class="nav_link_dropdown hideFromTec">
                     <div>
                         <a href="#" class="nav_link nav_hover">
                             <i class="bx bxs-component nav_icon"></i>
@@ -293,7 +322,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="nav_link_dropdown">
+                <div class="nav_link_dropdown hideFromTec">
                     <div>
                         <a href="#" class="nav_link nav_hover">
                             <i class='bx bxs-user-account nav_icon'></i>
@@ -317,6 +346,30 @@
               
                     </div>
                 </div>
+                <div class="nav_link_dropdown hideFromRest">
+                    <div>
+                        <a href="#" class="nav_link nav_hover">
+                            <i class="bx bxs-factory nav_icon"></i>
+                            <span class="nav_name">Produções Pendentes <i class='bx bx-chevron-right arrow'></i></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="nav_link_dropdown hideFromRest">
+                    <div>
+                        <a href="#" class="nav_link nav_hover">
+                            <i class="bx bxs-time nav_icon"></i>
+                            <span class="nav_name">Produções Semanais <i class='bx bx-chevron-right arrow'></i></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="nav_link_dropdown hideFromRest">
+                    <div>
+                        <a href="#" class="nav_link nav_hover">
+                            <i class="bx bxs-alarm-exclamation nav_icon"></i>
+                            <span class="nav_name">Produções Atrasadas <i class='bx bx-chevron-right arrow'></i></span>
+                        </a>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -326,6 +379,8 @@
         </a>
     </nav>
 </div>
+
+
 <!--Fim Menu-->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -374,6 +429,7 @@
         })
     }
 </script>
+
 
 <div class="container">{% block content %}{% endblock %}</div>
 

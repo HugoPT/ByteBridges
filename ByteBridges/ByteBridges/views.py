@@ -91,11 +91,11 @@ def IndexPage(request):
     user_groups = request.user.groups.all()
     user_role = user_groups[0].name if user_groups else None
     user_id = request.user.id
-    print("aaaaaaaaaaaaaaaa",user_role)
-    if user_role == "Técnico":
-        return render(request, 'tecMainPage.html', {'user_role': user_role,'user_name': user_name,'user_id': user_id})
-    else:
-        return render(request, 'dashboard.html', {'user_role': user_role })
+    response = render(request, 'tecMainPage.html', {'user_role': user_role, 'user_name': user_name, 'user_id': user_id}) if user_role == "Tecnico" else render(request, 'dashboard.html', {'user_role': user_role})
+
+    response.set_cookie('user_role', user_role)
+
+    return response
 
 # Clients
 @login_required

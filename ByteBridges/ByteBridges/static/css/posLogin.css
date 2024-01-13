@@ -147,6 +147,7 @@ a {
   color: var(--first-color-light);
   margin-bottom: 1.5rem;
   transition: 0.3s;
+  display: flex;
 }
 
 /* Estilo dos links da barra de navegação ao passar o mouse sobre eles */
