@@ -30,7 +30,7 @@ def weeklyProduction(request):
         cursor.execute("select  * FROM fn_technician_weeklyproductions(%s)", [user_id])
         weeklyProduction = cursor.fetchall()
         return render(request, 'weeklyProduction.html', {'weeklyProduction': weeklyProduction})
-    
+
 
 @login_required
 @group_required('Técnico')
@@ -52,7 +52,7 @@ def logout(request):
 
 def getCounts(request):
     data = request
-    print(data) 
+    print(data)
     if request.method == 'POST':
         with connections['technician'].cursor() as cursor:
             user_id = request.POST.get('userId')
@@ -69,7 +69,7 @@ def getCounts(request):
 
 def getCounts(request):
     data = request
-    print(data) 
+    print(data)
     if request.method == 'POST':
         with connections['technician'].cursor() as cursor:
             user_id = request.POST.get('userId')
@@ -545,15 +545,16 @@ def invoiceSupplierRegister(request):
     if request.method == 'POST':
         data = json.loads(request.POST.get('data'))
         header = json.loads(request.POST.get('header'))
-        print(data)
-        print(header)
-        # create a new supplier enc header
+        print("data" + data)
+        print("header" +header)
+
         with connections['admin'].cursor() as cursor:
             cursor.execute("select fn_orderssupplier_create(%s,%s,%s)",
                            [header[0]['obs'], header[0]['idsupplier'], header[0]['idwarehouse']])
             result = cursor.fetchone()
             if result:
                 for item in data:
+                    print(item[result[0]] + " " + item[component] + " " + item[quantity])
                     with connections['admin'].cursor() as cursor:
                         cursor.execute("CALL sp_buy_create(%s,%s,%s)",
                                        [result[0],
@@ -609,12 +610,13 @@ def documentsSupplierRegisterInvoice(request):
         doc = cursor.fetchone()
         print(doc)
         for line in documentLines:
+            print(line)
             cursor.execute("call sp_linesInvoice_create (%s,%s,%s,%s);", [doc[0], line[0], line[6], line[4]])
             for x in serialNumbers:
                 for key, value in x.items():
                     if key == line[0]:
                         for sn in value:
-                            print("serial " + sn)
+                            print("key " + key + " serial " + sn)
                             cursor.execute("CALL sp_serialGive(%s,%s)", [key, sn])
         return JsonResponse({'list': related_document_id})
 
