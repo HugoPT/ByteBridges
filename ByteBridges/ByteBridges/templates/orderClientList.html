@@ -1,148 +1,149 @@
 <!-- sellList.html -->
 {% extends 'base_template.html' %} {% block extra_css %} {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/tables.css' %}"/>
 {% endblock %} {% block content %}
 
-<div class="listContainer">
-  <h1>Lista de Encomendas de Clientes</h1>
-  <table id="suppliersTable" class="display">
-    <thead>
-      <tr>
-        <th>Documento</th>
-        <th>Cliente</th>
-        <th>Data de encomenda</th>
-        <th>Data de vencimento</th>
-        <th>Operações</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for s in sales %}
-      <tr>
-        <td><a href="{{ s.iddocument }}"> {{ s.documentnumber }}</a></td>
-        <td>{{ s.name }}</td>
-        <td>{{ s.date|date:"Y-m-d" }}</td>
-        <td>{{ s.duedate|date:"Y-m-d" }}</td>
-        <td>
-          <button
-            type="button"
-            class="btn btn-dark open-modal"
-            data-target="exampleModalCenter"
-            data-order-id="{{ s.iddocument }}"
-          >
-            <i class="fa-solid fa-circle-info"></i>
-          </button>
-            <a
-            href="{% url 'orderClientFetchInvoice' idorder=s.iddocument %}"
-            class="btn btn-dark"
-            ><i class="fa-solid fa fa-receipt"></i></a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-
-<div
-  class="modal fade"
-  id="exampleModalCenter"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="modalTitle"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalTitle">Detalhes</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form method="post">
-        {% csrf_token %}
-        <div class="modal-body">
-          <table
-            class="table"
-            style="width: 800px; margin: 0 auto"
-            id="itemsTable"
-          >
+    <div class="listContainer">
+        <h1>Lista de Encomendas de Clientes</h1>
+        <table id="suppliersTable" class="display">
             <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Equipamento</th>
-                <th scope="col">Ref</th>
-                <th scope="col">Custo</th>
-                <th scope="col">Quantidade</th>
-              </tr>
+            <tr>
+                <th>Documento</th>
+                <th>Cliente</th>
+                <th>Data de encomenda</th>
+                <th>Data de vencimento</th>
+                <th>Operações</th>
+            </tr>
             </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </form>
+            <tbody>
+            {% for s in sales %}
+                <tr>
+                    <td>{{ s.documentnumber }}</td>
+                    <td>{{ s.name }}</td>
+                    <td>{{ s.date|date:"Y-m-d" }}</td>
+                    <td>{{ s.duedate|date:"Y-m-d" }}</td>
+                    <td>
+                        <button
+                                type="button"
+                                class="btn btn-dark open-modal"
+                                data-target="exampleModalCenter"
+                                data-order-id="{{ s.iddocument }}"
+                        >
+                            <i class="fa-solid fa-circle-info"></i>
+                        </button>
+                        <a
+                                href="{% url 'orderClientFetchInvoice' idorder=s.iddocument %}"
+                                class="btn btn-dark"
+                        ><i class="fa-solid fa fa-receipt"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-  </div>
-</div>
 
-<script>
-  $(document).ready(function () {
-    $("#suppliersTable").DataTable({
-      dom: "Bfrtip",
-      buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
-      language: {
-        url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
-      },
-    });
-    $(".open-modal").on("click", function () {
-      var orderId = $(this).data("order-id");
-      var targetModal = $(this).data("target");
+    <div
+            class="modal fade"
+            id="exampleModalCenter"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="modalTitle"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Detalhes</h5>
+                    <button
+                            type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <table
+                                class="table"
+                                style="width: 800px; margin: 0 auto"
+                                id="itemsTable"
+                        >
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Equipamento</th>
+                                <th scope="col">Ref</th>
+                                <th scope="col">Custo</th>
+                                <th scope="col">Quantidade</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-      // Pass the orderId to the function that updates the modal content
-      updateModalContent(orderId);
+    <script>
+        $(document).ready(function () {
+            $("#suppliersTable").DataTable({
+                dom: "Bfrtip",
+                buttons: ["copyHtml5", "excelHtml5", "csvHtml5", "pdfHtml5"],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.13.7/i18n/pt-PT.json",
+                },
+                order: [[0, 'desc']],
+            });
+            $(".open-modal").on("click", function () {
+                var orderId = $(this).data("order-id");
+                var targetModal = $(this).data("target");
 
-      $("#" + targetModal).modal("show");
-    });
+                // Pass the orderId to the function that updates the modal content
+                updateModalContent(orderId);
 
-    function updateModalContent(orderId) {
-      $.ajax({
-        type: "POST",
-        url: '{% url "orderClientLinesFetch" %}',
-        data: { id: orderId },
-        dataType: "json",
-        success: function (data) {
-          // Handle the success response
-          updateDocumentsLines(data);
-        },
-        error: function () {
-          Swal.fire({
-            title: "Erro!",
-            text: "Falha na comunicação com o servidor",
-            icon: "error",
-          });
-        },
-      });
-    }
+                $("#" + targetModal).modal("show");
+            });
 
-    function updateDocumentsLines(options) {
-      // Find the table body
-      var tableBody = $("#itemsTable tbody");
-      tableBody.empty(); // Clear existing rows
+            function updateModalContent(orderId) {
+                $.ajax({
+                    type: "POST",
+                    url: '{% url "orderClientLinesFetch" %}',
+                    data: {id: orderId},
+                    dataType: "json",
+                    success: function (data) {
+                        // Handle the success response
+                        updateDocumentsLines(data);
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Erro!",
+                            text: "Falha na comunicação com o servidor",
+                            icon: "error",
+                        });
+                    },
+                });
+            }
 
-      options["list"].forEach(function (option) {
-        const newRow = $("<tr>");
-        newRow.append("<td>" + option[0] + "</td>");
-        newRow.append("<td>" + option[1] + "</td>");
-        newRow.append("<td>" + option[7] + "</td>");
-        newRow.append("<td>" + option[4] + "</td>");
-        newRow.append("<td>" + option[8] + "</td>");
-        tableBody.append(newRow);
-      });
-    }
-  });
-</script>
+            function updateDocumentsLines(options) {
+                // Find the table body
+                var tableBody = $("#itemsTable tbody");
+                tableBody.empty(); // Clear existing rows
+
+                options["list"].forEach(function (option) {
+                    const newRow = $("<tr>");
+                    newRow.append("<td>" + option[0] + "</td>");
+                    newRow.append("<td>" + option[1] + "</td>");
+                    newRow.append("<td>" + option[7] + "</td>");
+                    newRow.append("<td>" + option[4] + "</td>");
+                    newRow.append("<td>" + option[8] + "</td>");
+                    tableBody.append(newRow);
+                });
+            }
+        });
+    </script>
 
 {% endblock %}
