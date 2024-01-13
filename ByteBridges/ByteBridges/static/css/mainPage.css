@@ -15,7 +15,7 @@ body {
 .logoinContain {
   display: flex;
   align-items: center;
-  width: 50px;
+  width: 150px;
 }
 .navbarColor {
   background-color: #001f3f;
@@ -65,6 +65,7 @@ body {
 .Login {
   padding: 10px 20px;
   color: #ffffff;
+  font-weight: bolder;
 }
 .Login:hover {
   cursor: pointer;
