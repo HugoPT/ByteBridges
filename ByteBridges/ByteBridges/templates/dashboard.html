@@ -1,313 +1,311 @@
 {% extends 'base_template.html' %} {% block extra_css %} {% load static %}
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{% static 'css/dashboard.css' %}"
-/>
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{% static 'css/dashboard.css' %}"
+    />
 
 {% endblock %} {% block content %}
 
-<div class="container_dash">
-  <div class="dashTitle">
-    <h1>{{ user_role }}</h1>
-  </div>
-  <div class="row">
-    {% if user_role|default:""|safe == "Administrador" or
-    user_role|default:""|safe == "Gestor de Stock" %}
-    <div class="col-xl-6 col-lg-6">
-      <div class="card gradiant1">
-        <div class="card-statistic-3 p-4">
-          <div class="card-icon card-icon-large">
-            <i class="fa fa-users sideStyle" aria-hidden="true"></i>
-            <h5 class="card-title mb-0">Fornecedores</h5>
-          </div>
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="supplierList" class="btn btnChange">
-              Gerir Fornecedores <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-            <!-- Botão 2 -->
-            <a href="supplierCreate" class="btn btnChange">
-              Adicionar Fornecedores
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
+    <div class="container_dash">
+        <div class="dashTitle">
+            <h1>{{ user_role }}</h1>
         </div>
-      </div>
-    </div>
-    {% endif %} {% if user_role|default:""|safe == "Administrador" or
-    user_role|default:""|safe == "Gestor de Vendas" %}
-    <div class="col-xl-6 col-lg-6">
-      <div class="card gradiant2">
-        <div class="card-statistic-3 p-4">
-          <div class="card-icon card-icon-large">
-            <i class="fa fa-user sideStyle" aria-hidden="true"></i>
-            <h5 class="card-title mb-0">Clientes</h5>
-          </div>
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="clientList" class="btn btnChange">
-              Gerir Clientes
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-            <!-- Botão 2 -->
-            <a href="clientCreate" class="btn btnChange">
-              Adicionar Clientes
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %} {% if user_role|default:""|safe == "Administrador" or
-    user_role|default:""|safe == "Gestor de Stocks" %}
-    <div class="col-xl-6 col-lg-6">
-      <div class="card gradiant6">
-        <div class="card-statistic-3 p-4">
-          <div class="card-icon card-icon-large">
-            <i class="fa fa-shopping-cart sideStyle" aria-hidden="true"></i>
-            <h5 class="card-title mb-0">Compras</h5>
-          </div>
+        <div class="row">
+            {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
+                <div class="col-xl-6 col-lg-6">
+                    <div class="card gradiant1">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large">
+                                <i class="fa fa-users sideStyle" aria-hidden="true"></i>
+                                <h5 class="card-title mb-0">Fornecedores</h5>
+                            </div>
+                            <div class="row align-items-center mb-2 dashBtns">
+                                <!-- Botão 1 -->
+                                <a href="supplierList" class="btn btnChange">
+                                    Gerir Fornecedores <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                                <!-- Botão 2 -->
+                                <a href="supplierCreate" class="btn btnChange">
+                                    Adicionar Fornecedores
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Vendas" %}
+                <div class="col-xl-6 col-lg-6">
+                    <div class="card gradiant2">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large">
+                                <i class="fa fa-user sideStyle" aria-hidden="true"></i>
+                                <h5 class="card-title mb-0">Clientes</h5>
+                            </div>
+                            <div class="row align-items-center mb-2 dashBtns">
+                                <!-- Botão 1 -->
+                                <a href="clientList" class="btn btnChange">
+                                    Gerir Clientes
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                                <!-- Botão 2 -->
+                                <a href="clientCreate" class="btn btnChange">
+                                    Adicionar Clientes
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stocks" %}
+                <div class="col-xl-6 col-lg-6">
+                    <div class="card gradiant6">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large">
+                                <i class="fa fa-shopping-cart sideStyle" aria-hidden="true"></i>
+                                <h5 class="card-title mb-0">Compras</h5>
+                            </div>
 
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="orderSupplierList" class="btn btnChange">
-              Gerir Encomendas
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-            <!-- Botão 2 -->
-            <a href="orderSupplierCreate" class="btn btnChange">
-              Criar Encomendas
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %} {% if user_role|default:""|safe == "Administrador" or
-    user_role|default:""|safe == "Gestor de Vendas" %}
-    <div class="col-xl-6 col-lg-6">
-      <div class="card gradiant7">
-        <div class="card-statistic-3 p-4">
-          <div class="card-icon card-icon-large">
-            <i class="fa fa-truck sideStyle" aria-hidden="true"></i>
-            <h5 class="card-title mb-0">Vendas</h5>
-          </div>
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="orderClientList" class="btn btnChange">
-              Gerir Encomendas
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-            <!-- Botão 2 -->
-            <a href="orderClientCreate" class="btn btnChange">
-              Criar Encomendas
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %} {% if user_role|default:""|safe == "Administrador" or
-    user_role|default:""|safe == "Gestor de Stock" %}
-    <div class="col-xl-6 col-lg-6">
-      <div class="card gradiant5">
-        <div class="card-statistic-3 p-4">
-          <div class="card-icon card-icon-large">
-            <i class="fa fa-file-text sideStyle" aria-hidden="true"></i>
-            <h5 class="card-title mb-0">Facturas e Guias das Compras</h5>
-          </div>
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a
-              href="{% url 'invoiceSupplierRegister' %} "
-              class="btn btnChange"
-            >
-              Registar Documentos
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %} {% if user_role|default:""|safe == "Administrador" or
-    user_role|default:""|safe == "Gestor de Stock" %}
-    <div class="col-xl-6 col-lg-6">
-      <div class="card gradiant3">
-        <div class="card-statistic-3 p-4">
-          <div class="card-icon card-icon-large">
-            <i class="fa fa-cubes sideStyle" aria-hidden="true"></i>
-            <h5 class="card-title mb-0">Stocks</h5>
-          </div>
+                            <div class="row align-items-center mb-2 dashBtns">
+                                <!-- Botão 1 -->
+                                <a href="orderSupplierList" class="btn btnChange">
+                                    Gerir Encomendas
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                                <!-- Botão 2 -->
+                                <a href="orderSupplierCreate" class="btn btnChange">
+                                    Criar Encomendas
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Vendas" %}
+                <div class="col-xl-6 col-lg-6">
+                    <div class="card gradiant7">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large">
+                                <i class="fa fa-truck sideStyle" aria-hidden="true"></i>
+                                <h5 class="card-title mb-0">Vendas</h5>
+                            </div>
+                            <div class="row align-items-center mb-2 dashBtns">
+                                <!-- Botão 1 -->
+                                <a href="orderClientList" class="btn btnChange">
+                                    Gerir Encomendas
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                                <!-- Botão 2 -->
+                                <a href="orderClientCreate" class="btn btnChange">
+                                    Criar Encomendas
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
+                <div class="col-xl-6 col-lg-6">
+                    <div class="card gradiant5">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large">
+                                <i class="fa fa-file-text sideStyle" aria-hidden="true"></i>
+                                <h5 class="card-title mb-0">Facturas e Guias das Compras</h5>
+                            </div>
+                            <div class="row align-items-center mb-2 dashBtns">
+                                <!-- Botão 1 -->
+                                <a
+                                        href="{% url 'invoiceSupplierRegister' %} "
+                                        class="btn btnChange"
+                                >
+                                    Registar Documentos
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
+                <div class="col-xl-6 col-lg-6">
+                    <div class="card gradiant3">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large">
+                                <i class="fa fa-cubes sideStyle" aria-hidden="true"></i>
+                                <h5 class="card-title mb-0">Stocks</h5>
+                            </div>
 
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="stockList" class="btn btnChange">
-              Ver Stocks
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-            <!-- Botão 2 -->
-            <a href="stockMovementList" class="btn btnChange">
-              Movimentos de Stock
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %} {% if user_role|default:""|safe == "Administrador" or
-    user_role|default:""|safe == "Gestor de Produção" %}
-    <div class="col-xl-6 col-lg-6">
-      <div class="card gradiant5">
-        <div class="card-statistic-3 p-4">
-          <div class="card-icon card-icon-large">
-            <i class="fa fa-industry sideStyle" aria-hidden="true"></i>
-            <h5 class="card-title mb-0">Produção</h5>
-          </div>
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="productionOrderCreate" class="btn btnChange">
-              Ordens de Produção
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %} {% if user_role|default:""|safe == "Administrador" or
-    user_role|default:""|safe == "Gestor" %}
-    <div class="col-xl-6 col-lg-6">
-      <div class="card gradiant5">
-        <div class="card-statistic-3 p-4">
-          <div class="card-icon card-icon-large">
-            <i class="fa fa-pencil sideStyle" aria-hidden="true"></i>
-            <h5 class="card-title mb-0">Tarefas</h5>
-          </div>
+                            <div class="row align-items-center mb-2 dashBtns">
+                                <!-- Botão 1 -->
+                                <a href="stockList" class="btn btnChange">
+                                    Ver Stocks
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                                <!-- Botão 2 -->
+                                <a href="stockMovementList" class="btn btnChange">
+                                    Movimentos de Stock
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Produção" %}
+                <div class="col-xl-6 col-lg-6">
+                    <div class="card gradiant5">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large">
+                                <i class="fa fa-industry sideStyle" aria-hidden="true"></i>
+                                <h5 class="card-title mb-0">Produção</h5>
+                            </div>
+                            <div class="row align-items-center mb-2 dashBtns">
+                                <!-- Botão 1 -->
+                                <a href="productionOrderCreate" class="btn btnChange">
+                                    Ordens de Produção
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %} {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor" %}
+            <div class="col-xl-6 col-lg-6">
+                <div class="card gradiant5">
+                    <div class="card-statistic-3 p-4">
+                        <div class="card-icon card-icon-large">
+                            <i class="fa fa-pencil sideStyle" aria-hidden="true"></i>
+                            <h5 class="card-title mb-0">Tarefas</h5>
+                        </div>
 
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="productionTaskList" class="btn btnChange">
-              Gerir Tarefas de Produção
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %} {% if user_role|default:""|safe == "Administrador" or
-    user_role|default:""|safe == "Gestor de Produção" %}
-    <div class="col-xl-6 col-lg-6">
-      <div class="card gradiant4">
-        <div class="card-statistic-3 p-4">
-          <div class="card-icon card-icon-large">
-            <i class="fa fa-desktop sideStyle" aria-hidden="true"></i>
-            <h5 class="card-title mb-0">Equipamentos</h5>
-          </div>
+                        <div class="row align-items-center mb-2 dashBtns">
+                            <!-- Botão 1 -->
+                            <a href="productionTaskList" class="btn btnChange">
+                                Gerir Tarefas de Produção
+                                <i class="bx bx-right-arrow-alt iconsDash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+            {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Produção" %}
+                <div class="col-xl-6 col-lg-6">
+                    <div class="card gradiant4">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large">
+                                <i class="fa fa-desktop sideStyle" aria-hidden="true"></i>
+                                <h5 class="card-title mb-0">Equipamentos</h5>
+                            </div>
 
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="equipmentList" class="btn btnChange">
-              Gerir Equipamentos
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-            <!-- Botão 2 -->
-            <a href="equipmentCreate" class="btn btnChange">
-              Adicionar Equipamentos
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %} {% if user_role|default:""|safe == "Administrador" or
-    user_role|default:""|safe == "Gestor de Stock" %}
-    <div class="col-xl-6 col-lg-6">
-      <div class="card gradiant6">
-        <div class="card-statistic-3 p-4">
-          <div class="card-icon card-icon-large">
-            <i class="fa fa-microchip sideStyle" aria-hidden="true"></i>
-            <h5 class="card-title mb-0">Componentes</h5>
-          </div>
+                            <div class="row align-items-center mb-2 dashBtns">
+                                <!-- Botão 1 -->
+                                <a href="equipmentList" class="btn btnChange">
+                                    Gerir Equipamentos
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                                <!-- Botão 2 -->
+                                <a href="equipmentCreate" class="btn btnChange">
+                                    Adicionar Equipamentos
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
+                <div class="col-xl-6 col-lg-6">
+                    <div class="card gradiant6">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large">
+                                <i class="fa fa-microchip sideStyle" aria-hidden="true"></i>
+                                <h5 class="card-title mb-0">Componentes</h5>
+                            </div>
 
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="componentList" class="btn btnChange">
-              Gerir Componentes
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-            <!-- Botão 2 -->
-            <a href="componentCreate" class="btn btnChange">
-              Adicionar Componentes
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %} {% if user_role|default:""|safe == "Administrador" or
-    user_role|default:""|safe == "Gestor de Stock" %}
-    <div class="col-xl-6 col-lg-6">
-      <div class="card gradiant2">
-        <div class="card-statistic-3 p-4">
-          <div class="card-icon card-icon-large">
-            <i class="fa fa-object-group sideStyle" aria-hidden="true"></i>
-            <h5 class="card-title mb-0">Familia de Componentes</h5>
-          </div>
+                            <div class="row align-items-center mb-2 dashBtns">
+                                <!-- Botão 1 -->
+                                <a href="componentList" class="btn btnChange">
+                                    Gerir Componentes
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                                <!-- Botão 2 -->
+                                <a href="componentCreate" class="btn btnChange">
+                                    Adicionar Componentes
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            {% if user_role|default:""|safe == "Administrador" or user_role|default:""|safe == "Gestor de Stock" %}
+                <div class="col-xl-6 col-lg-6">
+                    <div class="card gradiant2">
+                        <div class="card-statistic-3 p-4">
+                            <div class="card-icon card-icon-large">
+                                <i class="fa fa-object-group sideStyle" aria-hidden="true"></i>
+                                <h5 class="card-title mb-0">Familia de Componentes</h5>
+                            </div>
 
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="familyList" class="btn btnChange">
-              Gerir Familias
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-            <!-- Botão 2 -->
-            <a href="familyCreate" class="btn btnChange">
-              Adicionar Familia
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %} {% if user_role|default:""|safe == "Administrador" %}
-    <div class="col-xl-6 col-lg-6">
-      <div class="card gradiant1">
-        <div class="card-statistic-3 p-4">
-          <div class="card-icon card-icon-large">
-            <i class="fa fa-id-badge sideStyle" aria-hidden="true"></i>
-            <h5 class="card-title mb-0">Utilizadores</h5>
-          </div>
+                            <div class="row align-items-center mb-2 dashBtns">
+                                <!-- Botão 1 -->
+                                <a href="familyList" class="btn btnChange">
+                                    Gerir Familias
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                                <!-- Botão 2 -->
+                                <a href="familyCreate" class="btn btnChange">
+                                    Adicionar Familia
+                                    <i class="bx bx-right-arrow-alt iconsDash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %} {% if user_role|default:""|safe == "Administrador" %}
+            <div class="col-xl-6 col-lg-6">
+                <div class="card gradiant1">
+                    <div class="card-statistic-3 p-4">
+                        <div class="card-icon card-icon-large">
+                            <i class="fa fa-id-badge sideStyle" aria-hidden="true"></i>
+                            <h5 class="card-title mb-0">Utilizadores</h5>
+                        </div>
 
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="userList" class="btn btnChange">
-              Gerir Utilizadores
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="laborList" class="btn btnChange">
-              Gerir Mão de Obra
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-            <!-- Botão 2 -->
-            <a href="laborCreate" class="btn btnChange">
-              Adicionar Mão de Obra
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
-          <div class="row align-items-center mb-2 dashBtns">
-            <!-- Botão 1 -->
-            <a href="reporting" class="btn btnChange">
-              Reporting
-              <i class="bx bx-right-arrow-alt iconsDash"></i>
-            </a>
-          </div>
+                        <div class="row align-items-center mb-2 dashBtns">
+                            <!-- Botão 1 -->
+                            <a href="userList" class="btn btnChange">
+                                Gerir Utilizadores
+                                <i class="bx bx-right-arrow-alt iconsDash"></i>
+                            </a>
+                        </div>
+                        <div class="row align-items-center mb-2 dashBtns">
+                            <!-- Botão 1 -->
+                            <a href="laborList" class="btn btnChange">
+                                Gerir Mão de Obra
+                                <i class="bx bx-right-arrow-alt iconsDash"></i>
+                            </a>
+                            <!-- Botão 2 -->
+                            <a href="laborCreate" class="btn btnChange">
+                                Adicionar Mão de Obra
+                                <i class="bx bx-right-arrow-alt iconsDash"></i>
+                            </a>
+                        </div>
+                        <div class="row align-items-center mb-2 dashBtns">
+                            <!-- Botão 1 -->
+                            <a href="reporting" class="btn btnChange">
+                                Reporting
+                                <i class="bx bx-right-arrow-alt iconsDash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         </div>
-      </div>
     </div>
-    {% endif %}
-  </div>
-</div>
 {% endblock %}
