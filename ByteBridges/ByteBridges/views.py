@@ -90,6 +90,7 @@ def IndexPage(request):
     user_groups = request.user.groups.all()
     user_role = user_groups[0].name if user_groups else None
     user_id = request.user.id
+    print("aki paaaaaaaaaaa", user_role)
     response = render(request, 'tecMainPage.html', {'user_role': user_role, 'user_name': user_name, 'user_id': user_id}) if user_role == "Tecnico" else render(request, 'dashboard.html', {'user_role': user_role})
 
     response.set_cookie('user_role', user_role)
@@ -595,7 +596,7 @@ def documentsSupplierRegisterInvoiceLines(request):
 
 
 @login_required
-@group_required('Gestor de Produção', 'Administrador')
+@group_required('Gestor_de_Producao', 'Administrador')
 def productionEquipmentCreate(request, equipment_id):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_families_list")
@@ -684,7 +685,7 @@ def familyDelete(request):
 
 
 @login_required
-@group_required('Gestor de Produção', 'Administrador')
+@group_required('Gestor_de_Producao', 'Administrador')
 def equipmentList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -696,7 +697,7 @@ def equipmentList(request):
 
 
 @login_required
-@group_required('Gestor de Produção', 'Administrador')
+@group_required('Gestor_de_Producao', 'Administrador')
 def equipmentCreate(request):
     with connections['admin'].cursor() as cursor:
         cursor.execute("select * from view_categories_list")
@@ -762,7 +763,7 @@ def equipmentCreate(request):
 
 
 @login_required
-@group_required('Gestor de Produção', 'Administrador')
+@group_required('Gestor_de_Producao', 'Administrador')
 def equipmentEdit(request, equipment_id):
     # Fetch the client information from the database
     with connections['admin'].cursor() as cursor:
@@ -800,7 +801,7 @@ def equipmentEdit(request, equipment_id):
 
 
 @login_required
-@group_required('Gestor de Produção', 'Administrador')
+@group_required('Gestor_de_Producao', 'Administrador')
 def equipmentDelete(request):
     if request.method == 'POST' and 'id' in request.POST:
         # Call the stored procedure to delete the client
@@ -1122,7 +1123,7 @@ def productionTaskCreateSend(request):
 
 
 @login_required
-@group_required('Administrador', 'Gestor de Produção')
+@group_required('Administrador', 'Gestor_de_Producao')
 def productionTaskList(request):
     with connections['admin'].cursor() as cursor:
         # Call the stored procedure using the CALL statement
@@ -1143,7 +1144,7 @@ def tecProductionTaskList(request):
 
 
 @login_required
-@group_required('Administrador', 'Gestor de Produção', 'Tecnico')
+@group_required('Administrador', 'Gestor_de_Producao', 'Tecnico')
 def productionOrderCreate(request):
     current_user = request.user.id
     with connections['admin'].cursor() as cursor:
@@ -1201,7 +1202,7 @@ def sendMail(request):
         return JsonResponse({'response': "sent"})
 
 @login_required
-@group_required('Administrador', 'Gestor de Produção')
+@group_required('Administrador', 'Gestor_de_Producao')
 def register_computer_mongo(request, equipment_id):
     mongo_instance = pymongo.MongoClient(settings.MONGO_DB_HOST,
                                          username=settings.MONGO_USERNAME,
@@ -1232,7 +1233,7 @@ def register_computer_mongo(request, equipment_id):
     return render(request, 'equipmentSpecs.html', context)
 
 @login_required
-@group_required('Administrador', 'Gestor de Produção')
+@group_required('Administrador', 'Gestor_de_Producao')
 def register_computer_mongo_send(request):
     if request.method == 'POST':
         mongo_instance = pymongo.MongoClient(settings.MONGO_DB_HOST,
