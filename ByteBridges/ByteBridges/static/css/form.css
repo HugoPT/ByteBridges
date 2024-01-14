@@ -112,7 +112,8 @@
   max-width: 1000px !important;
 }
 .label.active {
-  transform: translateY(-24px);
+  transform: translateY(-24px) !important;
+  content: normal;
 }
 
 .addMoreBtn {

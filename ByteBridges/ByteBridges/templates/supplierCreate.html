@@ -38,9 +38,11 @@
                     document.getElementById("city").value = nif_pt_data.records[nif].geo.region;
                     document.getElementById("email").value = nif_pt_data.records[nif].contacts.email;
                     let phone = nif_pt_data.records[nif].phone;
-                    document.getElementById("phone").value = phone.split("").filter(char => char !== " ").join("");
-                    document.getElementById("obs").value = nif_pt_data.records[nif].activity;
-
+                    if (phone) {
+                        document.getElementById("phone").value = phone.split("").filter(char => char !== " ").join("");
+                    }
+                    document.getElementById("obs").value = formatActivity(nif_pt_data.records[nif].activity);
+                    labelsUP();
                 },
                 error: function () {
                     Swal.fire({
@@ -50,36 +52,31 @@
                     });
                 },
             });
-            {#let nif = document.getElementById("nif_pt").value;#}
-            {##}
-            {#let apiUrl = `http://127.0.0.1:8000/get-nif/${nif}/`;#}
-            {#function decodeHtml(html) {#}
-            {#  return decodeURIComponent(escape(html));#}
-
-            {#fetch(apiUrl)#}
-            {#  .then((response) => {#}
-            {#    console.log(response);#}
-            {#    return response.json();#}
-            {#  })#}
-            {#  .then((result) => {#}
-            {#    console.log(result.records[nif]);#}
-            {#    var x = result.records[nif];#}
-            {#    document.getElementById("name").value = x.title;#}
-            {#    document.getElementById("nif").value = x.nif;#}
-            {#    document.getElementById("address").value = x.address;#}
-            {#    document.getElementById("zipcode").value = x.pc4 + "-" + x.pc3;#}
-            {#    document.getElementById("city").value = x.geo.region;#}
-            {#    document.getElementById("email").value = x.contacts.email;#}
-            {##}
-            {#    var obsText = x.activity;#}
-            {#    obsText = decodeHtml(obsText);#}
-            {#    obsText = obsText.replace(/<\/?p>/g, "");#}
-            {#    obsText = obsText.replace(/[^\w\s]/gi, "");#}
-            {#    obsText = obsText.trim();#}
-            {#    document.getElementById("obs").value = obsText;#}
-            {#  })#}
-            {#  .catch((error) => console.error("Error:", error));#}
         });
+        function formatActivity(activity) {
+            // Remove HTML tags
+            let sanitizedText = activity.replace(/<[^>]*>/g, '');
+        
+            // Decode HTML entities
+            let decodedText = $('<div/>').html(sanitizedText).text();
+        
+            // Remove leading and trailing white spaces
+            return decodedText.trim();
+        }
+        function labelsUP() {
+            console.log("labelsUP function called");
+            
+            $(".input-text").each(function() {
+                // Check if the input field has data
+                if ($(this).val().trim() !== "") {
+                    // Find the corresponding label and add 'active' class
+                    var label = $("label[for='" + $(this).attr("id") + "']");
+                    console.log("Adding 'active' class to label:", label);
+                    label.addClass("active");
+                }
+            });
+        }
+        
     </script>
     <form class="allforms row" action="{% url 'supplierCreate' %}" method="post">
         {% csrf_token %}
@@ -154,7 +151,7 @@
                     type="email"
                     required
             />
-            <label class="label" for="phone">Email</label>
+            <label class="label" for="email">Email</label>
         </div>
 
         <div class="form-field col-lg-12">

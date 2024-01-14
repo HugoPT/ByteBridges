@@ -135,43 +135,5 @@
             });
         });
 
-        {#function send_json_file() {#}
-        {#    console.log("click")#}
-        {##}
-        {##}
-        {#    var formData = new FormData();#}
-        {#    console.log()#}
-        {#    var fileInput = $('#json_file')[0].files[0];#}
-        {##}
-        {#    formData.append('json_file', fileInput);#}
-        {##}
-        {##}
-        {#    $.ajax({#}
-        {#        type: "POST",#}
-        {#        url: "componentCreateViaJSON",#}
-        {#        data: {#}
-        {#            csrfmiddlewaretoken: '{{ csrf_token }}',#}
-        {#            data: formData,#}
-        {#        },#}
-        {#        success: function (response) {#}
-        {#            console.log("Data successfully sent to the server");#}
-        {#            Swal.fire({#}
-        {#                title: "Encomenda criada",#}
-        {#                text: "Foi criada a nova encomenda ao fornecedor",#}
-        {#                imageUrl: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg",#}
-        {#                imageWidth: 200,#}
-        {#                imageHeight: 200,#}
-        {#                imageAlt: "https://static.vecteezy.com/system/resources/previews/000/350/131/original/vector-package-icon.jpg"#}
-        {#            }).then((result) => {#}
-        {#                window.location.replace("/dashboard")#}
-        {#            })#}
-        {##}
-        {#        },#}
-        {#        error: function (error) {#}
-        {#            console.error("Error sending data to the server:", error);#}
-        {#        },#}
-        {#    });#}
-
-
     </script>
 {% endblock %}

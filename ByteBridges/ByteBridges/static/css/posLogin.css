@@ -177,7 +177,7 @@ a {
 
 /* Adiciona uma linha vertical à esquerda do link ativo na barra de navegação */
 .active::before {
-  content: "";
+  /*content: "";*/
   position: absolute;
   left: 0;
   width: 2px;
