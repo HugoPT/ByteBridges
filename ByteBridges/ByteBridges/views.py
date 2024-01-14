@@ -26,6 +26,7 @@ def Homepage(request):
 @group_required('Tecnico')
 def weeklyProduction(request):
     user_id = request.user.id
+    print(user_id)
     with connections['technician'].cursor() as cursor:
         cursor.execute("select  * FROM fn_technician_weeklyproductions(%s)", [user_id])
         weeklyProduction = cursor.fetchall()

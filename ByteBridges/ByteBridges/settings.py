@@ -85,7 +85,7 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ByteBridgesFinalxxxxxxxxx',
+        'NAME': 'ecommerce_db',
         'USER': 'master',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
@@ -93,7 +93,7 @@ DATABASES = {
     },
     'admin': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ByteBridgesFinalxxxxxxxxx',
+        'NAME': 'ecommerce_db',
         'USER': 'master',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
@@ -101,7 +101,7 @@ DATABASES = {
     },
     'manager': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ByteBridgesFinalxxxxxxxxx',
+        'NAME': 'ecommerce_db',
         'USER': 'master',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
@@ -109,7 +109,7 @@ DATABASES = {
     },
     'reporting': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ByteBridgesFinalxxxxxxxxx',
+        'NAME': 'ecommerce_db',
         'USER': 'master',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
@@ -117,31 +117,13 @@ DATABASES = {
     },
     'technician': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ByteBridgesFinalxxxxxxxxx',
+        'NAME': 'ecommerce_db',
         'USER': 'master',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
         'PORT': '5455',
     },
 
-    'mongo': {
-        'ENGINE': 'djongo',
-        'NAME': 'bytebridges',
-        'HOST': 'apps.i9soft.pt',
-        'PORT': 27017,
-        'USER': 'root',
-        'PASSWORD': 'estgvApp2023',
-        'AUTH_SOURCE': 'admin',
-        'ENFORCE_SCHEMA': False,
-    },
-    'mongodb': {
-        'ENGINE': 'djongo',
-        'NAME': 'db',
-        'HOST': 'mongodb://apps.i9soft.pt:27017/',
-
-        'PORT': '27017',
-        'ENFORCE_SCHEMA': False,
-    }
 
 }
 
@@ -189,7 +171,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # MONGO DB
-MONGO_DB_NAME = 'bytebridges'
+MONGO_DB_NAME = 'bytebridges_store'
 MONGO_DB_HOST = 'mongodb://apps.i9soft.pt:27017/'
 MONGO_USERNAME = 'root'
 MONGO_PASSWORD = 'estgvApp2023'
