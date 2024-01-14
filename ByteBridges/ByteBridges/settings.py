@@ -94,7 +94,7 @@ DATABASES = {
     'admin': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ecommerce_db',
-        'USER': 'master',
+        'USER': 'master_admin',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
         'PORT': '5455',
@@ -102,7 +102,7 @@ DATABASES = {
     'manager': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ecommerce_db',
-        'USER': 'master',
+        'USER': 'master_manager',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
         'PORT': '5455',
@@ -110,7 +110,7 @@ DATABASES = {
     'reporting': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ecommerce_db',
-        'USER': 'master',
+        'USER': 'master_reporting',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
         'PORT': '5455',
@@ -118,7 +118,7 @@ DATABASES = {
     'technician': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ecommerce_db',
-        'USER': 'master',
+        'USER': 'master_technician',
         'PASSWORD': 'safeP@ss0rd4ever',
         'HOST': 'apps.i9soft.pt',
         'PORT': '5455',
