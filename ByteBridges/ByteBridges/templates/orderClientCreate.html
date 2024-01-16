@@ -40,10 +40,17 @@
             {% endfor %}
             </tbody>
         </table>
+        <div class="btns_display">
 
-        <button id="getSelectedRowsBtn" class="btn btn-primary">
-            Adicionar items selecionados
-        </button>
+            <button id="getSelectedRowsBtn" class="btn btn-primary">
+                Adicionar items selecionados
+            </button>
+            <button class="btn btn-success newP"><i class="fa fa-industry sideStyle" aria-hidden="true"></i> 
+                    <a class="nolink" href="{% url 'productionOrderCreate' %}">Criar nova produção</a>
+            </button>
+
+        </div>
+
 
         <div id="selectedRowsContainer" class="display"></div>
         <div id="selectClient">
@@ -95,10 +102,6 @@
         </div>
     </div>
     <hr>
-    <div>
-        <button class="btn btn-success col-md-12"><i class="fa fa-industry sideStyle" aria-hidden="true"></i> <a
-                style="color: white" href="{% url 'productionOrderCreate' %}">Criar nova produção</a></button>
-    </div>
     <br>
     <script>
         var i = 0;

@@ -12,6 +12,19 @@
   padding: 20px;
   margin: 0px;
 }
+.btns_display {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.newP {
+  margin-left: 20px;
+}
+.nolink {
+  text-decoration: none;
+  color: #fff;
+}
 .modalInput {
   width: 300px;
   padding: 10px;
