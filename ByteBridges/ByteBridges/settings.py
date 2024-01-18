@@ -85,43 +85,43 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommerce_db',
-        'USER': 'master',
-        'PASSWORD': 'safeP@ss0rd4ever',
-        'HOST': 'apps.i9soft.pt',
-        'PORT': '5455',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     },
     'admin': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommerce_db',
-        'USER': 'master_admin',
-        'PASSWORD': 'safeP@ss0rd4ever',
-        'HOST': 'apps.i9soft.pt',
-        'PORT': '5455',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     },
     'manager': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommerce_db',
-        'USER': 'master_manager',
-        'PASSWORD': 'safeP@ss0rd4ever',
-        'HOST': 'apps.i9soft.pt',
-        'PORT': '5455',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     },
     'reporting': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommerce_db',
-        'USER': 'master_reporting',
-        'PASSWORD': 'safeP@ss0rd4ever',
-        'HOST': 'apps.i9soft.pt',
-        'PORT': '5455',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     },
     'technician': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommerce_db',
-        'USER': 'master_technician',
-        'PASSWORD': 'safeP@ss0rd4ever',
-        'HOST': 'apps.i9soft.pt',
-        'PORT': '5455',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     },
 
 
@@ -171,16 +171,16 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # MONGO DB
-MONGO_DB_NAME = 'bytebridges_store'
-MONGO_DB_HOST = 'mongodb://apps.i9soft.pt:27017/'
-MONGO_USERNAME = 'root'
-MONGO_PASSWORD = 'estgvApp2023'
+MONGO_DB_NAME = ''
+MONGO_DB_HOST = ''
+MONGO_USERNAME = ''
+MONGO_PASSWORD = ''
 
 # API KEYS
 NIF_PT_TOKEN = '9753df22de14c1e7e397c5d27b3ec9a4'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'bytebridgessite@gmail.com'
-EMAIL_HOST_PASSWORD = 'qaga xlte iskl eisc '
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
